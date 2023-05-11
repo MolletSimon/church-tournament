@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Phase, Tournament } from "../../../models/Tournament";
 
 type Props = {
@@ -6,7 +6,7 @@ type Props = {
 	setTournament: (tournament: Tournament) => void;
 };
 
-const PhaseDefinition = ({ tournament, setTournament }: Props) => {
+const PhasesTournamentDefinition: React.FC<Props> = ({ tournament, setTournament }) => {
 	const [numberPhase, setNumberPhase] = useState(tournament.numberPhase);
 	const [phases, setPhases] = useState<Phase[]>(tournament.phases);
 
@@ -33,6 +33,9 @@ const PhaseDefinition = ({ tournament, setTournament }: Props) => {
 
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
+		phases.forEach((phase, index) => {
+			phase.id = index
+		})
 		setTournament({ ...tournament, phases, numberPhase });
 	};
 
@@ -91,4 +94,4 @@ const PhaseDefinition = ({ tournament, setTournament }: Props) => {
 	);
 };
 
-export default PhaseDefinition;
+export default PhasesTournamentDefinition;
