@@ -1,12 +1,17 @@
 import {Tournament} from "../../../models/Tournament";
-import React from "react";
+import React, {useEffect} from "react";
 
 interface Props {
 	tournament: Tournament;
 	setTournament: (value: Tournament) => void;
+	setIsValid: (value: boolean) => void;
 }
 
-export const TournamentDefinition: React.FC<Props> = ({tournament, setTournament}) => {
+export const TournamentDefinition: React.FC<Props> = ({tournament, setTournament, setIsValid}) => {
+	useEffect(() => {
+		if (tournament.name && tournament.numberTeams && tournament.dateTournament) setIsValid(true)
+	}, [setIsValid, tournament]);
+
 	return (
 		<>
 			<form className="m-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">

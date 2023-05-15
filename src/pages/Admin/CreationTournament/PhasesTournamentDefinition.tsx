@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { Phase, Tournament } from "../../../models/Tournament";
 
 type Props = {
 	tournament: Tournament;
 	setTournament: (tournament: Tournament) => void;
+	setIsValid: (value: boolean) => void;
 };
 
-const PhasesTournamentDefinition: React.FC<Props> = ({ tournament, setTournament }) => {
+const PhasesTournamentDefinition: React.FC<Props> = ({ tournament, setTournament, setIsValid }) => {
 	const [numberPhase, setNumberPhase] = useState(tournament.numberPhase);
 	const [phases, setPhases] = useState<Phase[]>(tournament.phases);
 
@@ -38,6 +39,16 @@ const PhasesTournamentDefinition: React.FC<Props> = ({ tournament, setTournament
 		})
 		setTournament({ ...tournament, phases, numberPhase });
 	};
+
+	useEffect(() => {
+		if(tournament.numberPhase) {
+			console.log(tournament)
+			setIsValid(true);
+			tournament.phases.forEach(phase => {
+				if (!phase.type || !phase.name) setIsValid(false);
+			})
+		}
+	}, [setIsValid, tournament])
 
 	return (
 		<form onSubmit={handleSubmit}>

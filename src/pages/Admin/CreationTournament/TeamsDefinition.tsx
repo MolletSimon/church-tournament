@@ -1,11 +1,12 @@
-import React, {useState} from "react";
+import React, { useEffect, useState} from "react";
 import {Tournament} from "../../../models/Tournament";
 
 interface Props {
 	setTournament: (value: Tournament) => void;
 	tournament: Tournament;
+	setIsValid: (value: boolean) => void;
 }
-export const TeamsDefinition: React.FC<Props> = ({setTournament, tournament}) => {
+export const TeamsDefinition: React.FC<Props> = ({setTournament, tournament, setIsValid}) => {
 	const [inputValue, setInputValue] = useState('');
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,11 +18,20 @@ export const TeamsDefinition: React.FC<Props> = ({setTournament, tournament}) =>
 		setInputValue('');
 	};
 
+	useEffect(() => {
+		if (tournament.teams.length > 0) setIsValid(true)
+		else setIsValid(false)
+	}, [setIsValid, tournament])
+
 	const handleDelete = (indexToDelete: number) => {
 		setTournament({...tournament,
 			teams: tournament.teams.filter((_, index) => index !== indexToDelete),
 		});
 	};
+
+	const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+		if (event.key === 'Enter' ) handleSubmit();
+	}
 
 	return (
 		<>
@@ -33,6 +43,7 @@ export const TeamsDefinition: React.FC<Props> = ({setTournament, tournament}) =>
 					placeholder="Nom de l'équipe"
 					value={inputValue}
 					onChange={handleChange}
+					onKeyUp={(e) => handleKeyPress(e)}
 				/>
 				<button
 					className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

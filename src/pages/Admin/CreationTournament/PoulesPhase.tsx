@@ -1,13 +1,14 @@
-import {ChangeEvent, useState} from 'react';
+import {ChangeEvent, useEffect, useState} from 'react';
 import {Phase} from "../../../models/Tournament";
 
 interface PoulesPhaseProps {
 	phase: Phase,
 	updatePhase: (phase: Phase, index: number) => void,
-	index: number
+	index: number;
+	setIsValid: (value: boolean) => void;
 }
 
-const PoulesPhase: React.FC<PoulesPhaseProps> = ({ phase, updatePhase, index }) => {
+const PoulesPhase: React.FC<PoulesPhaseProps> = ({ phase, updatePhase, index, setIsValid }) => {
 	const [isAllerRetour, setIsAllerRetour] = useState(phase.isAllerRetour || false);
 	const [nombreEquipesParPoule, setNombreEquipesParPoule] = useState(phase.nombreEquipesParPoule || 4);
 	const [nombreQualifiesParPoule, setNombreQualifiesParPoule] = useState(phase.nombreQualifiesParPoule || 2);
@@ -19,6 +20,10 @@ const PoulesPhase: React.FC<PoulesPhaseProps> = ({ phase, updatePhase, index }) 
 			isAllerRetour: event.target.checked,
 		}, index);
 	};
+
+	useEffect(() => {
+		setIsValid(true)
+	}, [setIsValid])
 
 	const handleNombreEquipesParPouleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setNombreEquipesParPoule(parseInt(event.target.value));

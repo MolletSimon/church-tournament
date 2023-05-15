@@ -9,10 +9,18 @@ import PhasesTournamentDefinition from "./PhasesTournamentDefinition";
 export const CreateTournament = () => {
 	const [tournament, setTournament] = useState({teams: [], phases: []} as Tournament);
 	const [step, setStep] = useState(1);
+	const [isValid, setIsValid] = useState(false);
 
 	const updatePhase = (phase: Phase, index: number) => {
 		tournament.phases[index] = phase;
 		setTournament({...tournament})
+	}
+
+	const handleNextStep = () => {
+		if (isValid) {
+			setStep(step+1);
+			setIsValid(false);
+		}
 	}
 
 	return (
@@ -21,23 +29,21 @@ export const CreateTournament = () => {
 				<div className="w-2/3 p-4 pr-8">
 					<h1 className="text-3xl text-blue-500 font-bold mb-4">Création d'un tournoi ⚽️</h1>
 					{step === 1 && (
-						<TournamentDefinition tournament={tournament} setTournament={setTournament} />
+						<TournamentDefinition setIsValid={setIsValid} tournament={tournament} setTournament={setTournament} />
 					)}
 					{step === 2 && (
-						<TeamsDefinition setTournament={setTournament} tournament={tournament} />
+						<TeamsDefinition setIsValid={setIsValid} setTournament={setTournament} tournament={tournament} />
 					)}
 					{step === 3 && (
-						<PhasesTournamentDefinition tournament={tournament} setTournament={setTournament} />
+						<PhasesTournamentDefinition setIsValid={setIsValid} tournament={tournament} setTournament={setTournament} />
 					)}
 					{step === 4 && (
 						<>
 							<h2 className="text-xl font-bold mb-4">Phases de poules</h2>
 							{tournament.phases?.map((p, index) => (
 								<>
-									{p.type === 'Poules' ? <PoulesPhase phase={p} updatePhase={updatePhase} index={index}/> : <h1>elim</h1>}
-
+									{p.type === 'Poules' && <PoulesPhase setIsValid={setIsValid} phase={p} updatePhase={updatePhase} index={index}/>}
 								</>
-
 							))}
 						</>
 
@@ -51,7 +57,7 @@ export const CreateTournament = () => {
 						</button>
 						<button
 							className="bg-green-400 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-							onClick={() => setStep(step + 1)}
+							onClick={handleNextStep}
 						>
 							Suivant
 						</button>
