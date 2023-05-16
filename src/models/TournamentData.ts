@@ -1,13 +1,14 @@
+import {Timestamp} from "firebase/firestore";
+
 import {Phase} from "./Phase";
 
-export type Tournament = {
+export interface TournamentFromFirestore {
+    dateTournament: Timestamp,
     id?: string,
     name?: string,
     numberTeams?: number,
-    dateTournament?: Date,
     teams: string[],
     phases: Phase[],
     numberPhase?: number,
     isDrawDone: boolean
 }
-

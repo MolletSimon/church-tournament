@@ -19,6 +19,7 @@ export const TeamsDefinition: React.FC<Props> = ({setTournament, tournament, set
 	};
 
 	useEffect(() => {
+		setTournament({...tournament, numberTeams : tournament.teams.length})
 		if (tournament.teams.length > 0) setIsValid(true)
 		else setIsValid(false)
 	}, [setIsValid, tournament])

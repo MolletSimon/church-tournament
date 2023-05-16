@@ -9,7 +9,7 @@ interface Props {
 
 export const TournamentDefinition: React.FC<Props> = ({tournament, setTournament, setIsValid}) => {
 	useEffect(() => {
-		if (tournament.name && tournament.numberTeams && tournament.dateTournament) setIsValid(true)
+		if (tournament.name && tournament.dateTournament) setIsValid(true)
 	}, [setIsValid, tournament]);
 
 	return (
@@ -23,14 +23,6 @@ export const TournamentDefinition: React.FC<Props> = ({tournament, setTournament
 						<input className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 							   id="name" type="text" placeholder="Nom" name="name" value={tournament.name}
 							   onChange={(e) => setTournament({...tournament ,name: e.target.value})} />
-					</div>
-					<div className="mb-4">
-						<label className="block text-gray-700 font-bold mb-2" htmlFor="number-teams">
-							Nombre d'équipes
-						</label>
-						<input className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-							   id="number-teams" type="number" placeholder="Nombre" name="number-teams" value={tournament.numberTeams}
-							   onChange={(e) => setTournament({...tournament, numberTeams: parseInt(e.target.value)})} />
 					</div>
 					<div className="mb-4">
 						<label className="block text-gray-700 font-bold mb-2" htmlFor="date">

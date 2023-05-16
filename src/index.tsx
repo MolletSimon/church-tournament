@@ -9,6 +9,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import {CreateTournament} from "./pages/Admin/CreationTournament/CreateTournament";
 import {Admin} from "./pages/Admin/Admin";
+import {TournamentDetails} from "./pages/Tournament/Tournament";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -31,15 +32,16 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <React.StrictMode>
+  <React.Fragment>
       <Router>
           <Routes>
               <Route path="/" element={<App/>}></Route>
               <Route path="/admin" element={<Admin/>}/>
               <Route path="/create-tournament" element={<CreateTournament/>} />
+              <Route path="/tournament/:id" element={<TournamentDetails/>} />
           </Routes>
       </Router>
-  </React.StrictMode>
+  </React.Fragment>
 );
 
 // If you want to start measuring performance in your app, pass a function
