@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
-import { Phase, Tournament } from "../../../models/Tournament";
+import { Tournament } from "../../../models/Tournament";
+import {Phase} from "../../../models/Phase";
 
 type Props = {
 	tournament: Tournament;

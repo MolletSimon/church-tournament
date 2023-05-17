@@ -1,27 +1,29 @@
 import React, { useState} from "react";
-import {Phase, Tournament} from "../../../models/Tournament";
+import {Tournament} from "../../../models/Tournament";
 import {TournamentDefinition} from "./TournamentDefinition";
 import {TeamsDefinition} from "./TeamsDefinition";
 import RecapTournament from "./RecapTournament";
 import PoulesPhase from "./PoulesPhase";
 import PhasesTournamentDefinition from "./PhasesTournamentDefinition";
+import FinalRecap from "./FinalRecap";
+import {Phase} from "../../../models/Phase";
 
 export const CreateTournament = () => {
-	const [tournament, setTournament] = useState({teams: [], phases: []} as Tournament);
+	const [tournament, setTournament] = useState({isDrawDone: false, teams: [], phases: []} as Tournament);
 	const [step, setStep] = useState(1);
 	const [isValid, setIsValid] = useState(false);
 
 	const updatePhase = (phase: Phase, index: number) => {
 		tournament.phases[index] = phase;
-		setTournament({...tournament})
-	}
+		setTournament({...tournament});
+	};
 
 	const handleNextStep = () => {
 		if (isValid) {
 			setStep(step+1);
 			setIsValid(false);
 		}
-	}
+	};
 
 	return (
 		<div className="m-5 p-5">
@@ -42,13 +44,17 @@ export const CreateTournament = () => {
 							<h2 className="text-xl font-bold mb-4">Phases de poules</h2>
 							{tournament.phases?.map((p, index) => (
 								<>
-									{p.type === 'Poules' && <PoulesPhase setIsValid={setIsValid} phase={p} updatePhase={updatePhase} index={index}/>}
+									{p.type === "Poules" && <PoulesPhase setIsValid={setIsValid} phase={p} updatePhase={updatePhase} index={index}/>}
 								</>
 							))}
 						</>
 
 					)}
-					<div className="mt-8">
+					{step === 5 && (
+						<FinalRecap tournament={tournament} />
+					)}
+
+					{step < 5 && <div className="mt-8">
 						<button
 							className="bg-red-400 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
 							onClick={() => setStep(step - 1)}
@@ -61,12 +67,15 @@ export const CreateTournament = () => {
 						>
 							Suivant
 						</button>
+					</div>}
+				</div>
+				{step < 5 && <>
+					<div className="w-1/3 p-4">
+						<RecapTournament tournament={tournament} />
 					</div>
-				</div>
-				<div className="w-1/3 p-4">
-					<RecapTournament tournament={tournament} />
-				</div>
+				</>}
+
 			</div>
 		</div>
-	)
-}
+	);
+};
