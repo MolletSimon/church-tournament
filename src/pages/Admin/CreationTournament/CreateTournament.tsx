@@ -7,9 +7,10 @@ import PoulesPhase from "./PoulesPhase";
 import PhasesTournamentDefinition from "./PhasesTournamentDefinition";
 import FinalRecap from "./FinalRecap";
 import {Phase} from "../../../models/Phase";
+import {Button} from "../../../components/generic/Button";
 
 export const CreateTournament = () => {
-	const [tournament, setTournament] = useState({isDrawDone: false, teams: [], phases: []} as Tournament);
+	const [tournament, setTournament] = useState({isDrawDone: false, teams: [], phases: [], status: "init"} as Tournament);
 	const [step, setStep] = useState(1);
 	const [isValid, setIsValid] = useState(false);
 
@@ -25,11 +26,15 @@ export const CreateTournament = () => {
 		}
 	};
 
+	const handlePrecStep = () => {
+		setStep(step-1);
+	}
+
 	return (
 		<div className="m-5 p-5">
 			<div className="flex flex-row">
 				<div className="w-2/3 p-4 pr-8">
-					<h1 className="text-3xl text-blue-500 font-bold mb-4">Création d'un tournoi ⚽️</h1>
+					<h1 className="text-3xl text-primary font-bold mb-4">Création d'un tournoi ⚽️</h1>
 					{step === 1 && (
 						<TournamentDefinition setIsValid={setIsValid} tournament={tournament} setTournament={setTournament} />
 					)}
@@ -55,18 +60,8 @@ export const CreateTournament = () => {
 					)}
 
 					{step < 5 && <div className="mt-8">
-						<button
-							className="bg-red-400 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
-							onClick={() => setStep(step - 1)}
-						>
-							Précédent
-						</button>
-						<button
-							className="bg-green-400 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-							onClick={handleNextStep}
-						>
-							Suivant
-						</button>
+						<Button action={handlePrecStep} color="danger" text="Précédent" hoverColor="red-600" additionalClass="ml-4 mr-4" />
+						<Button action={handleNextStep} color="success" text="Suivant" hoverColor="primary" />
 					</div>}
 				</div>
 				{step < 5 && <>

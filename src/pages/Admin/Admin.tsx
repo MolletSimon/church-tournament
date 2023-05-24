@@ -1,9 +1,10 @@
 import {useNavigate} from "react-router-dom";
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs } from "firebase/firestore";
+import {collection, getDocs, Timestamp} from "firebase/firestore";
 import {db} from "../../index";
 import Loader from "../Common/Loader";
 import {TournamentFromFirestore} from "../../models/TournamentData";
+import {Tournament} from "../../models/Tournament";
 
 interface TournamentData {
 	id: string,
@@ -11,37 +12,43 @@ interface TournamentData {
 }
 
 export const Admin: React.FC = () => {
-	const [tournaments, setTournaments] = useState<TournamentData[]>([]);
+	const [tournaments, setTournaments] = useState<Tournament[]>([]);
 	const navigate = useNavigate();
 
 	const fetchTournaments = async () => {
 
 		await getDocs(collection(db, "tournaments"))
 			.then((querySnapshot)=>{
-				const dataTournaments = querySnapshot.docs
+				let dataTournaments = querySnapshot.docs
 					.map((doc) => ({
-						id: doc.id,
 						...doc.data(),
-					})) as TournamentData[];
+					})) as Tournament[];
+				console.log(dataTournaments)
+				dataTournaments = dataTournaments.map((tournament) => ({
+					...tournament,
+					dateTournament : (tournament.dateTournament as unknown as Timestamp)?.toDate()
+				}))
+
 				setTournaments(dataTournaments);
 			})
-
 	}
 
-	const handleClick = (tournament: TournamentData) => {
+	const handleClick = (tournament: Tournament) => {
 		navigate(`/tournament/${tournament.id}`)
 	}
 
 	useEffect(() => {
 		fetchTournaments()
-	}, [tournaments]);
+		console.log("tournament fetchted")
+		console.log(tournaments)
+	}, []);
 
 	return (
 		<>
 			<h1 className="text-3xl font-bold m-8">Page administrateur</h1>
 			<div className="flex flex-row m-8">
 				<button
-					className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+					className="bg-success hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full hover:transition-all focus:outline-none focus:shadow-outline"
 					onClick={() => navigate("/create-tournament")}
 				>
 					Créer un tournoi
@@ -51,13 +58,19 @@ export const Admin: React.FC = () => {
 
 				{tournaments ? tournaments.map((t) => (
 					<div
-						key={t.tournament.id}
+						key={t.id}
 						onClick={() => handleClick(t)}
 						className="bg-gray-100 p-4 rounded-md flex flex-col justify-center items-center shadow-lg m-8 cursor-pointer hover:scale-110 transform"
 					>
-						<h3 className="text-lg font-bold mb-2 text-blue-500">{t.tournament.name}</h3>
-						<p className="text-lg mb-2">Nombre d'équipes : {t.tournament.numberTeams}</p>
-						<p>{t.tournament.dateTournament?.toDate().toLocaleDateString()}</p>
+						<h3 className="text-lg font-bold mb-2 text-primary">{t.name}</h3>
+						<p>{t.dateTournament?.toLocaleDateString()}</p>
+
+						<p className="text-lg mb-2">Nombre d'équipes : {t.numberTeams}</p>
+						<span className={`text-sm font-semibold uppercase mt-2 py-1 px-2 rounded ${t.status === 'init' ? 'bg-warning text-white' : t.status === 'started' ? 'bg-yellow-500 text-gray-800' : 'bg-primary text-white'}`}>
+							{t.status === 'init' && <p>Initié</p>}
+							{t.status === 'drawMade' && <p>TAS Effectué - Prêt à lancer</p>}
+							{t.status === 'started' && <p>Démarré</p>}
+						  </span>
 					</div>
 				)) : <Loader/>}
 			</div>

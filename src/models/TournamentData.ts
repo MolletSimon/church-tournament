@@ -10,5 +10,6 @@ export interface TournamentFromFirestore {
     teams: string[],
     phases: Phase[],
     numberPhase?: number,
-    isDrawDone: boolean
+    isDrawDone: boolean,
+    status: string
 }

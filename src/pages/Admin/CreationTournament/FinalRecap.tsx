@@ -4,8 +4,9 @@ import RecapTournament from './RecapTournament';
 import {Tournament} from "../../../models/Tournament";
 import Loader from "../../Common/Loader";
 import {db} from "../../../index";
-import { addDoc, collection } from 'firebase/firestore';
+import {addDoc, collection, doc, setDoc} from 'firebase/firestore';
 import {useNavigate} from "react-router-dom";
+import {Button} from "../../../components/generic/Button";
 
 interface Props {
 	tournament: Tournament;
@@ -19,10 +20,8 @@ const FinalRecap: React.FC<Props> = ({ tournament }) => {
 		setIsLoading(true);
 
 		try {
-			const docRef = await addDoc(collection(db, "tournaments"), {
-				tournament: tournament,
-			});
-			console.log("Document written with ID: ", docRef.id);
+			const docRef = await addDoc(collection(db, "tournaments"), tournament);
+			await setDoc(doc(db, "tournaments", docRef.id), {...tournament, id: docRef.id})
 			navigate("/admin");
 		} catch (e) {
 			console.error("Error adding document: ", e);
@@ -38,13 +37,8 @@ const FinalRecap: React.FC<Props> = ({ tournament }) => {
 			</h3>
 			<RecapTournament tournament={tournament} />
 			<div className="flex justify-center mt-4">
-				<button
-					className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 focus:outline-none"
-					onClick={handleSaveTournament}
-					disabled={isLoading}
-				>
-					{isLoading ? <Loader /> : 'Enregistrer'}
-				</button>
+
+				{isLoading ? <Loader /> : <Button text='Enregistrer' color='primary' action={handleSaveTournament} disabled={isLoading} />}
 			</div>
 		</>
 	);
