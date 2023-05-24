@@ -14,13 +14,12 @@ import {TournamentDetails} from "./pages/Tournament/Tournament";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyAuoJd0tqoF23elawzcpaDU02-Mu9azKlw",
-    authDomain: "church-tournament.firebaseapp.com",
-    projectId: "church-tournament",
-    storageBucket: "church-tournament.appspot.com",
-    messagingSenderId: "154721190099",
-    appId: "1:154721190099:web:f00f921dc824cbd4bf1426",
-    measurementId: "G-087KHJ547J"
+    apiKey: "AIzaSyAAqsqFzjM4p5CMCwVjCt9si8l9oaOyb9E",
+    authDomain: "church-tournament-test.firebaseapp.com",
+    projectId: "church-tournament-test",
+    storageBucket: "church-tournament-test.appspot.com",
+    messagingSenderId: "1053745518061",
+    appId: "1:1053745518061:web:c6f615ea32501da30cc3e4"
 };
 
 // Initialize Firebase

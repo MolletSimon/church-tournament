@@ -1,4 +1,4 @@
-import {ChangeEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 
 import {Phase} from "../../../models/Phase";
 
@@ -10,35 +10,42 @@ interface PoulesPhaseProps {
 }
 
 const PoulesPhase: React.FC<PoulesPhaseProps> = ({ phase, updatePhase, index, setIsValid }) => {
-	const [isAllerRetour, setIsAllerRetour] = useState(phase.isAllerRetour || false);
-	const [nombreEquipesParPoule, setNombreEquipesParPoule] = useState(phase.nombreEquipesParPoule || 4);
-	const [nombreQualifiesParPoule, setNombreQualifiesParPoule] = useState(phase.nombreQualifiesParPoule || 2);
+	const [isHomeAndAway, setIsHomeAndAway] = useState(phase.isHomeAndAway || false);
+	const [numberGroups, setNumberGroups] = useState(phase.numberGroups || 4);
+	const [numberTeamsByGroup, setNumberTeamsByGroup] = useState(phase.numberTeamsByGroup || 4);
+	const [numberQualifiedByGroup, setNumberQualifiedByGroup] = useState(phase.numberQualifiedByGroup || 2);
 
-	const handleIsAllerRetourChange = (event: ChangeEvent<HTMLInputElement>) => {
-		setIsAllerRetour(event.target.checked);
+	const handleIsHomeAndAwayChange = (event: ChangeEvent<HTMLInputElement>) => {
+		setIsHomeAndAway(event.target.checked);
 		updatePhase({
 			...phase,
-			isAllerRetour: event.target.checked,
+			isHomeAndAway: event.target.checked,
 		}, index);
 	};
 
-	useEffect(() => {
-		setIsValid(true)
-	}, [setIsValid])
+	useEffect(() => {setIsValid(true)}, [])
 
-	const handleNombreEquipesParPouleChange = (event: ChangeEvent<HTMLInputElement>) => {
-		setNombreEquipesParPoule(parseInt(event.target.value));
+	const handleNumberTeamsByGroupChange = (event: ChangeEvent<HTMLInputElement>) => {
+		setNumberTeamsByGroup(parseInt(event.target.value));
 		updatePhase({
 			...phase,
-			nombreEquipesParPoule: parseInt(event.target.value),
+			numberTeamsByGroup: parseInt(event.target.value),
 		}, index);
 	};
 
-	const handleNombreQualifiesParPouleChange = (event: ChangeEvent<HTMLInputElement>) => {
-		setNombreQualifiesParPoule(parseInt(event.target.value));
+	const handleNumberGroupsChange = (event: ChangeEvent<HTMLInputElement>) => {
+		setNumberGroups(parseInt(event.target.value));
 		updatePhase({
 			...phase,
-			nombreQualifiesParPoule: parseInt(event.target.value),
+			numberGroups: parseInt(event.target.value),
+		}, index);
+	};
+
+	const handleNumberQualifiedByGroupChange = (event: ChangeEvent<HTMLInputElement>) => {
+		setNumberQualifiedByGroup(parseInt(event.target.value));
+		updatePhase({
+			...phase,
+			numberQualifiedByGroup: parseInt(event.target.value),
 		}, index);
 	};
 
@@ -50,10 +57,23 @@ const PoulesPhase: React.FC<PoulesPhaseProps> = ({ phase, updatePhase, index, se
 					<input
 						type="checkbox"
 						className="mr-2 leading-tight"
-						checked={isAllerRetour}
-						onChange={handleIsAllerRetourChange}
+						checked={isHomeAndAway}
+						onChange={handleIsHomeAndAwayChange}
 					/>
 					<span className="text-sm">Matchs aller/retour</span>
+				</label>
+			</div>
+			<div className="mb-4">
+				<label className="block mb-2">
+					Nombre de poules :
+					<input
+						type="number"
+						className="ml-2 border border-gray-400 rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+						min="2"
+						max="20"
+						value={numberGroups}
+						onChange={handleNumberGroupsChange}
+					/>
 				</label>
 			</div>
 			<div className="mb-4">
@@ -64,8 +84,8 @@ const PoulesPhase: React.FC<PoulesPhaseProps> = ({ phase, updatePhase, index, se
 						className="ml-2 border border-gray-400 rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 						min="2"
 						max="20"
-						value={nombreEquipesParPoule}
-						onChange={handleNombreEquipesParPouleChange}
+						value={numberTeamsByGroup}
+						onChange={handleNumberTeamsByGroupChange}
 					/>
 				</label>
 			</div>
@@ -76,9 +96,8 @@ const PoulesPhase: React.FC<PoulesPhaseProps> = ({ phase, updatePhase, index, se
 						type="number"
 						className="ml-2 border border-gray-400 rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 						min="1"
-						max={nombreEquipesParPoule - 1}
-						value={nombreQualifiesParPoule}
-						onChange={handleNombreQualifiesParPouleChange}
+						value={numberQualifiedByGroup}
+						onChange={handleNumberQualifiedByGroupChange}
 					/>
 				</label>
 			</div>

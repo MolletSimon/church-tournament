@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { Tournament } from "../../../models/Tournament";
 import {Phase} from "../../../models/Phase";
+import {Button} from "../../../components/generic/Button";
 
 type Props = {
 	tournament: Tournament;
@@ -37,6 +38,13 @@ const PhasesTournamentDefinition: React.FC<Props> = ({ tournament, setTournament
 		event.preventDefault();
 		phases.forEach((phase, index) => {
 			phase.id = index
+			if (phase.type === 'Poules') {
+				phase.numberGroups = 4;
+				phase.isHomeAndAway = false;
+				phase.numberTeamsByGroup = 4;
+				phase.numberQualifiedByGroup = 2;
+				phase.active = false;
+			}
 		})
 		setTournament({ ...tournament, phases, numberPhase });
 	};
@@ -99,9 +107,7 @@ const PhasesTournamentDefinition: React.FC<Props> = ({ tournament, setTournament
 					</div>
 				</div>
 			))}
-			<button className="bg-blue-400 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-				Enregistrer
-			</button>
+			<Button text='Enregistrer' color='primary' type='submit' />
 		</form>
 	);
 };

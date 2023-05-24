@@ -1,27 +1,31 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import 'firebase/firestore';
 import {db} from "../../index";
-import {doc, getDoc} from 'firebase/firestore'
+import {doc, getDoc, Timestamp} from 'firebase/firestore'
 import {Tournament} from "../../models/Tournament";
 import RecapTournament from '../Admin/CreationTournament/RecapTournament';
 import {TournamentService} from "../../services/TournamentService";
 import Loader from "../Common/Loader";
 import {TournamentFromFirestore} from "../../models/TournamentData";
 import MakeDraw from "./MakeDraw";
+import {Button} from "../../components/generic/Button";
 
 export const TournamentDetails: React.FC = () => {
 	const { id } = useParams();
 	const [tournament, setTournament] = useState<Tournament | null>(null);
 	const [drawMode, setDrawMode] = useState(false);
+	const navigate = useNavigate();
 
 	const fetchTournament = async () => {
+		console.log(id)
 		const docRef = doc(db, "tournaments", id!);
 		const docSnap = await getDoc(docRef);
 
 		if (docSnap.exists()) {
-			const tournamentData = docSnap.data()["tournament"] as TournamentFromFirestore;
-			setTournament(TournamentService.ConvertTournamentFromTournamentData(tournamentData))
+			const tournamentData = docSnap.data() as Tournament;
+			const date = tournamentData.dateTournament as unknown as Timestamp;
+			setTournament({...tournamentData, dateTournament: date.toDate()})
 		} else {
 			console.log("No such document!");
 		}
@@ -40,6 +44,10 @@ export const TournamentDetails: React.FC = () => {
 		// Code pour supprimer le tournoi ici...
 	};
 
+	const handleBack = () => {
+		navigate("/")
+	}
+
 	useEffect(() => {
 		if(id) fetchTournament()
 	}, [id]);
@@ -50,30 +58,17 @@ export const TournamentDetails: React.FC = () => {
 				<div className="mt-10 ml-36 mr-36">
 					<RecapTournament tournament={tournament} />
 					<div className="flex justify-end space-x-4 py-4">
-						<button
-							onClick={handleStartTournament}
-							disabled={!tournament.isDrawDone}
-							className="px-4 py-2 text-white bg-blue-500 rounded-md disabled:bg-gray-400 hover:bg-blue-600"
-						>
-							Lancer le tournoi
-						</button>
-						<button
-							onClick={handleDraw}
-							className="px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600"
-						>
-							Effectuer le tirage au sort
-						</button>
-						<button
-							onClick={handleDeleteTournament}
-							className="px-4 py-2 text-white bg-red-500 rounded-md hover:bg-red-600"
-						>
-							Supprimer le tournoi
-						</button>
+
+						<Button text="Retour" color="primary" action={handleBack}/>
+
+						<Button text="Lancer le tournoi" color="warning" hoverColor="green-600" action={handleStartTournament} disabled={tournament.status !== 'drawMade'} />
+						<Button text="Effectuer le tirage au sort" color="success" action={handleDraw} hoverColor='green-600' disabled={tournament.status !== 'init'} />
+						<Button text="Supprimer le tournoi" color="danger" action={handleDeleteTournament} hoverColor='red-600' />
 					</div>
 				</div>
 			) }
 
-			{drawMode && <MakeDraw tournament={tournament!} />}
+			{drawMode && <MakeDraw tournament={tournament!} setTournament={setTournament} setDrawMode={setDrawMode} />}
 		</>
 	);
 };

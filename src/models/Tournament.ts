@@ -8,6 +8,6 @@ export type Tournament = {
     teams: string[],
     phases: Phase[],
     numberPhase?: number,
-    isDrawDone: boolean
+    status: "started" | "init" | "drawMade"
 }
 
