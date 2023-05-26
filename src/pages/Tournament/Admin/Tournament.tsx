@@ -1,29 +1,28 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import 'firebase/firestore';
-import {db} from "../../index";
-import {doc, getDoc, Timestamp} from 'firebase/firestore'
-import {Tournament} from "../../models/Tournament";
-import RecapTournament from '../Admin/CreationTournament/RecapTournament';
-import {TournamentService} from "../../services/TournamentService";
-import Loader from "../Common/Loader";
-import {TournamentFromFirestore} from "../../models/TournamentData";
+import {db} from "../../../index";
+import {doc, getDoc, setDoc, Timestamp} from 'firebase/firestore'
+import {Tournament} from "../../../models/Tournament";
+import RecapTournament from '../../Admin/CreationTournament/RecapTournament';
 import MakeDraw from "./MakeDraw";
-import {Button} from "../../components/generic/Button";
+import {Button} from "../../../components/generic/Button";
+import {TournamentStarted} from "./TournamentStarted";
 
 export const TournamentDetails: React.FC = () => {
 	const { id } = useParams();
 	const [tournament, setTournament] = useState<Tournament | null>(null);
 	const [drawMode, setDrawMode] = useState(false);
+	const [launched, setLaunched] = useState(false);
 	const navigate = useNavigate();
 
 	const fetchTournament = async () => {
-		console.log(id)
 		const docRef = doc(db, "tournaments", id!);
 		const docSnap = await getDoc(docRef);
 
 		if (docSnap.exists()) {
 			const tournamentData = docSnap.data() as Tournament;
+			if (tournamentData.status === "started") setLaunched(true);
 			const date = tournamentData.dateTournament as unknown as Timestamp;
 			setTournament({...tournamentData, dateTournament: date.toDate()})
 		} else {
@@ -31,12 +30,12 @@ export const TournamentDetails: React.FC = () => {
 		}
 	}
 
-	const handleStartTournament = () => {
-		// Code pour lancer le tournoi ici...
+	const handleStartTournament = async () => {
+		await setDoc(doc(db, "tournaments", tournament?.id!),{...tournament, status: "started"});
+		setLaunched(true);
 	};
 
 	const handleDraw = () => {
-		// Code pour effectuer le tirage au sort ici...
 		setDrawMode(true)
 	};
 
@@ -54,7 +53,7 @@ export const TournamentDetails: React.FC = () => {
 
 	return (
 		<>
-			{tournament && !drawMode && (
+			{tournament && !drawMode && !launched && (
 				<div className="mt-10 ml-36 mr-36">
 					<RecapTournament tournament={tournament} />
 					<div className="flex justify-end space-x-4 py-4">
@@ -69,6 +68,10 @@ export const TournamentDetails: React.FC = () => {
 			) }
 
 			{drawMode && <MakeDraw tournament={tournament!} setTournament={setTournament} setDrawMode={setDrawMode} />}
+
+			{tournament && launched && (
+				<TournamentStarted tournament={tournament} setTournament={setTournament} />
+			)}
 		</>
 	);
 };
