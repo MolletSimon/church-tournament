@@ -3,13 +3,7 @@ import React, { useEffect, useState } from 'react';
 import {collection, getDocs, Timestamp} from "firebase/firestore";
 import {db} from "../../index";
 import Loader from "../Common/Loader";
-import {TournamentFromFirestore} from "../../models/TournamentData";
 import {Tournament} from "../../models/Tournament";
-
-interface TournamentData {
-	id: string,
-	tournament: TournamentFromFirestore
-}
 
 export const Admin: React.FC = () => {
 	const [tournaments, setTournaments] = useState<Tournament[]>([]);
@@ -66,7 +60,7 @@ export const Admin: React.FC = () => {
 						<p>{t.dateTournament?.toLocaleDateString()}</p>
 
 						<p className="text-lg mb-2">Nombre d'équipes : {t.numberTeams}</p>
-						<span className={`text-sm font-semibold uppercase mt-2 py-1 px-2 rounded ${t.status === 'init' ? 'bg-warning text-white' : t.status === 'started' ? 'bg-yellow-500 text-gray-800' : 'bg-primary text-white'}`}>
+						<span className={`text-sm font-semibold uppercase mt-2 py-1 px-2 rounded ${t.status === 'init' ? 'bg-warning text-white' : t.status === 'started' ? 'bg-primary text-white' : 'bg-primary text-white'}`}>
 							{t.status === 'init' && <p>Initié</p>}
 							{t.status === 'drawMade' && <p>TAS Effectué - Prêt à lancer</p>}
 							{t.status === 'started' && <p>Démarré</p>}
