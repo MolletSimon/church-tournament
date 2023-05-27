@@ -51,7 +51,6 @@ const PhasesTournamentDefinition: React.FC<Props> = ({ tournament, setTournament
 
 	useEffect(() => {
 		if(tournament.numberPhase) {
-			console.log(tournament)
 			setIsValid(true);
 			tournament.phases.forEach(phase => {
 				if (!phase.type || !phase.name) setIsValid(false);

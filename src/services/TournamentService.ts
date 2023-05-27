@@ -1,5 +1,8 @@
 import {Tournament} from "../models/Tournament";
-import {Group, Match, Phase, Ranking} from "../models/Phase";
+import {Phase} from "../models/Phase";
+import {Ranking} from "../models/Ranking";
+import {Group} from "../models/Group";
+import {Match} from "../models/Match";
 
 export class TournamentService {
     public GeneratePhase(tournament: Tournament, groups: string[][]): Phase[] {
@@ -27,7 +30,12 @@ export class TournamentService {
                         rankings.push({
                             position: index + 1,
                             team: team,
-                            points: 0
+                            points: 0,
+                            goalScored: 0,
+                            goalTaken: 0,
+                            numberDraw: 0,
+                            numberLose: 0,
+                            numberWin: 0
                         })
                     })
                     updatedGroups.push({

@@ -4,9 +4,10 @@ import {Tournament} from "../../../models/Tournament";
 import {Button} from "../../../components/generic/Button";
 import { doc, setDoc } from "firebase/firestore";
 import {db} from "../../../index";
-import {Group, Match} from "../../../models/Phase";
 import {useNavigate} from "react-router-dom";
 import {TournamentService} from "../../../services/TournamentService";
+import {Group} from "../../../models/Group";
+import {Match} from "../../../models/Match";
 
 
 interface MakeDrawProps {

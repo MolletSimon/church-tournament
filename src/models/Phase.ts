@@ -1,3 +1,5 @@
+import {Group} from "./Group";
+
 export type Phase = {
     id?: number,
     name?: string,
@@ -10,21 +12,3 @@ export type Phase = {
     groups?: Group[]
 }
 
-export type Match = {
-    teams: string[];
-    score1?: number;
-    score2?: number;
-    winner?: string;
-}
-
-export type Group = {
-    teams: string[];
-    ranking?: Ranking[];
-    matches: Match[];
-}
-
-export type Ranking = {
-    position: number;
-    points: number;
-    team: string;
-}
