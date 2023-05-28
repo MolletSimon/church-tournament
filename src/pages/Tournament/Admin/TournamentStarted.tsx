@@ -23,7 +23,18 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 	const handleGroupChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
 		let newIndex = parseInt(event.target.value);
 		setSelectedGroupIndex(newIndex);
-		setSelectedGroup(groups[newIndex]);
+		const matches = groups[newIndex].matches;
+
+		// Met à jour les scores des matchs existants en conservant les scores précédents
+		const updatedMatches = matches.map((match, matchIndex) => {
+			const updatedMatch = matches[matchIndex];
+			return {
+				...match,
+				score1: updatedMatch.score1 ? updatedMatch.score1 : 0,
+				score2: updatedMatch.score2 ? updatedMatch.score2 : 0,
+			};
+		});
+		setSelectedGroup({...groups[newIndex], matches: updatedMatches});
 	};
 
 	const handleScoreChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
