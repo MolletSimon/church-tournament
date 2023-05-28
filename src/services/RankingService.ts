@@ -7,6 +7,7 @@ export class RankingService {
         ranks.forEach(team => {
             team = this.InitTeam(team);
             const teamMatches = tournament.phases[0].groups![index].matches.filter((match) => match.teams.includes(team.team));
+            console.log(teamMatches)
             teamMatches.forEach((teamMatch) => {
                 switch (teamMatch.winner) {
                     case team.team:
@@ -49,20 +50,24 @@ export class RankingService {
     private handleTeamWin(team: Ranking, teamMatch: Match) {
         team.points += 3;
         team.numberWin++;
-        team.goalScored += Math.max(teamMatch.score1!, teamMatch.score2!);
-        team.goalTaken += Math.min(teamMatch.score1!, teamMatch.score2!);
+        team.goalScored += this.checkScoreNull(teamMatch) ? Math.max(teamMatch.score1!, teamMatch.score2!) : 0;
+        team.goalTaken += this.checkScoreNull(teamMatch) ? Math.min(teamMatch.score1!, teamMatch.score2!) : 0;
     }
 
     private handleTeamDraw(team: Ranking, teamMatch: Match) {
         team.points++;
         team.numberDraw++;
-        team.goalScored += teamMatch.score1!;
-        team.goalTaken += teamMatch.score1!;
+        team.goalScored += this.checkScoreNull(teamMatch) ? teamMatch.score1! : 0;
+        team.goalTaken += this.checkScoreNull(teamMatch) ? teamMatch.score1! : 0;
     }
 
     private handleTeamLoss(team: Ranking, teamMatch: Match) {
         team.numberLose++;
-        team.goalScored += Math.min(teamMatch.score1!, teamMatch.score2!);
-        team.goalTaken += Math.max(teamMatch.score1!, teamMatch.score2!);
+        team.goalScored += this.checkScoreNull(teamMatch) ? Math.min(teamMatch.score1!, teamMatch.score2!) : 0;
+        team.goalTaken += this.checkScoreNull(teamMatch) ? Math.max(teamMatch.score1!, teamMatch.score2!) : 0;
+    }
+
+    private checkScoreNull(m: Match) {
+        return m.score1 != null && m.score2 != null;
     }
 }

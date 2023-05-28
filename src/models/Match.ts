@@ -1,7 +1,7 @@
 export type Match = {
     teams: string[];
-    score1?: number;
-    score2?: number;
+    score1?: number | null;
+    score2?: number | null;
     winner?: string;
     played?: false;
 }

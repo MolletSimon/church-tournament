@@ -25,19 +25,22 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 		setSelectedGroupIndex(newIndex);
 		const matches = groups[newIndex].matches;
 
+		console.log(matches)
 		// Met à jour les scores des matchs existants en conservant les scores précédents
 		const updatedMatches = matches.map((match, matchIndex) => {
 			const updatedMatch = matches[matchIndex];
+			console.log(updatedMatch.score1 !== undefined)
 			return {
 				...match,
-				score1: updatedMatch.score1 ? updatedMatch.score1 : 0,
-				score2: updatedMatch.score2 ? updatedMatch.score2 : 0,
+				score1: updatedMatch.score1 !== undefined ? updatedMatch.score1 : null,
+				score2: updatedMatch.score2 !== undefined ? updatedMatch.score2 : null,
 			};
 		});
 		setSelectedGroup({...groups[newIndex], matches: updatedMatches});
 	};
 
 	const handleScoreChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
+		console.log(e.target.value)
 		if(e.target.id === "score1") match.score1 = e.target.value ? parseInt(e.target.value) : 0;
 		else match.score2 = e.target.value ? parseInt(e.target.value) : 0;
 
@@ -95,9 +98,9 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 											<p className="text-sm font-medium text-gray-900">{match.teams[0]}</p>
 										</div>
 										<div className="flex items-center space-x-2">
-											<input type="number" id="score1" onChange={(e) => handleScoreChange(e, match, matchIndex)} className="w-20 border border-gray-300 rounded-md text-lg text-primary font-bold py-2 px-3 text-center" value={match.score1} />
+											<input type="number" id="score1" onChange={(e) => handleScoreChange(e, match, matchIndex)} className="w-20 border border-gray-300 rounded-md text-lg text-primary font-bold py-2 px-3 text-center" value={match.score1 != null ? match.score1 : ""} />
 											<span className="text-sm text-gray-500">-</span>
-											<input type="number" id="score2" onChange={(e) => handleScoreChange(e, match, matchIndex)} className="w-20 border border-gray-300 rounded-md text-lg text-primary font-bold py-2 px-3 text-center" value={match.score2} />
+											<input type="number" id="score2" onChange={(e) => handleScoreChange(e, match, matchIndex)} className="w-20 border border-gray-300 rounded-md text-lg text-primary font-bold py-2 px-3 text-center" value={match.score2 != null ? match.score2 : ""} />
 										</div>
 										<div className="flex-1 min-w-0">
 											<p className="text-sm font-medium text-gray-900 text-end">{match.teams[1]}</p>
