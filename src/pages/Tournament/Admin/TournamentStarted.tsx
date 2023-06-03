@@ -40,12 +40,13 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 	};
 
 	const handleScoreChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
-		console.log(e.target.value)
 		if(e.target.id === "score1") match.score1 = e.target.value ? parseInt(e.target.value) : 0;
 		else match.score2 = e.target.value ? parseInt(e.target.value) : 0;
 
 		const updateTournament = {...tournament};
 		const group = updateTournament.phases[0].groups![selectedGroupIndex];
+		setTournament(updateTournament);
+
 
 		if (match.score1 != null && match.score2 != null) {
 			let teamsRank = updateTournament.phases[0].groups![selectedGroupIndex].ranking!;

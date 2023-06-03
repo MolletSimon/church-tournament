@@ -51,8 +51,9 @@ const MakeDraw: React.FC<MakeDrawProps> = ({ tournament, setTournament, setDrawM
 
 		const tournamentService = new TournamentService();
 		const updatedPhases = tournamentService.GeneratePhase(tournament, groups);
-		const newTournament = {...tournament, phases: updatedPhases, status: 'drawMade'}
+		const newTournament: Tournament = {...tournament, phases: updatedPhases, status: "drawMade"}
 		await setDoc(document, newTournament);
+		setTournament(newTournament);
 		setDrawMode(false);
 	}
 
@@ -60,7 +61,7 @@ const MakeDraw: React.FC<MakeDrawProps> = ({ tournament, setTournament, setDrawM
 		<DragDropContext onDragEnd={handleDragEnd}>
 			<div className="h-full flex flex-col justify-center items-center">
 				<h1 className="text-4xl font-bold mt-12">Saisie des poules</h1>
-				<h3 className="text-lg italic mb-12 mt-4 text-primary">Glisser déposer les équipes dans les poules correspondantes</h3>
+				<h3 className="text-lg italic mb-12 mt-4 text-primary">Glisser et déposer les équipes dans les poules correspondantes</h3>
 				<div className="flex flex-col justify-center items-center md:flex-row w-full">
 					<div className="md:mr-12 mb-8 md:mb-0 w-1/2">
 						<h2 className="text-2xl font-bold mb-4">Équipes :</h2>
