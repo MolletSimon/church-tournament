@@ -7,7 +7,6 @@ export class RankingService {
         ranks.forEach(team => {
             team = this.InitTeam(team);
             const teamMatches = tournament.phases[0].groups![index].matches.filter((match) => match.teams.includes(team.team));
-            console.log(teamMatches)
             teamMatches.forEach((teamMatch) => {
                 switch (teamMatch.winner) {
                     case team.team:
@@ -22,7 +21,12 @@ export class RankingService {
                 }
             });
         });
-        ranks.sort((a,b) => (b.points - a.points))
+        ranks.sort((a, b) => {
+            if (b.points !== a.points) {
+                return b.points - a.points;
+            }
+            return (b.goalScored - b.goalTaken) - (a.goalScored - a.goalTaken);
+        });
         ranks.forEach((r, i) => r.position = i + 1)
         return ranks;
     }

@@ -4,11 +4,7 @@ import {Tournament} from "../../../models/Tournament";
 import {Button} from "../../../components/generic/Button";
 import { doc, setDoc } from "firebase/firestore";
 import {db} from "../../../index";
-import {useNavigate} from "react-router-dom";
 import {TournamentService} from "../../../services/TournamentService";
-import {Group} from "../../../models/Group";
-import {Match} from "../../../models/Match";
-
 
 interface MakeDrawProps {
 	tournament: Tournament;
@@ -48,10 +44,10 @@ const MakeDraw: React.FC<MakeDrawProps> = ({ tournament, setTournament, setDrawM
 
 	const handleValidate = async () => {
 		const document = doc(db, "tournaments", tournament.id!);
-
 		const tournamentService = new TournamentService();
+		console.log(groups)
 		const updatedPhases = tournamentService.GeneratePhase(tournament, groups);
-		const newTournament: Tournament = {...tournament, phases: updatedPhases, status: "drawMade"}
+		const newTournament: Tournament = {...tournament, phases: updatedPhases, status: "drawMade", currentPhase: 0}
 		await setDoc(document, newTournament);
 		setTournament(newTournament);
 		setDrawMode(false);

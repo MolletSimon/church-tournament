@@ -21,7 +21,7 @@ const FinalRecap: React.FC<Props> = ({ tournament }) => {
 
 		try {
 			const docRef = await addDoc(collection(db, "tournaments"), tournament);
-			await setDoc(doc(db, "tournaments", docRef.id), {...tournament, id: docRef.id})
+			await setDoc(doc(db, "tournaments", docRef.id), {...tournament, id: docRef.id});
 			navigate("/admin");
 		} catch (e) {
 			console.error("Error adding document: ", e);
