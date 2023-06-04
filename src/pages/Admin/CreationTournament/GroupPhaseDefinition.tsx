@@ -9,7 +9,7 @@ interface PoulesPhaseProps {
 	setIsValid: (value: boolean) => void;
 }
 
-const PoulesPhase: React.FC<PoulesPhaseProps> = ({ phase, updatePhase, index, setIsValid }) => {
+const GroupPhaseDefinition: React.FC<PoulesPhaseProps> = ({ phase, updatePhase, index, setIsValid }) => {
 	const [isHomeAndAway, setIsHomeAndAway] = useState(phase.isHomeAndAway || false);
 	const [numberGroups, setNumberGroups] = useState(phase.numberGroups || 4);
 	const [numberTeamsByGroup, setNumberTeamsByGroup] = useState(phase.numberTeamsByGroup || 4);
@@ -105,4 +105,4 @@ const PoulesPhase: React.FC<PoulesPhaseProps> = ({ phase, updatePhase, index, se
 	);
 };
 
-export default PoulesPhase;
+export default GroupPhaseDefinition;

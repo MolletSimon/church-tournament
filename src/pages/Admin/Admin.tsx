@@ -17,7 +17,6 @@ export const Admin: React.FC = () => {
 					.map((doc) => ({
 						...doc.data(),
 					})) as Tournament[];
-				console.log(dataTournaments)
 				dataTournaments = dataTournaments.map((tournament) => ({
 					...tournament,
 					dateTournament : (tournament.dateTournament as unknown as Timestamp)?.toDate()
@@ -34,7 +33,6 @@ export const Admin: React.FC = () => {
 	useEffect(() => {
 		fetchTournaments()
 		console.log("tournament fetchted")
-		console.log(tournaments)
 	}, []);
 
 	return (

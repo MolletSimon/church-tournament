@@ -7,6 +7,7 @@ export type Tournament = {
     dateTournament?: Date,
     teams: string[],
     phases: Phase[],
+    currentPhase: number,
     numberPhase?: number,
     status: "started" | "init" | "drawMade"
 }

@@ -3,14 +3,14 @@ import {Tournament} from "../../../models/Tournament";
 import {TournamentDefinition} from "./TournamentDefinition";
 import {TeamsDefinition} from "./TeamsDefinition";
 import RecapTournament from "./RecapTournament";
-import PoulesPhase from "./PoulesPhase";
+import GroupPhaseDefinition from "./GroupPhaseDefinition";
 import PhasesTournamentDefinition from "./PhasesTournamentDefinition";
 import FinalRecap from "./FinalRecap";
 import {Phase} from "../../../models/Phase";
 import {Button} from "../../../components/generic/Button";
 
 export const CreateTournament = () => {
-	const [tournament, setTournament] = useState({isDrawDone: false, teams: [], phases: [], status: "init"} as Tournament);
+	const [tournament, setTournament] = useState({isDrawDone: false, teams: [], phases: [], status: "init", currentPhase:0} as Tournament);
 	const [step, setStep] = useState(1);
 	const [isValid, setIsValid] = useState(false);
 
@@ -49,7 +49,7 @@ export const CreateTournament = () => {
 							<h2 className="text-xl font-bold mb-4">Phases de poules</h2>
 							{tournament.phases?.map((p, index) => (
 								<>
-									{p.type === "Poules" && <PoulesPhase setIsValid={setIsValid} phase={p} updatePhase={updatePhase} index={index}/>}
+									{p.type === "Poules" && <GroupPhaseDefinition setIsValid={setIsValid} phase={p} updatePhase={updatePhase} index={index}/>}
 								</>
 							))}
 						</>
