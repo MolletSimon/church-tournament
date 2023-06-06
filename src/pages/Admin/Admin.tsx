@@ -31,8 +31,12 @@ export const Admin: React.FC = () => {
 	}
 
 	useEffect(() => {
-		fetchTournaments()
-		console.log("tournament fetchted")
+		if (sessionStorage.getItem("connected")) {
+			fetchTournaments()
+		} else {
+			navigate("/login")
+		}
+
 	}, []);
 
 	return (

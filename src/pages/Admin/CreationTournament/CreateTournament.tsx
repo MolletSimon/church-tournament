@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Tournament} from "../../../models/Tournament";
 import {TournamentDefinition} from "./TournamentDefinition";
 import {TeamsDefinition} from "./TeamsDefinition";
@@ -8,11 +8,13 @@ import PhasesTournamentDefinition from "./PhasesTournamentDefinition";
 import FinalRecap from "./FinalRecap";
 import {Phase} from "../../../models/Phase";
 import {Button} from "../../../components/generic/Button";
+import {useNavigate} from "react-router-dom";
 
 export const CreateTournament = () => {
-	const [tournament, setTournament] = useState({isDrawDone: false, teams: [], phases: [], status: "init", currentPhase:0} as Tournament);
+	const [tournament, setTournament] = useState({teams: [], phases: [], status: "init", currentPhase:0} as Tournament);
 	const [step, setStep] = useState(1);
 	const [isValid, setIsValid] = useState(false);
+	const navigate = useNavigate();
 
 	const updatePhase = (phase: Phase, index: number) => {
 		tournament.phases[index] = phase;
@@ -29,6 +31,10 @@ export const CreateTournament = () => {
 	const handlePrecStep = () => {
 		setStep(step-1);
 	}
+
+	useEffect(() => {
+		if (!sessionStorage.getItem("connected")) navigate("/login")
+	}, [])
 
 	return (
 		<div className="m-5 p-5">

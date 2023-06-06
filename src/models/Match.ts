@@ -4,4 +4,6 @@ export type Match = {
     score2?: number | null;
     winner?: string;
     played?: false;
+    field?: string;
+    hour?: string;
 }

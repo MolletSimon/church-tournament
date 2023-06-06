@@ -42,25 +42,40 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 	};
 
 	const handleScoreChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
-		if(e.target.id === "score1") match.score1 = e.target.value ? parseInt(e.target.value) : 0;
-		else match.score2 = e.target.value ? parseInt(e.target.value) : 0;
+		const newScore = e.target.value ? parseInt(e.target.value) : null;
+		const teamIndex = e.target.id === "score1" ? 0 : 1;
+		const newMatch = { ...match, [`score${teamIndex + 1}`]: newScore };
+		await updateMatch(newMatch, matchIndex);
+	};
 
-		const updateTournament = {...tournament};
+	const handleFieldChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
+		const newField = e.target.value;
+		const newMatch = { ...match, field: newField };
+		await updateMatch(newMatch, matchIndex);
+	};
+
+	const handleHourChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
+		const newHour = e.target.value;
+		const newMatch = { ...match, hour: newHour };
+		await updateMatch(newMatch, matchIndex);
+	};
+
+	const updateMatch = async (newMatch: Match, matchIndex: number) => {
+		const updateTournament = { ...tournament };
 		const group = updateTournament.phases[tournament.currentPhase].groups![selectedGroupIndex];
+		group.matches[matchIndex] = newMatch;
+		setSelectedGroup(group);
 		setTournament(updateTournament);
 
-
-		if (match.score1 != null && match.score2 != null) {
+		if (newMatch.score1 != null && newMatch.score2 != null) {
 			let teamsRank = updateTournament.phases[0].groups![selectedGroupIndex].ranking!;
-			match = rankingService.DetermineWinner(match);
-			rankingService.ComputeRanking(teamsRank, match, updateTournament, selectedGroupIndex);
+			newMatch = rankingService.DetermineWinner(newMatch);
+			rankingService.ComputeRanking(teamsRank, newMatch, updateTournament, selectedGroupIndex);
 
-			group.matches[matchIndex] = match;
-			setSelectedGroup(group);
 			await setDoc(doc(db, "tournaments", tournament.id!), updateTournament);
 			setTournament(updateTournament);
 		}
-	}
+	};
 
 	return (
 		<>
@@ -134,9 +149,32 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 										<div className="flex items-center justify-center h-8 w-8 rounded-full bg-pink text-white">
 											{match.teams[1].charAt(0)}
 										</div>
+										<div className="flex items-center space-x-2">
+											<input
+												type="text"
+												id="field"
+												onChange={(e) =>
+													handleFieldChange(e, match, matchIndex)
+												}
+												className="w-40 border border-gray-300 rounded-md text-lg text-primary font-bold py-2 px-3 text-center"
+												value={match.field != null ? match.field : ""}
+												placeholder="Terrain"
+											/>
+											<input
+												type="text"
+												id="hour"
+												onChange={(e) =>
+													handleHourChange(e, match, matchIndex)
+												}
+												className="w-24 border border-gray-300 rounded-md text-lg text-primary font-bold py-2 px-3 text-center"
+												value={match.hour != null ? match.hour : ""}
+												placeholder="Heure"
+											/>
+										</div>
 									</div>
 								</div>
 							</li>
+
 						))}
 					</ul>
 					<div className="flex justify-center items-center w-full sm:w-1/2 p-4 mt-10">

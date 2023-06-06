@@ -10,16 +10,21 @@ import { getFirestore } from "firebase/firestore";
 import {CreateTournament} from "./pages/Admin/CreationTournament/CreateTournament";
 import {Admin} from "./pages/Admin/Admin";
 import {TournamentDetails} from "./pages/Tournament/Admin/Tournament";
+import HomePage from "./pages/Tournament/User/HomePage";
+import TeamPage from "./pages/Tournament/User/TeamPage";
+import GroupPage from "./pages/Tournament/User/GroupPage";
+import LoginPage from "./pages/Admin/LoginPage";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyAAqsqFzjM4p5CMCwVjCt9si8l9oaOyb9E",
-    authDomain: "church-tournament-test.firebaseapp.com",
-    projectId: "church-tournament-test",
-    storageBucket: "church-tournament-test.appspot.com",
-    messagingSenderId: "1053745518061",
-    appId: "1:1053745518061:web:c6f615ea32501da30cc3e4"
+    apiKey: "AIzaSyAuoJd0tqoF23elawzcpaDU02-Mu9azKlw",
+    authDomain: "church-tournament.firebaseapp.com",
+    projectId: "church-tournament",
+    storageBucket: "church-tournament.appspot.com",
+    messagingSenderId: "154721190099",
+    appId: "1:154721190099:web:f00f921dc824cbd4bf1426",
+    measurementId: "G-087KHJ547J"
 };
 
 // Initialize Firebase
@@ -35,6 +40,10 @@ root.render(
       <Router>
           <Routes>
               <Route path="/" element={<App/>}></Route>
+              <Route path="/:tournamentId" element={<HomePage/>}/>
+              <Route path="/login" element={<LoginPage/>} />
+              <Route path="/:tournamentId/:teamName" element={<TeamPage/>}/>
+              <Route path="/:tournamentId/group/:groupId" element={<GroupPage/>}/>
               <Route path="/admin" element={<Admin/>}/>
               <Route path="/create-tournament" element={<CreateTournament/>} />
               <Route path="/tournament/:id" element={<TournamentDetails/>} />

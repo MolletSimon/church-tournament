@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import React, {useState} from 'react';
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {Tournament} from "../../../models/Tournament";
 import {Button} from "../../../components/generic/Button";
-import { doc, setDoc } from "firebase/firestore";
+import {doc, setDoc} from "firebase/firestore";
 import {db} from "../../../index";
 import {TournamentService} from "../../../services/TournamentService";
 
@@ -45,13 +45,37 @@ const MakeDraw: React.FC<MakeDrawProps> = ({ tournament, setTournament, setDrawM
 	const handleValidate = async () => {
 		const document = doc(db, "tournaments", tournament.id!);
 		const tournamentService = new TournamentService();
-		console.log(groups)
 		const updatedPhases = tournamentService.GeneratePhase(tournament, groups);
 		const newTournament: Tournament = {...tournament, phases: updatedPhases, status: "drawMade", currentPhase: 0}
 		await setDoc(document, newTournament);
 		setTournament(newTournament);
 		setDrawMode(false);
 	}
+
+	const handleRandom = () => {
+		shuffleArray(remainingTeams);
+		setGroups(splitAndExplode(remainingTeams, groups.length));
+		setRemainingTeams([])
+	};
+
+	const splitAndExplode = (array: string[], numParts: number):string[][] => {
+		const arrayParts = [];
+		const partSize = Math.ceil(array.length / numParts);
+		for (let i = 0; i < numParts; i++) {
+			const start = i * partSize;
+			const end = start + partSize;
+			const part = array.slice(start, end);
+			arrayParts.push(part);
+		}
+		return arrayParts.map((part) => [...part]);
+	};
+
+	const shuffleArray = (array: string[]) => {
+		for (let i = array.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[array[i], array[j]] = [array[j], array[i]];
+		}
+	};
 
 	return (
 		<DragDropContext onDragEnd={handleDragEnd}>
@@ -115,6 +139,7 @@ const MakeDraw: React.FC<MakeDrawProps> = ({ tournament, setTournament, setDrawM
 				<div className="flex gap-4 my-6">
 					<Button text="Retour" color="primary" action={() => setDrawMode(false)} />
 					<Button text="Réinitialiser" color="danger" action={handleReset} hoverColor='red-600' />
+					<Button text="Tirage aléatoire" color="warning" action={handleRandom} />
 					<Button text="Valider" disabled={remainingTeams.length > 0} color="success" action={handleValidate} hoverColor='green-600' />
 				</div>
 			</div>

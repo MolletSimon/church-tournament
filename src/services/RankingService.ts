@@ -25,7 +25,10 @@ export class RankingService {
             if (b.points !== a.points) {
                 return b.points - a.points;
             }
-            return (b.goalScored - b.goalTaken) - (a.goalScored - a.goalTaken);
+            if ((b.goalScored - b.goalTaken) !== (a.goalScored - a.goalTaken)) {
+                return b.goalScored - a.goalScored;
+            }
+            return b.goalScored - a.goalScored;
         });
         ranks.forEach((r, i) => r.position = i + 1)
         return ranks;

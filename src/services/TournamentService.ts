@@ -11,21 +11,8 @@ export class TournamentService {
                 if (phase.type === 'Poules') {
                     const updatedGroups = new Array<Group>();
                     for (let i = 0; i < phase.numberGroups; i++) {
-                        const matches = new Array<Match>();
                         const teamsGroup = groups[i];
-                        for (let j = 0; j < teamsGroup.length; j++) {
-                            for (let k = j + 1; k < teamsGroup.length; k++) {
-                                matches.push({
-                                    teams: [teamsGroup[j], teamsGroup[k]],
-                                });
-
-                                if (phase.isHomeAndAway) {
-                                    matches.push({
-                                        teams: [teamsGroup[k], teamsGroup[j]],
-                                    });
-                                }
-                            }
-                        }
+                        const matches = this.createMatchs(teamsGroup, phase.isHomeAndAway);
                         const rankings = [] as Ranking[];
                         teamsGroup.forEach((team, index) => {
                             rankings.push({
@@ -51,5 +38,44 @@ export class TournamentService {
             }
             return phase;
         })
+    }
+
+    private createMatchs(teams: string[], isHomeAndAway: boolean) {
+        const numTeams = teams.length;
+        const halfNumTeams = Math.ceil(numTeams / 2);
+        const rounds = numTeams - 1;
+        const matches = [];
+
+        // Générer les matchs pour la première journée
+        for (let i = 0; i < halfNumTeams; i++) {
+            const homeTeam = teams[i];
+            const awayTeam = teams[numTeams - i - 1];
+            if (homeTeam && awayTeam) {
+                matches.push({ teams: [homeTeam, awayTeam] });
+                if (isHomeAndAway) {
+                    matches.push({ teams: [awayTeam, homeTeam] });
+                }
+            }
+        }
+
+        // Générer les matchs pour les journées suivantes
+        for (let round = 1; round < rounds; round++) {
+            const roundMatches = [];
+            const pivot = teams.shift()!;
+            teams.splice(halfNumTeams, 0, pivot);
+            for (let i = 0; i < halfNumTeams; i++) {
+                const homeTeam = teams[i];
+                const awayTeam = teams[numTeams - i - 1];
+                if (homeTeam && awayTeam) {
+                    roundMatches.push({ teams: [homeTeam, awayTeam] });
+                    if (isHomeAndAway) {
+                        roundMatches.push({ teams: [awayTeam, homeTeam] });
+                    }
+                }
+            }
+            matches.push(...roundMatches);
+        }
+
+        return matches;
     }
 }
