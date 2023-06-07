@@ -10,7 +10,7 @@ const LoginPage = () => {
 		event.preventDefault();
 
 		if (password === "motdepassetournoi") {
-			sessionStorage.setItem("connected", "true");
+			localStorage.setItem("connected", "true");
 			navigate("/admin")
 		} else {
 			setError("Mot de passe incorrect");

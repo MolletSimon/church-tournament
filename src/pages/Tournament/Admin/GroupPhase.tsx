@@ -65,6 +65,7 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 		const group = updateTournament.phases[tournament.currentPhase].groups![selectedGroupIndex];
 		group.matches[matchIndex] = newMatch;
 		setSelectedGroup(group);
+		await setDoc(doc(db, "tournaments", tournament.id!), updateTournament);
 		setTournament(updateTournament);
 
 		if (newMatch.score1 != null && newMatch.score2 != null) {
@@ -86,7 +87,7 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 				</h1>
 			</div>
 
-			<div className="space-y-4 px-4 sm:mx-32 mt-20">
+			<div className="space-y-4 px-4 sm:mx-16 mt-20">
 				<div className="flex items-center space-x-2">
 					<label htmlFor="group" className="font-medium text-gray-700">
 						Groupe
@@ -107,12 +108,12 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 				</div>
 
 				<div className="flex flex-col sm:flex-row w-full justify-between items-start">
-					<ul className="divide-y divide-gray-200 p-4 border-2 border-primary px-8 rounded-xl mt-10 w-full sm:w-auto">
+					<ul className="divide-y divide-gray-200 p-4 px-8 rounded-xl mt-10 w-full sm:w-auto">
 						{selectedGroup.matches.map((match, matchIndex) => (
-							<li key={matchIndex} className="py-4 flex justify-center">
+							<li key={matchIndex} className="py-4 pl-0 flex justify-center">
 								<div className="w-full">
 									<div className="flex items-center space-x-4">
-										<div className="flex items-center justify-center h-8 w-8 rounded-full bg-pink text-white">
+										<div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary text-white">
 											{match.teams[0].charAt(0)}
 										</div>
 										<div className="flex-1 min-w-0">
@@ -146,7 +147,7 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 												{match.teams[1]}
 											</p>
 										</div>
-										<div className="flex items-center justify-center h-8 w-8 rounded-full bg-pink text-white">
+										<div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary text-white">
 											{match.teams[1].charAt(0)}
 										</div>
 										<div className="flex items-center space-x-2">
@@ -177,18 +178,18 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 
 						))}
 					</ul>
-					<div className="flex justify-center items-center w-full sm:w-1/2 p-4 mt-10">
+					<div className="flex justify-center items-center w-full sm:w-1/2 p-4 ml-8 mt-10">
 						<div className="flex flex-col w-full ">
 							<div>
 								<table className="table-fixed w-full border-2 rounded-lg">
 									<thead>
 									<tr className="font-bold">
-										<th className="w-1/4 px-4 py-2">P</th>
+										<th className="w-1/12 px-4 py-2 text-left">P</th>
 										<th className="w-1/4 px-4 py-2">E</th>
-										<th className="w-1/4 px-4 py-2">BM</th>
-										<th className="w-1/4 px-4 py-2">BE</th>
-										<th className="w-1/4 px-4 py-2">Diff</th>
-										<th className="w-1/4 px-4 py-2">Pts</th>
+										<th className="w-1/12 px-4 py-2">BM</th>
+										<th className="w-1/12 px-4 py-2">BE</th>
+										<th className="w-1/12 px-4 py-2">Diff</th>
+										<th className="w-1/12 px-4 py-2">Pts</th>
 									</tr>
 									</thead>
 									<tbody>
@@ -199,13 +200,13 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 												className={index < tournament.phases[tournament.currentPhase].numberQualifiedByGroup ? "bg-green-500 text-white" : ""}
 											>
 												<td className="border px-4 py-2">{team.position}</td>
-												<td className="border px-4 py-2">{team.team}</td>
-												<td className="border px-4 py-2">{team.goalScored}</td>
-												<td className="border px-4 py-2">{team.goalTaken}</td>
-												<td className="border px-4 py-2">
+												<td className="border px-4 py-2 text-center">{team.team}</td>
+												<td className="border px-4 py-2 text-center">{team.goalScored}</td>
+												<td className="border px-4 py-2 text-center">{team.goalTaken}</td>
+												<td className="border px-4 py-2 text-center">
 													{team.goalScored - team.goalTaken}
 												</td>
-												<td className="border px-4 py-2">{team.points}</td>
+												<td className="border px-4 py-2 text-center">{team.points}</td>
 											</tr>
 										))}
 									</tbody>

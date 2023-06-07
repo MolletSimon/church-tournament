@@ -33,7 +33,7 @@ export const CreateTournament = () => {
 	}
 
 	useEffect(() => {
-		if (!sessionStorage.getItem("connected")) navigate("/login")
+		if (!localStorage.getItem("connected")) navigate("/login")
 	}, [])
 
 	return (

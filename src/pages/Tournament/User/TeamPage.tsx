@@ -25,6 +25,7 @@ const TeamPage = () => {
 				const docSnap = await getDoc(docRef);
 				if (docSnap.exists()) {
 					setTournament(docSnap.data() as Tournament);
+					console.log(docSnap.data() as Tournament)
 				} else {
 					console.log("No such document!");
 				}
@@ -66,7 +67,7 @@ const TeamPage = () => {
 								<div className="grid grid-cols-3 py-2">
 									<div className="text-xl">{match.teams[0]}</div>
 									<div className={`text-center text-2xl font-bold ${teamResult(match)}`}>
-										{match.score1 !== undefined && match.score2 !== undefined
+										{match.score1 && match.score2
 											? `${match.score1} - ${match.score2}`
 											: "-"}
 									</div>

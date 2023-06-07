@@ -4,12 +4,17 @@ import {GroupPhase} from "./GroupPhase";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import {Group} from "../../../models/Group";
+import 'react-toastify/dist/ReactToastify.css';
 import Modal from 'react-modal';
 import {TournamentService} from "../../../services/TournamentService";
 import {Button} from "../../../components/generic/Button";
 import {addDoc, collection, doc, setDoc} from "firebase/firestore";
 import {db} from "../../../index";
 import {Phase} from "../../../models/Phase";
+import PhasesTournamentDefinition from "../../Admin/CreationTournament/PhasesTournamentDefinition";
+import GroupPhaseDefinition from "../../Admin/CreationTournament/GroupPhaseDefinition";
+import {toast, ToastContainer} from "react-toastify";
+import {Link} from "react-router-dom";
 
 interface Props {
 	tournament: Tournament,
@@ -30,6 +35,8 @@ const customStyles = {
 export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) => {
 	const tournamentService = new TournamentService();
 	const [modalIsOpen, setIsOpen] = React.useState(false);
+	const [modalLooserTournamentIsOpen, setLooserTournamentIsOpen] = React.useState(false);
+	const [looserTournament, setLooserTournament] = useState<Tournament>();
 
 	function openModal() {
 		setIsOpen(true);
@@ -39,7 +46,7 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 		setIsOpen(false);
 	}
 
-	const handleNextPhase = () => {
+	const handleNextPhase = async () => {
 		const previousPhase = tournament.phases[tournament.currentPhase];
 		const qualified = previousPhase.groups?.map((g, indexG) => g.ranking?.slice(0, previousPhase.numberQualifiedByGroup)
 			.map(r => {
@@ -70,7 +77,13 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 			}
 		}
 		let newPhases = tournamentService.GeneratePhase({...tournament, currentPhase: 1}, groups);
-		setTournament({...tournament, phases: newPhases, currentPhase: tournament.currentPhase + 1});
+		const tournamentToSave = {...tournament, phases: newPhases, currentPhase: tournament.currentPhase + 1}
+		setTournament(tournamentToSave);
+		try {
+			await setDoc(doc(db, "tournaments", tournament.id!), {...tournamentToSave});
+		} catch (e) {
+			console.error("Error adding document: ", e);
+		}
 		setIsOpen(false);
 	}
 
@@ -86,21 +99,54 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 		return tournament.teams.filter((item) => !qualified.includes(item));
 	}
 
+	const updatePhase = (phase: Phase, index: number) => {
+		if(looserTournament) {
+			looserTournament.phases[index] = phase;
+			setLooserTournament({...looserTournament});
+		}
+	};
+
 	const handleCreateLooserTournament = async () => {
-		/*const looserTournament = {...tournament};
-		looserTournament.teams =  getEliminated(tournament.phases[tournament.currentPhase]);
-		looserTournament.name += " - Consolante";
-		looserTournament.currentPhase = 0;
-		looserTournament.numberTeams = looserTournament.teams.length;
-		delete looserTournament.id;
-		console.log(looserTournament)
+		const lTournament = {
+			currentPhase: 0,
+			name: tournament.name + " - Consolante",
+			dateTournament: tournament.dateTournament,
+			status: "init",
+			numberTeams: getEliminated(tournament.phases[tournament.currentPhase]).length,
+			teams: getEliminated(tournament.phases[tournament.currentPhase]),
+			phases: [] as Phase[]
+		} as Tournament;
+
+		setLooserTournament(lTournament);
+		setLooserTournamentIsOpen(true);
+	};
+
+	const CustomToastWithLink = () => (
+		<div>
+			<p>Votre tournoi a bien été créé ! Il s'est ouvert dans un nouvel onglet.</p>
+		</div>
+	);
+
+	const handleSaveLooserTournament = async () => {
 		try {
 			const docRef = await addDoc(collection(db, "tournaments"), looserTournament);
-			await setDoc(doc(db, "tournaments", docRef.id), {...tournament, id: docRef.id});
+			await setDoc(doc(db, "tournaments", docRef.id), {...looserTournament, id: docRef.id});
+			setLooserTournamentIsOpen(false);
+			toast.success(CustomToastWithLink, {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: "light",
+			});
+			window.open(`/tournament/${docRef.id}`,'', 'rel=noopener noreferrer')
 			handleNextPhase();
 		} catch (e) {
 			console.error("Error adding document: ", e);
-		}*/
+		}
 	};
 
 	return (
@@ -109,7 +155,8 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 				isOpen={modalIsOpen}
 				onRequestClose={closeModal}
 				style={customStyles}
-				contentLabel="Example Modal"
+				contentLabel="Phase suivante"
+				ariaHideApp={false}
 			>
 				<div className="p-4">
 					<h3 className="text-2xl">⚠️ Passage à la phase suivante</h3>
@@ -128,7 +175,32 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 				</div>
 
 			</Modal>
+			<Modal isOpen={modalLooserTournamentIsOpen} onRequestClose={() => setLooserTournamentIsOpen(false)} style={customStyles} ariaHideApp={false}>
+				{looserTournament && <>
+					{looserTournament.phases.length === 0 &&
+						<PhasesTournamentDefinition tournament={looserTournament} setTournament={setLooserTournament} setIsValid={() => true} />
+					}
+					{looserTournament.phases.map((p,index) => p.type === "Poules" && <GroupPhaseDefinition phase={p} updatePhase={updatePhase} index={index} setIsValid={() => true} />)}
+
+					<div className="flex justify-center gap-2">
+						<Button text="Oui, créer un tournoi" color="success" action={handleSaveLooserTournament} />
+						<Button text="Annuler" color="danger" action={() => setLooserTournamentIsOpen(false)} />
+					</div>
+				</>}
+			</Modal>
 			{tournament.phases[tournament.currentPhase].type === "Poules" ? <GroupPhase handleNextPhase={openModal} tournament={tournament} setTournament={setTournament} /> : <></>}
+			<ToastContainer
+				position="top-right"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+				theme="light"
+			/>
 		</>
 	)
 }
