@@ -5,14 +5,14 @@ import {Group} from "../models/Group";
 import {Match} from "../models/Match";
 
 export class TournamentService {
-    public GeneratePhase(tournament: Tournament, groups: string[][]): Phase[] {
+    public GeneratePhase(tournament: Tournament, groups?: string[][]): Phase[] {
         return tournament.phases.map((phase, index) => {
             if (index === tournament.currentPhase) {
                 if (phase.type === 'Poules') {
                     const updatedGroups = new Array<Group>();
-                    for (let i = 0; i < phase.numberGroups; i++) {
-                        const teamsGroup = groups[i];
-                        const matches = this.createMatchs(teamsGroup, phase.isHomeAndAway);
+                    for (let i = 0; i < phase.numberGroups!; i++) {
+                        const teamsGroup = groups![i];
+                        const matches = this.createMatchs(teamsGroup, phase.isHomeAndAway!);
                         const rankings = [] as Ranking[];
                         teamsGroup.forEach((team, index) => {
                             rankings.push({
@@ -27,13 +27,15 @@ export class TournamentService {
                             })
                         })
                         updatedGroups.push({
-                            teams: groups[i],
+                            teams: groups![i],
                             matches: matches,
                             ranking: rankings
                         });
                     }
 
                     return {...phase, groups: updatedGroups};
+                } else {
+
                 }
             }
             return phase;

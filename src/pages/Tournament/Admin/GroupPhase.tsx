@@ -80,13 +80,6 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 
 	return (
 		<>
-
-			<div className="flex items-center mt-8 px-4 sm:px-0">
-				<h1 className="font-bold text-primary text-3xl self-center sm:ml-20">
-					{tournament.name} - Phase : {tournament.phases[tournament.currentPhase].name}
-				</h1>
-			</div>
-
 			<div className="space-y-4 px-4 sm:mx-16 mt-20">
 				<div className="flex items-center space-x-2">
 					<label htmlFor="group" className="font-medium text-gray-700">
@@ -197,7 +190,7 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 										selectedGroup.ranking.map((team, index) => (
 											<tr
 												key={index}
-												className={index < tournament.phases[tournament.currentPhase].numberQualifiedByGroup ? "bg-green-500 text-white" : ""}
+												className={index < tournament.phases[tournament.currentPhase].numberQualifiedByGroup! ? "bg-green-500 text-white" : ""}
 											>
 												<td className="border px-4 py-2">{team.position}</td>
 												<td className="border px-4 py-2 text-center">{team.team}</td>

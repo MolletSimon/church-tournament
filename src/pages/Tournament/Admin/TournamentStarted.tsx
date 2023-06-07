@@ -10,11 +10,16 @@ import {TournamentService} from "../../../services/TournamentService";
 import {Button} from "../../../components/generic/Button";
 import {addDoc, collection, doc, setDoc} from "firebase/firestore";
 import {db} from "../../../index";
-import {Phase} from "../../../models/Phase";
+import {Knockout, Phase} from "../../../models/Phase";
 import PhasesTournamentDefinition from "../../Admin/CreationTournament/PhasesTournamentDefinition";
 import GroupPhaseDefinition from "../../Admin/CreationTournament/GroupPhaseDefinition";
 import {toast, ToastContainer} from "react-toastify";
 import {Link} from "react-router-dom";
+import * as tls from "tls";
+import knockoutPhase from "./KnockoutPhase";
+import {Match} from "../../../models/Match";
+import KnockoutPhase from "./KnockoutPhase";
+import KnockoutTree from "./KnockoutPhase";
 
 interface Props {
 	tournament: Tournament,
@@ -52,31 +57,46 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 			.map(r => {
 				return {team: r.team, position: r.position, group: indexG}
 			})).flat();
-		const phase = tournament.phases[1];
+		const phase = tournament.phases[tournament.currentPhase + 1];
 		const teams = qualified!.map(q => q!.team);
-		const teamsPerGroup = Math.ceil(qualified!.length / phase.numberGroups);
-		const groups: string[][] = Array.from({length: phase.numberGroups}, () => []);
-		for (let i = 0; i < phase.numberGroups; i++) {
-			const group = groups[i];
-			while (group.length < teamsPerGroup && teams.length > 0) {
-				group.push(teams.shift()!);
-			}
-			if (i > 0) {
-				const previousGroup = previousPhase.groups![i - 1];
-				const previousBestTeam = previousGroup.ranking![0].team;
-				while (previousGroup.ranking!.length > 0 && teams.length > 0) {
-					const index = teams.findIndex(t => t === previousBestTeam);
-					if (index !== -1) {
-						const teamToMove = teams.splice(index, 1)[0];
-						group.push(teamToMove);
-						previousGroup.ranking!.shift();
-					} else {
-						break;
+		let newPhases = [] as Phase[];
+		console.log(phase)
+		if (phase.type === "Poules") {
+			const teamsPerGroup = Math.ceil(qualified!.length / phase.numberGroups!);
+			const groups: string[][] = Array.from({length: phase.numberGroups!}, () => []);
+			for (let i = 0; i < phase.numberGroups!; i++) {
+				const group = groups[i];
+				while (group.length < teamsPerGroup && teams.length > 0) {
+					group.push(teams.shift()!);
+				}
+				if (i > 0) {
+					const previousGroup = previousPhase.groups![i - 1];
+					const previousBestTeam = previousGroup.ranking![0].team;
+					while (previousGroup.ranking!.length > 0 && teams.length > 0) {
+						const index = teams.findIndex(t => t === previousBestTeam);
+						if (index !== -1) {
+							const teamToMove = teams.splice(index, 1)[0];
+							group.push(teamToMove);
+							previousGroup.ranking!.shift();
+						} else {
+							break;
+						}
 					}
 				}
 			}
+			newPhases = tournamentService.GeneratePhase({...tournament, currentPhase: tournament.currentPhase + 1}, groups);
+		} else {
+			const koPhase = {...tournament.phases[tournament.currentPhase + 1]};
+			koPhase.knockout = {
+				currentRound: 0,
+				teams: teams,
+				roundOf: Math.ceil(teams.length / 2),
+				matches: generateNextPhaseMatches(qualified!, qualified?.length)
+			} as Knockout;
+			tournament.phases[tournament.currentPhase + 1] = koPhase;
+			newPhases = [...tournament.phases]
 		}
-		let newPhases = tournamentService.GeneratePhase({...tournament, currentPhase: 1}, groups);
+
 		const tournamentToSave = {...tournament, phases: newPhases, currentPhase: tournament.currentPhase + 1}
 		setTournament(tournamentToSave);
 		try {
@@ -85,6 +105,55 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 			console.error("Error adding document: ", e);
 		}
 		setIsOpen(false);
+	}
+
+	function generateNextPhaseMatches(qualified: FlatArray<({
+		team: string;
+		position: number;
+		group: number
+	}[] | undefined)[], 1>[], numQualifiers: number | undefined): Match[] {
+		// Sort the qualified teams by their group and position
+		const sortedQualified = qualified.sort((a, b) => {
+			if (a!.group !== b!.group) return a!.group - b!.group;
+			return a!.position - b!.position;
+		});
+
+		// Group the qualified teams by their group
+		const groupedQualified: { [key: number]: { team: string, position: number }[] } = {};
+		sortedQualified.forEach((team) => {
+			if (!groupedQualified[team!.group]) {
+				groupedQualified[team!.group] = [];
+			}
+			groupedQualified[team!.group].push({ team: team!.team, position: team!.position });
+		});
+
+		// Pair the teams from different groups, with opposite positions
+		const matches: Match[] = [];
+		let i = 0;
+		while (i < numQualifiers!) {
+			// Find the group of the i-th qualified team
+			const groupIndex = Math.floor(i / (numQualifiers! / Object.keys(groupedQualified).length));
+			const group = groupedQualified[groupIndex];
+
+			// Determine the position of the i-th team in the group
+			const positionInGroup = i % (numQualifiers! / Object.keys(groupedQualified).length);
+			const teamA = group[positionInGroup].team;
+
+			// Find the group with opposite position
+			const oppositeGroupIndex = (groupIndex + Object.keys(groupedQualified).length / 2) % Object.keys(groupedQualified).length;
+			const oppositeGroup = groupedQualified[oppositeGroupIndex];
+
+			// Determine the opposite position in the opposite group
+			const oppositePositionInGroup = numQualifiers! / Object.keys(groupedQualified).length - positionInGroup - 1;
+			const teamB = oppositeGroup[oppositePositionInGroup].team;
+
+			// Add the match to the list
+			matches.push({
+				teams: [teamA, teamB],
+			});
+			i++;
+		}
+		return matches;
 	}
 
 	const getQualified = (phase: Phase) => {
@@ -149,9 +218,12 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 		}
 	};
 
+	const onScoreChange = () => {
+
+	};
 	return (
 		<>
-			<Modal
+			{tournament.phases[tournament.currentPhase + 1] && <Modal
 				isOpen={modalIsOpen}
 				onRequestClose={closeModal}
 				style={customStyles}
@@ -174,7 +246,8 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 					<Button text="Non, annuler" color="danger" action={closeModal} />
 				</div>
 
-			</Modal>
+			</Modal>}
+
 			<Modal isOpen={modalLooserTournamentIsOpen} onRequestClose={() => setLooserTournamentIsOpen(false)} style={customStyles} ariaHideApp={false}>
 				{looserTournament && <>
 					{looserTournament.phases.length === 0 &&
@@ -188,7 +261,12 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 					</div>
 				</>}
 			</Modal>
-			{tournament.phases[tournament.currentPhase].type === "Poules" ? <GroupPhase handleNextPhase={openModal} tournament={tournament} setTournament={setTournament} /> : <></>}
+			<div className="flex items-center mt-8 px-4 sm:px-0">
+				<h1 className="font-bold text-primary text-3xl self-center sm:ml-20">
+					{tournament.name} - Phase : {tournament.phases[tournament.currentPhase].name}
+				</h1>
+			</div>
+			{tournament.phases[tournament.currentPhase].type === "Poules" ? <GroupPhase handleNextPhase={openModal} tournament={tournament} setTournament={setTournament} /> : <KnockoutPhase phase={tournament.phases[tournament.currentPhase]} />}
 			<ToastContainer
 				position="top-right"
 				autoClose={5000}
