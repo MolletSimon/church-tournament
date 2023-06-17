@@ -91,7 +91,7 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 				currentRound: 0,
 				teams: teams,
 				roundOf: Math.ceil(teams.length / 2),
-				matches: generateNextPhaseMatches(qualified!, qualified?.length)
+				matches: generateNextPhaseMatches(qualified!, qualified?.length).slice(0, Math.ceil(teams.length / 2))
 			} as Knockout;
 			tournament.phases[tournament.currentPhase + 1] = koPhase;
 			newPhases = [...tournament.phases]
@@ -263,10 +263,10 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 			</Modal>
 			<div className="flex items-center mt-8 px-4 sm:px-0">
 				<h1 className="font-bold text-primary text-3xl self-center sm:ml-20">
-					{tournament.name} - Phase : {tournament.phases[tournament.currentPhase].name}
+					{tournament.name} - Phase : {tournament.phases[tournament.currentPhase]?.name}
 				</h1>
 			</div>
-			{tournament.phases[tournament.currentPhase].type === "Poules" ? <GroupPhase handleNextPhase={openModal} tournament={tournament} setTournament={setTournament} /> : <KnockoutPhase phase={tournament.phases[tournament.currentPhase]} />}
+			{tournament.phases[tournament.currentPhase]?.type === "Poules" ? <GroupPhase handleNextPhase={openModal} tournament={tournament} setTournament={setTournament} /> : <KnockoutPhase phase={tournament.phases[tournament.currentPhase]} />}
 			<ToastContainer
 				position="top-right"
 				autoClose={5000}
