@@ -105,17 +105,19 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 					<ul className="divide-y divide-gray-200 p-4 px-8 rounded-xl mt-10 w-full sm:w-auto">
 						{selectedGroup.matches.map((match, matchIndex) => (
 							<li key={matchIndex} className="py-4 pl-0 flex justify-center">
-								<MatchComponent match={match} matchIndex={matchIndex} handleScoreChange={handleScoreChange} handleFieldChange={handleFieldChange} handleHourChange={handleHourChange}/>
-							</li>
+								<div className="rounded-xl border-2 p-4 hover:scale-110 transition-all">
+									<MatchComponent match={match} matchIndex={matchIndex} handleScoreChange={handleScoreChange} handleFieldChange={handleFieldChange} handleHourChange={handleHourChange}/>
+								</div>
+								</li>
 
 						))}
 					</ul>
 					<div className="flex justify-center items-center w-full sm:w-1/2 p-4 ml-8 mt-10">
 						<div className="flex flex-col w-full ">
-							<div>
-								<table className="table-fixed w-full border-2 rounded-lg">
-									<thead>
-									<tr className="font-bold">
+							<div className="border-2 rounded-xl">
+								<table className="table-fixed w-full divide-y divide-gray-200">
+									<thead className="rounded-lg">
+									<tr className="font-bold rounded-lg">
 										<th className="w-1/12 px-4 py-2 text-left">P</th>
 										<th className="w-1/4 px-4 py-2">E</th>
 										<th className="w-1/12 px-4 py-2">BM</th>
@@ -131,14 +133,14 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 												key={index}
 												className={index < tournament.phases[tournament.currentPhase].numberQualifiedByGroup! ? "bg-green-500 text-white" : ""}
 											>
-												<td className="border px-4 py-2">{team.position}</td>
-												<td className="border px-4 py-2 text-center">{team.team}</td>
-												<td className="border px-4 py-2 text-center">{team.goalScored}</td>
-												<td className="border px-4 py-2 text-center">{team.goalTaken}</td>
-												<td className="border px-4 py-2 text-center">
+												<td className="px-6 py-4">{team.position}</td>
+												<td className="px-6 py-4 text-center uppercase font-bold">{team.team}</td>
+												<td className="px-6 py-4 text-center">{team.goalScored}</td>
+												<td className="px-6 py-4 text-center">{team.goalTaken}</td>
+												<td className="px-6 py-4 text-center">
 													{team.goalScored - team.goalTaken}
 												</td>
-												<td className="border px-4 py-2 text-center">{team.points}</td>
+												<td className="px-4 py-2 text-center">{team.points}</td>
 											</tr>
 										))}
 									</tbody>

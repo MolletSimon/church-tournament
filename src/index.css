@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'Mabry';
-  src: url("../public/fonts/MabryPro-Regular.ttf");
-}
-
 @layer components {
 
 }
@@ -14,7 +9,7 @@
 body {
   margin: 0;
   color: #555249;
-  font-family: 'Mabry', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #fcfcfc;

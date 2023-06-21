@@ -44,6 +44,7 @@ export const Admin: React.FC = () => {
 			<h1 className="text-3xl font-bold m-8">Page administrateur</h1>
 			<div className="flex flex-row m-8">
 				<button
+					id="createTournament"
 					className="bg-success hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full hover:transition-all focus:outline-none focus:shadow-outline"
 					onClick={() => navigate("/create-tournament")}
 				>
@@ -55,8 +56,9 @@ export const Admin: React.FC = () => {
 				{tournaments ? tournaments.map((t) => (
 					<div
 						key={t.id}
+						id={t.name}
 						onClick={() => handleClick(t)}
-						className="bg-gray-100 p-4 rounded-md flex flex-col justify-center items-center shadow-lg m-8 cursor-pointer hover:scale-110 transform"
+						className="bg-gray-100 p-4 rounded-md flex flex-col justify-center items-center shadow-lg m-8 cursor-pointer hover:scale-110 transform transition-all"
 					>
 						<h3 className="text-lg font-bold mb-2 text-primary">{t.name}</h3>
 						<p>{t.dateTournament?.toLocaleDateString()}</p>

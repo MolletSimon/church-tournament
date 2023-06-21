@@ -71,6 +71,7 @@ const GroupPhaseDefinition: React.FC<PoulesPhaseProps> = ({ phase, updatePhase, 
 						className="ml-2 border border-gray-400 rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 						min="2"
 						max="20"
+						id={`numberGroups${index}`}
 						value={numberGroups}
 						onChange={handleNumberGroupsChange}
 					/>
@@ -84,6 +85,7 @@ const GroupPhaseDefinition: React.FC<PoulesPhaseProps> = ({ phase, updatePhase, 
 						className="ml-2 border border-gray-400 rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 						min="2"
 						max="20"
+						id={`numberTeams${index}`}
 						value={numberTeamsByGroup}
 						onChange={handleNumberTeamsByGroupChange}
 					/>
@@ -96,6 +98,7 @@ const GroupPhaseDefinition: React.FC<PoulesPhaseProps> = ({ phase, updatePhase, 
 						type="number"
 						className="ml-2 border border-gray-400 rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 						min="1"
+						id={`numberQualified${index}`}
 						value={numberQualifiedByGroup}
 						onChange={handleNumberQualifiedByGroupChange}
 					/>

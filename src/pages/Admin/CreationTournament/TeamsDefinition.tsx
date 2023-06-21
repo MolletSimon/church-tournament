@@ -47,6 +47,7 @@ export const TeamsDefinition: React.FC<Props> = ({setTournament, tournament, set
 					type="text"
 					className="bg-white rounded-lg border-gray-400 border-2 py-2 px-4 leading-tight focus:outline-none focus:border-blue-500 mb-2 md:mb-0 md:mr-4"
 					placeholder="Nom de l'équipe"
+					id="teamName"
 					value={inputValue}
 					onChange={handleChange}
 					onKeyUp={(e) => handleKeyPress(e)}
