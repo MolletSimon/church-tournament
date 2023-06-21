@@ -1,8 +1,8 @@
 import {Group} from "./Group";
-import {Match} from "./Match";
+import {MatchKnockout} from "./Match";
 
 export type Knockout = {
-    matches?: Match[],
+    matches?: MatchKnockout[],
     teams?: string[],
     roundOf?: number,
     currentRound?: number

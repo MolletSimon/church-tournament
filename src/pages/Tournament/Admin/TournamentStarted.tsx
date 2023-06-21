@@ -17,7 +17,7 @@ import {toast, ToastContainer} from "react-toastify";
 import {Link} from "react-router-dom";
 import * as tls from "tls";
 import knockoutPhase from "./KnockoutPhase";
-import {Match} from "../../../models/Match";
+import {Match, MatchKnockout} from "../../../models/Match";
 import KnockoutPhase from "./KnockoutPhase";
 import KnockoutTree from "./KnockoutPhase";
 
@@ -128,7 +128,7 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 		});
 
 		// Pair the teams from different groups, with opposite positions
-		const matches: Match[] = [];
+		const matches: MatchKnockout[] = [];
 		let i = 0;
 		while (i < numQualifiers!) {
 			// Find the group of the i-th qualified team
@@ -150,6 +150,7 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 			// Add the match to the list
 			matches.push({
 				teams: [teamA, teamB],
+				round: 8
 			});
 			i++;
 		}

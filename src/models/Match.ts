@@ -1,3 +1,5 @@
+import {Round} from "./Enums/Round";
+
 export type Match = {
     teams: string[];
     score1?: number | null;
@@ -6,4 +8,8 @@ export type Match = {
     played?: false;
     field?: string;
     hour?: string;
+}
+
+export interface MatchKnockout extends Match {
+    round: number
 }
