@@ -45,7 +45,7 @@ export const Admin: React.FC = () => {
 			<div className="flex flex-row m-8">
 				<button
 					id="createTournament"
-					className="bg-success hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full hover:transition-all focus:outline-none focus:shadow-outline"
+					className="bg-primary hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full hover:transition-all focus:outline-none focus:shadow-outline"
 					onClick={() => navigate("/create-tournament")}
 				>
 					Créer un tournoi

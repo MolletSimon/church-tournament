@@ -1,23 +1,34 @@
 import React, {useEffect, useState} from 'react';
 import {Phase} from "../../../models/Phase";
-import {Match} from "../../../models/Match";
+import {Match, MatchKnockout} from "../../../models/Match";
 import {MatchComponent} from "../../../components/tournament/MatchComponent";
 import {Button} from "../../../components/generic/Button";
-import { Round } from '../../../models/Enums/Round';
+import {Round} from '../../../models/Enums/Round';
+import {Tournament} from "../../../models/Tournament";
+import {RankingService} from "../../../services/RankingService";
+import {doc, setDoc} from "firebase/firestore";
+import {db} from "../../../index";
 
 type Props = {
-  phase: Phase;
+  tournament: Tournament;
+  setTournament: (phase: Tournament) => void,
 };
 
-const KnockoutPhase: React.FC<Props> = ({ phase }) => {
+const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
   const [currentRound, setCurrentRound] = useState<Round>(Round.NONE);
+  const [phase, setPhase] = useState(tournament.phases[tournament.currentPhase]);
+  const rankingService = new RankingService();
 
   useEffect(() => {
     setCurrentRound(getRound(phase.knockout?.roundOf!));
   }, [])
 
-  const getNextPhase = () => {
+  const getNextRound = () => {
+    return getRound(phase.knockout?.roundOf! / 2).toString();
+  }
 
+  const getLastRound = () => {
+    return getRound(phase.knockout?.roundOf! * 2).toString();
   }
 
   const getRound = (roundOf: number): Round => {
@@ -38,8 +49,27 @@ const KnockoutPhase: React.FC<Props> = ({ phase }) => {
   const handleScoreChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
     const newScore = e.target.value ? parseInt(e.target.value) : null;
     const teamIndex = e.target.id === "score1" ? 0 : 1;
-    const newMatch = { ...match, [`score${teamIndex + 1}`]: newScore };
+    let newPhase = {...phase};
+    newPhase.knockout!.matches![matchIndex] = {
+      ...match,
+      [`score${teamIndex + 1}`]: newScore,
+      round: phase.knockout?.roundOf!
+    } as MatchKnockout;
+    tournament.phases[phase.id!] = {...newPhase};
+    setPhase(newPhase);
+    setTournament(tournament);
   };
+
+  const handleSaveGame = async () => {
+    const updateTournament = { ...tournament };
+    updateTournament!.phases![tournament.currentPhase]!.knockout!.matches!.forEach(match => {
+      if (match.score1 != null && match.score2 != null) {
+        match = rankingService.DetermineWinner(match) as MatchKnockout;
+      }
+    })
+    await setDoc(doc(db, "tournaments", tournament.id!), updateTournament);
+    setTournament(updateTournament);
+  }
 
   const handleFieldChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
     const newField = e.target.value;
@@ -50,22 +80,42 @@ const KnockoutPhase: React.FC<Props> = ({ phase }) => {
     const newHour = e.target.value;
     const newMatch = { ...match, hour: newHour };
   };
+
   const nextPhase = () => {
-    setCurrentRound(getRound(phase.knockout?.roundOf! / 2))
-    phase.knockout!.roundOf = phase.knockout?.roundOf! / 2
+    const round = getRound(phase.knockout?.roundOf! / 2)
+    const newPhase = {...phase};
+    setCurrentRound(round)
+    const qualified = phase.knockout?.matches?.filter(m => m.round === phase.knockout?.roundOf!).map(m => {
+      return m.winner
+    })
+    const newRoundOf = phase.knockout?.roundOf! / 2
+    newPhase.knockout!.roundOf = newRoundOf
+    newPhase.knockout?.matches?.push({
+      round: newRoundOf,
+      teams: qualified
+    } as MatchKnockout)
   };
+
   return(
       <div className="m-10">
+
     {phase.knockout?.matches?.map((match, matchIndex) => (
-        <li key={matchIndex} className="py-4 pl-0 flex justify-center w-2/3 m-8 flex-col">
-          <div className="rounded-xl border-2 p-4 hover:scale-110 transition-all">
-          <h2 className="font-bold text-xl m-2 italic">{currentRound} {matchIndex + 1}</h2>
-            <MatchComponent match={match} matchIndex={matchIndex} handleScoreChange={handleScoreChange} handleFieldChange={handleFieldChange} handleHourChange={handleHourChange} />
-          </div>
-        </li>
+        <>
+        {match.round === phase.knockout!.roundOf &&
+
+                <li key={matchIndex} className="py-4 pl-0 flex justify-center m-8 flex-col">
+                  <div className="rounded-xl border-2 p-4 hover:scale-110 transition-all">
+                    <h2 className="font-bold text-xl m-2 italic">{currentRound}</h2>
+                    <MatchComponent handleSaveGame={handleSaveGame} match={match} matchIndex={matchIndex} handleScoreChange={handleScoreChange} handleFieldChange={handleFieldChange} handleHourChange={handleHourChange} />
+                  </div>
+                </li>
+
+        }
+        </>
     ))}
-        <Button text="Suivant" color="primary" type="button" action={nextPhase} />
-        <p className="italic m-10 text-primary">Prochaine phase : {getRound(phase.knockout?.roundOf! / 2).toString()}...</p>
+        <div className="flex items-center w-full justify-center gap-4">
+          <Button text={`Précédent (${getLastRound()}..)` } color="danger" type="button" action={nextPhase} />
+          <Button text={`Suivant (${getNextRound()}..)`} color="primary" type="button" action={nextPhase} /></div>
   </div>
   )
 };

@@ -7,3 +7,4 @@ describe('pass group phase', () => {
         cy.get('button').contains('Suivant').click()
     })
 })
+

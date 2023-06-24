@@ -43,10 +43,11 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 	};
 
 	const handleScoreChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
+		console.log("score changed")
 		const newScore = e.target.value ? parseInt(e.target.value) : null;
 		const teamIndex = e.target.id === "score1" ? 0 : 1;
 		const newMatch = { ...match, [`score${teamIndex + 1}`]: newScore };
-		await updateMatch(newMatch, matchIndex);
+		updateMatch(newMatch, matchIndex);
 	};
 
 	const handleFieldChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
@@ -61,24 +62,40 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 		await updateMatch(newMatch, matchIndex);
 	};
 
-	const updateMatch = async (newMatch: Match, matchIndex: number) => {
+	const updateMatch = (newMatch: Match, matchIndex: number) => {
 		const updateTournament = { ...tournament };
 		const group = updateTournament.phases[tournament.currentPhase].groups![selectedGroupIndex];
 		group.matches[matchIndex] = newMatch;
 		setSelectedGroup(group);
-		await setDoc(doc(db, "tournaments", tournament.id!), updateTournament);
 		setTournament(updateTournament);
 
-		if (newMatch.score1 != null && newMatch.score2 != null) {
+
+		/*if (newMatch.score1 != null && newMatch.score2 != null) {
 			let teamsRank = updateTournament.phases[0].groups![selectedGroupIndex].ranking!;
 			newMatch = rankingService.DetermineWinner(newMatch);
 			rankingService.ComputeRanking(teamsRank, newMatch, updateTournament, selectedGroupIndex);
 
 			await setDoc(doc(db, "tournaments", tournament.id!), updateTournament);
 			setTournament(updateTournament);
-		}
+		}*/
 	};
 
+	const handleSaveGame = async () => {
+		const updateTournament = { ...tournament };
+		const group = updateTournament.phases[tournament.currentPhase].groups![selectedGroupIndex];
+		group.matches = selectedGroup.matches
+
+		group.matches.forEach(match => {
+			if (match.score1 != null && match.score2 != null) {
+				let teamsRank = updateTournament.phases[0].groups![selectedGroupIndex].ranking!;
+				match = rankingService.DetermineWinner(match);
+				rankingService.ComputeRanking(teamsRank, match, updateTournament, selectedGroupIndex);
+			}
+		})
+
+		await setDoc(doc(db, "tournaments", tournament.id!), updateTournament);
+		setTournament(updateTournament);
+	};
 	return (
 		<>
 			<div className="space-y-4 px-4 sm:mx-16 mt-20">
@@ -106,7 +123,7 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 						{selectedGroup.matches.map((match, matchIndex) => (
 							<li key={matchIndex} className="py-4 pl-0 flex justify-center">
 								<div className="rounded-xl border-2 p-4 hover:scale-110 transition-all">
-									<MatchComponent match={match} matchIndex={matchIndex} handleScoreChange={handleScoreChange} handleFieldChange={handleFieldChange} handleHourChange={handleHourChange}/>
+									<MatchComponent handleSaveGame={handleSaveGame} match={match} matchIndex={matchIndex} handleScoreChange={handleScoreChange} handleFieldChange={handleFieldChange} handleHourChange={handleHourChange}/>
 								</div>
 								</li>
 
@@ -118,8 +135,8 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 								<table className="table-fixed w-full divide-y divide-gray-200">
 									<thead className="rounded-lg">
 									<tr className="font-bold rounded-lg">
-										<th className="w-1/12 px-4 py-2 text-left">P</th>
-										<th className="w-1/4 px-4 py-2">E</th>
+										<th className="w-1/12 px-4 py-2 text-left">N°</th>
+										<th className="w-1/4 px-4 py-2">Equipe</th>
 										<th className="w-1/12 px-4 py-2">BM</th>
 										<th className="w-1/12 px-4 py-2">BE</th>
 										<th className="w-1/12 px-4 py-2">Diff</th>
@@ -131,9 +148,12 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 										selectedGroup.ranking.map((team, index) => (
 											<tr
 												key={index}
-												className={index < tournament.phases[tournament.currentPhase].numberQualifiedByGroup! ? "bg-green-500 text-white" : ""}
+												className={index < tournament.phases[tournament.currentPhase].numberQualifiedByGroup! ? "bg-green-100 text-black" : ""}
 											>
-												<td className="px-6 py-4">{team.position}</td>
+												{index < tournament.phases[tournament.currentPhase].numberQualifiedByGroup! ?
+													<td className="px-5 border-l-8 border-l-green-500">{team.position}</td> : <td className="px-6 py-4">{team.position}</td>
+												}
+
 												<td className="px-6 py-4 text-center uppercase font-bold">{team.team}</td>
 												<td className="px-6 py-4 text-center">{team.goalScored}</td>
 												<td className="px-6 py-4 text-center">{team.goalTaken}</td>

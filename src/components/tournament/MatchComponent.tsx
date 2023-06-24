@@ -6,13 +6,14 @@ interface Props {
 	matchIndex: number,
 	handleScoreChange: (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => void,
 	handleFieldChange: (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => void,
-	handleHourChange: (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => void
+	handleHourChange: (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => void,
+	handleSaveGame?: () => void
 }
 
-export const MatchComponent: React.FC<Props> = ({match, matchIndex, handleScoreChange, handleFieldChange, handleHourChange}) => {
+export const MatchComponent: React.FC<Props> = ({match, matchIndex, handleScoreChange, handleFieldChange, handleHourChange, handleSaveGame}) => {
 	return (
 		<div className="w-full">
-			<div className="flex items-center space-x-4">
+			<div className="flex items-center justify-center space-x-4">
 				<div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary text-white">
 					{match.teams[0].charAt(0)}
 				</div>
@@ -25,6 +26,7 @@ export const MatchComponent: React.FC<Props> = ({match, matchIndex, handleScoreC
 					<input
 						type="number"
 						id="score1"
+						onBlur={handleSaveGame}
 						onChange={(e) =>
 							handleScoreChange(e, match, matchIndex)
 						}
@@ -35,6 +37,7 @@ export const MatchComponent: React.FC<Props> = ({match, matchIndex, handleScoreC
 					<input
 						type="number"
 						id="score2"
+						onBlur={handleSaveGame}
 						onChange={(e) =>
 							handleScoreChange(e, match, matchIndex)
 						}
@@ -54,6 +57,7 @@ export const MatchComponent: React.FC<Props> = ({match, matchIndex, handleScoreC
 					<input
 						type="text"
 						id="field"
+						onBlur={handleSaveGame}
 						onChange={(e) =>
 							handleFieldChange(e, match, matchIndex)
 						}
@@ -64,6 +68,7 @@ export const MatchComponent: React.FC<Props> = ({match, matchIndex, handleScoreC
 					<input
 						type="text"
 						id="hour"
+						onBlur={handleSaveGame}
 						onChange={(e) =>
 							handleHourChange(e, match, matchIndex)
 						}
