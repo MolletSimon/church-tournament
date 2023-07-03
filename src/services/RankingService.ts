@@ -6,7 +6,7 @@ export class RankingService {
     public ComputeRanking(ranks: Ranking[], match: Match, tournament: Tournament, index: number): Ranking[] {
         ranks.forEach(team => {
             team = this.InitTeam(team);
-            const teamMatches = tournament.phases[0].groups![index].matches.filter((match) => match.teams.includes(team.team));
+            const teamMatches = tournament.phases[tournament.currentPhase].groups![index].matches.filter((match) => match.teams.includes(team.team));
             teamMatches.forEach((teamMatch) => {
                 switch (teamMatch.winner) {
                     case team.team:

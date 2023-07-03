@@ -43,7 +43,6 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 	};
 
 	const handleScoreChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
-		console.log("score changed")
 		const newScore = e.target.value ? parseInt(e.target.value) : null;
 		const teamIndex = e.target.id === "score1" ? 0 : 1;
 		const newMatch = { ...match, [`score${teamIndex + 1}`]: newScore };
@@ -67,17 +66,19 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 		const group = updateTournament.phases[tournament.currentPhase].groups![selectedGroupIndex];
 		group.matches[matchIndex] = newMatch;
 		setSelectedGroup(group);
+
+		if (newMatch.score1 != null && newMatch.score2 != null) {
+			console.log("tascapte")
+			let teamsRank = updateTournament.phases[tournament.currentPhase].groups![selectedGroupIndex].ranking!;
+			console.log(teamsRank)
+			newMatch = rankingService.DetermineWinner(newMatch);
+			console.log(newMatch)
+			rankingService.ComputeRanking(teamsRank, newMatch, updateTournament, selectedGroupIndex);
+			console.log(updateTournament)
+		}
+
 		setTournament(updateTournament);
 
-
-		/*if (newMatch.score1 != null && newMatch.score2 != null) {
-			let teamsRank = updateTournament.phases[0].groups![selectedGroupIndex].ranking!;
-			newMatch = rankingService.DetermineWinner(newMatch);
-			rankingService.ComputeRanking(teamsRank, newMatch, updateTournament, selectedGroupIndex);
-
-			await setDoc(doc(db, "tournaments", tournament.id!), updateTournament);
-			setTournament(updateTournament);
-		}*/
 	};
 
 	const handleSaveGame = async () => {

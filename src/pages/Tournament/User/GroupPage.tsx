@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {Link, useParams} from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { FaFutbol, FaTrophy } from "react-icons/fa";
@@ -72,39 +72,48 @@ const GroupPage = () => {
 			</div>
 			<div className="px-4">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-					<div className="bg-white rounded-md shadow-md px-4 py-2 text-gray-800">
-						<h2 className="text-lg font-bold mb-2 flex items-center">
+					<div className="rounded-md py-8 text-gray-800">
+						<h2 className="text-lg font-bold flex items-center px-4 mb-4">
 							<FaTrophy className="text-primary text-xl mr-2"/>
 							Classement
 						</h2>
 						{group?.ranking ? (
-							<table className="w-full">
-								<thead>
-								<tr>
-									<th className="text-left py-2">Position</th>
-									<th className="text-left py-2">Equipe</th>
-									<th className="text-right py-2">Pts</th>
-									<th className="text-right py-2">+/-</th>
+							<div className="border-2 rounded-xl">
+							<table className="table-fixed w-full divide-y divide-gray-200">
+								<thead className="rounded-lg">
+								<tr className="font-bold rounded-lg">
+									<th className="w-1/12 px-4 py-2 text-left">N°</th>
+									<th className="w-1/4 px-4 py-2">Equipe</th>
+									<th className="w-1/12 px-4 py-2">Diff</th>
+									<th className="w-1/12 px-4 py-2">Pts</th>
 								</tr>
 								</thead>
 								<tbody>
-								{group.ranking.map((teamRanking, index) => (
-									<tr key={teamRanking.team} className={`${isTeamQualified(index)} ${index % 2 === 0 ? "bg-white" : "bg-gray-200"}`}>
-										<td className="py-2 pl-4">{teamRanking.position}</td>
-										<td className="py-2">{teamRanking.team}</td>
-										<td className="text-right py-2">{teamRanking.points}</td>
-										<td className="text-right py-2 pr-4">
-											{teamRanking.goalScored-teamRanking.goalTaken}
-										</td>
-									</tr>
-								))}
+								{group?.ranking &&
+									group.ranking!.map((team, index) => (
+										<tr
+											key={index}
+											className={index < tournament?.phases[tournament.currentPhase].numberQualifiedByGroup! ? "bg-green-100 text-black" : ""}
+										>
+											{index < tournament?.phases[tournament.currentPhase].numberQualifiedByGroup! ?
+												<td className="px-5 border-l-8 border-l-green-500">{team.position}</td> : <td className="px-6 py-4">{team.position}</td>
+											}
+
+											<td className="px-6 py-4 text-center uppercase font-bold">{team.team}</td>
+											<td className="px-6 py-4 text-center">
+												{team.goalScored - team.goalTaken}
+											</td>
+											<td className="px-4 py-2 text-center">{team.points}</td>
+										</tr>
+									))}
 								</tbody>
 							</table>
+							</div>
 						) : (
 							<p>Pas encore de classement.</p>
 						)}
 					</div>
-					<div className="bg-white rounded-md shadow-md px-4 py-2 text-gray-800">
+					<div className="bg-white rounded-md shadow-md px-8 py-6 text-gray-800">
 						<h2 className="text-lg font-bold mb-2 flex items-center">
 							<IoMdFootball className="text-primary text-xl mr-2" />
 							Matchs
@@ -113,9 +122,9 @@ const GroupPage = () => {
 							<table className="w-full">
 								<thead>
 								<tr>
-									<th className="text-left py-2">Equipe 1</th>
+									<th className="text-left py-2 w-1/3">Equipe 1</th>
 									<th className="text-center py-2">Score</th>
-									<th className="text-right py-2">Equipe 2</th>
+									<th className="text-right py-2 w-1/3">Equipe 2</th>
 								</tr>
 								</thead>
 								<tbody>
@@ -137,7 +146,7 @@ const GroupPage = () => {
 				</div>
 			</div>
 			<div className="flex justify-center mt-8">
-				<Link to="/">
+				<Link to={`/${tournamentId}`}>
 					<Button
 						text="Retour"
 						color="danger"
