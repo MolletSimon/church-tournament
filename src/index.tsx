@@ -14,6 +14,7 @@ import HomePage from "./pages/Tournament/User/HomePage";
 import TeamPage from "./pages/Tournament/User/TeamPage";
 import GroupPage from "./pages/Tournament/User/GroupPage";
 import LoginPage from "./pages/Admin/LoginPage";
+import {Historique} from "./pages/Tournament/Admin/Historique";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -47,6 +48,7 @@ root.render(
               <Route path="/admin" element={<Admin/>}/>
               <Route path="/create-tournament" element={<CreateTournament/>} />
               <Route path="/tournament/:id" element={<TournamentDetails/>} />
+              <Route path="/tournament/:id/historique" element={<Historique/>} />
           </Routes>
       </Router>
   </React.Fragment>

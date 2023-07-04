@@ -4,11 +4,15 @@ describe('field and hour', () => {
         cy.get('input#password').type('motdepassetournoi')
         cy.get('button').click()
         cy.get('div').contains('Démarré').click()
-        cy.get('input#field').each((i) => {
-            cy.wrap(i).clear().type('Terrain 1')
-        })
-        cy.get('input#hour').each((i) => {
-            cy.wrap(i).clear().type('12h30')
-        })
+        for (let i = 0; i < 4; i++) {
+            cy.get('select#group').select(i)
+            cy.get('input#score1').each((i) => {
+                cy.wrap(i).clear().type(Math.floor(Math.random() * 5).toString())
+            })
+            cy.get('input#score2').each((i) => {
+                cy.wrap(i).clear().type(Math.floor(Math.random() * 5).toString())
+                cy.wait(1000)
+            })
+        }
     })
 })

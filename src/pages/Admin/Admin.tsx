@@ -41,8 +41,12 @@ export const Admin: React.FC = () => {
 
 	return (
 		<>
-			<h1 className="text-3xl font-bold m-8">Page administrateur</h1>
-			<div className="flex flex-row m-8">
+			<div className="flex gap-6 items-center m-8">
+				<img src="/images/logo.png" alt="logo" width={100}/>
+				<h1 className="uppercase text-6xl ml-8 tracking-widest font-bold text-primary font-lexend">PITCH PERFECT</h1>
+			</div>
+			<h1 className="text-3xl mt-8 ml-20 font-bold">Page administrateur</h1>
+			<div className="flex flex-row my-8 mx-20">
 				<button
 					id="createTournament"
 					className="bg-primary hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full hover:transition-all focus:outline-none focus:shadow-outline"
@@ -58,12 +62,13 @@ export const Admin: React.FC = () => {
 						key={t.id}
 						id={t.name}
 						onClick={() => handleClick(t)}
-						className="bg-gray-100 p-4 rounded-md flex flex-col justify-center items-center shadow-lg m-8 cursor-pointer hover:scale-110 transform transition-all"
+						className="bg-gray-100 p-4 rounded-md flex flex-col justify-center items-center shadow-lg ml-20 cursor-pointer hover:scale-110 transform transition-all"
 					>
 						<h3 className="text-lg font-bold mb-2 text-primary">{t.name}</h3>
 						<p>{t.dateTournament?.toLocaleDateString()}</p>
 
 						<p className="text-lg mb-2">Nombre d'équipes : {t.numberTeams}</p>
+						<p className="italic text-primary">Phase actuelle : {t.phases[t.currentPhase]?.name}</p>
 						<span className={`text-sm font-semibold uppercase mt-2 py-1 px-2 rounded ${t.status === 'init' ? 'bg-warning text-white' : t.status === 'started' ? 'bg-primary text-white' : 'bg-primary text-white'}`}>
 							{t.status === 'init' && <p>Initié</p>}
 							{t.status === 'drawMade' && <p>TAS Effectué - Prêt à lancer</p>}

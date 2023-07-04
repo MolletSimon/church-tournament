@@ -9,6 +9,7 @@ export type Tournament = {
     phases: Phase[],
     currentPhase: number,
     numberPhase?: number,
-    status: "started" | "init" | "drawMade"
+    status: "started" | "init" | "drawMade",
+    looserTournament?: string
 }
 

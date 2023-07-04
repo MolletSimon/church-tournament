@@ -1,10 +1,12 @@
 import {useState, useEffect, ChangeEvent} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import {Tournament} from "../../../models/Tournament";
 import {db} from "../../../index";
 import { FaUserFriends, FaRegFutbol, FaUsers } from "react-icons/fa";
 import { MdGroup } from "react-icons/md";
+import {PhaseType} from "../../../models/Enums/PhaseType";
+import {Button} from "../../../components/generic/Button";
 
 
 const HomePage = () => {
@@ -21,8 +23,14 @@ const HomePage = () => {
 				const docSnap = await getDoc(docRef);
 				if (docSnap.exists()) {
 					const tourn = docSnap.data() as Tournament
-					setTournament(tourn);
-					setTeamsDisplayed(tourn!.teams);
+					if (tourn.status !== "init") {
+						setTournament(tourn);
+						const currentPhase = tourn!.phases[tourn.currentPhase];
+						if (currentPhase.type === PhaseType.GROUP)
+							setTeamsDisplayed(currentPhase.groups!.flatMap(g => g.teams));
+						else
+							setTeamsDisplayed(currentPhase.knockout?.teams!)
+					}
 				} else {
 					console.log("No such document!");
 				}
@@ -100,6 +108,15 @@ const HomePage = () => {
 							</div>
 						</div>
 					))}
+					{tournament?.status === "init" && <p>Le tournoi est en cours de préparation...</p>}
+					{tournament && tournament.looserTournament && <>
+						<p className="italic mx-2 my-4 font-bold">⚠️ Si votre équipe ne figure pas dans la liste, elle est peut être dans le tournoi consolante. Vous pouvez y accéder à l'aide du bouton ci-dessous...</p>
+						<Link to={`/${tournament.looserTournament}`} >
+							<div className="flex justify-center w-full mb-6">
+								<Button text="Accéder au tournoi consolante" color="primary" />
+							</div>
+						</Link>
+					</>}
 				</div>
 
 			)}

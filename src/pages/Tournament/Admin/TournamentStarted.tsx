@@ -20,6 +20,7 @@ import knockoutPhase from "./KnockoutPhase";
 import {Match, MatchKnockout} from "../../../models/Match";
 import KnockoutPhase from "./KnockoutPhase";
 import KnockoutTree from "./KnockoutPhase";
+import {PhaseService} from "../../../services/PhaseService";
 
 interface Props {
 	tournament: Tournament,
@@ -38,60 +39,34 @@ const customStyles = {
 };
 
 export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) => {
-	const tournamentService = new TournamentService();
 	const [modalIsOpen, setIsOpen] = React.useState(false);
 	const [modalLooserTournamentIsOpen, setLooserTournamentIsOpen] = React.useState(false);
 	const [looserTournament, setLooserTournament] = useState<Tournament>();
 
-	function openModal() {
+	const openModal = () => {
+
+
 		setIsOpen(true);
 	}
 
-	function closeModal() {
+	const closeModal = () => {
 		setIsOpen(false);
 	}
 
 	const handleNextPhase = async () => {
+		const phaseService = new PhaseService();
 		const previousPhase = tournament.phases[tournament.currentPhase];
 		let qualified = previousPhase.groups?.map((g, indexG) => g.ranking?.slice(0, previousPhase.numberQualifiedByGroup)
 			.map(r => {
 				return {team: r.team, position: r.position, group: indexG}
 			})).flat();
-		console.log(qualified!.sort((a, b) => a!.group - b!.group))
 		const phase = tournament.phases[tournament.currentPhase + 1];
 		const teams = qualified!.map(q => q!.team);
 		let newPhases = [] as Phase[];
 		if (phase.type === "Poules") {
-			const teamsPerGroup = Math.ceil(qualified!.length / phase.numberGroups!);
-			const groups: string[][] = Array.from({length: phase.numberGroups!}, () => []);
-			console.log(groups)
-			for (let i = 0; i < phase.numberGroups!; i++) {
-				const group = groups[i];
-				const groupTeam: any[] = [];
-
-				while (group.length < teamsPerGroup && qualified!.length > 0) {
-					for (let i = 0; i <= qualified?.length!; i++) {
-						if (!groupTeam.some(qg => qg.group === qualified![i]!.group || qg.position === qualified![i]!.position)) {
-							group.push(qualified![i]!.team);
-							groupTeam.push(qualified![i]);
-							qualified = qualified?.filter((q) => q!.team !== qualified![i]!.team)
-							break;
-						}
-					}
-				}
-
-			}
-			newPhases = tournamentService.GeneratePhase({...tournament, currentPhase: tournament.currentPhase + 1}, groups);
+			newPhases = phaseService.GenerateGroupPhase(phase, tournament, qualified);
 		} else {
-			const koPhase = {...tournament.phases[tournament.currentPhase + 1]};
-			koPhase.knockout = {
-				currentRound: 0,
-				teams: teams,
-				roundOf: Math.ceil(teams.length / 2),
-				matches: generateNextPhaseMatches(qualified!, qualified?.length).slice(0, Math.ceil(teams.length / 2))
-			} as Knockout;
-			tournament.phases[tournament.currentPhase + 1] = koPhase;
-			newPhases = [...tournament.phases]
+			newPhases = phaseService.GenerateKnockoutPhase(tournament, teams, qualified);
 		}
 
 		const tournamentToSave = {...tournament, phases: newPhases, currentPhase: tournament.currentPhase + 1}
@@ -104,55 +79,7 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 		setIsOpen(false);
 	}
 
-	function generateNextPhaseMatches(qualified: FlatArray<({
-		team: string;
-		position: number;
-		group: number
-	}[] | undefined)[], 1>[], numQualifiers: number | undefined): Match[] {
-		// Sort the qualified teams by their group and position
-		const sortedQualified = qualified.sort((a, b) => {
-			if (a!.group !== b!.group) return a!.group - b!.group;
-			return a!.position - b!.position;
-		});
 
-		// Group the qualified teams by their group
-		const groupedQualified: { [key: number]: { team: string, position: number }[] } = {};
-		sortedQualified.forEach((team) => {
-			if (!groupedQualified[team!.group]) {
-				groupedQualified[team!.group] = [];
-			}
-			groupedQualified[team!.group].push({ team: team!.team, position: team!.position });
-		});
-
-		// Pair the teams from different groups, with opposite positions
-		const matches: MatchKnockout[] = [];
-		let i = 0;
-		while (i < numQualifiers!) {
-			// Find the group of the i-th qualified team
-			const groupIndex = Math.floor(i / (numQualifiers! / Object.keys(groupedQualified).length));
-			const group = groupedQualified[groupIndex];
-
-			// Determine the position of the i-th team in the group
-			const positionInGroup = i % (numQualifiers! / Object.keys(groupedQualified).length);
-			const teamA = group[positionInGroup].team;
-
-			// Find the group with opposite position
-			const oppositeGroupIndex = (groupIndex + Object.keys(groupedQualified).length / 2) % Object.keys(groupedQualified).length;
-			const oppositeGroup = groupedQualified[oppositeGroupIndex];
-
-			// Determine the opposite position in the opposite group
-			const oppositePositionInGroup = numQualifiers! / Object.keys(groupedQualified).length - positionInGroup - 1;
-			const teamB = oppositeGroup[oppositePositionInGroup].team;
-
-			// Add the match to the list
-			matches.push({
-				teams: [teamA, teamB],
-				round: numQualifiers! / 2
-			});
-			i++;
-		}
-		return matches;
-	}
 
 	const getQualified = (phase: Phase) => {
 		return phase.groups?.map((g, indexG) => g.ranking?.slice(0, phase.numberQualifiedByGroup)
@@ -198,6 +125,7 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 		try {
 			const docRef = await addDoc(collection(db, "tournaments"), looserTournament);
 			await setDoc(doc(db, "tournaments", docRef.id), {...looserTournament, id: docRef.id});
+			await setDoc(doc(db, "tournaments", tournament.id!), {...tournament, looserTournament : docRef.id})
 			setLooserTournamentIsOpen(false);
 			toast.success(CustomToastWithLink, {
 				position: "top-right",
@@ -209,21 +137,16 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 				progress: undefined,
 				theme: "light",
 			});
-			window.open(`/tournament/${docRef.id}`,'', 'rel=noopener noreferrer')
+			window.open(`/tournament/${docRef.id}`,'_blank', 'noreferrer')
 			handleNextPhase();
 		} catch (e) {
 			console.error("Error adding document: ", e);
 		}
 	};
 
-	const onScoreChange = () => {
-
-	};
-	const phasePrec = () => {
-		setTournament({...tournament, currentPhase: tournament.currentPhase - 1 })
-	};
 	return (
 		<>
+			{/* MODAL */}
 			{tournament.phases[tournament.currentPhase + 1] && <Modal
 				isOpen={modalIsOpen}
 				onRequestClose={closeModal}
@@ -257,18 +180,24 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 					{looserTournament.phases.map((p,index) => p.type === "Poules" && <GroupPhaseDefinition phase={p} updatePhase={updatePhase} index={index} setIsValid={() => true} />)}
 
 					<div className="flex justify-center gap-2">
-						<Button text="Oui, créer un tournoi" color="success" action={handleSaveLooserTournament} />
+						{looserTournament.phases.length > 0 && <Button text="Oui, créer un tournoi" color="success" action={handleSaveLooserTournament} />}
 						<Button text="Annuler" color="danger" action={() => setLooserTournamentIsOpen(false)} />
 					</div>
 				</>}
 			</Modal>
-			<div className="flex items-center mt-8 px-4 sm:px-0">
-				<h1 className="font-bold text-primary text-3xl self-center sm:ml-20">
+
+
+			<div className="flex justify-between mt-8 px-4 sm:px-0 sm:mx-20">
+				<h1 className="font-bold text-primary text-3xl self-center">
 					{tournament.name} - Phase : {tournament.phases[tournament.currentPhase]?.name}
 				</h1>
+				<Link to={`historique`}>
+					<Button text="Historique" color="primary" />
+				</Link>
 			</div>
-			{tournament.phases[tournament.currentPhase]?.type === "Poules" ? <GroupPhase handleNextPhase={openModal} tournament={tournament} setTournament={setTournament} /> : <KnockoutPhase setTournament={setTournament} tournament={tournament} />}
-			{/*<Button text="Phase précédente (ne sera pas sur le projet final, sert au debug)" color="danger" action={phasePrec} />*/}
+			{tournament.phases[tournament.currentPhase]?.type === "Poules" ?
+				<GroupPhase handleNextPhase={openModal} tournament={tournament} setTournament={setTournament} /> :
+				<KnockoutPhase setTournament={setTournament} tournament={tournament} />}
 			<ToastContainer
 				position="top-right"
 				autoClose={5000}

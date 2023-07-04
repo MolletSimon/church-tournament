@@ -1,5 +1,5 @@
 import {Button} from "../../../components/generic/Button";
-import React, {useEffect, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {RankingService} from "../../../services/RankingService";
 import {Match} from "../../../models/Match";
@@ -7,6 +7,7 @@ import {doc, setDoc} from "firebase/firestore";
 import {db} from "../../../index";
 import {Tournament} from "../../../models/Tournament";
 import {MatchComponent} from "../../../components/tournament/MatchComponent";
+import {RankingComponent} from "../../../components/tournament/RankingComponent";
 
 interface Props {
 	tournament: Tournament,
@@ -20,6 +21,7 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 	const [selectedGroupIndex, setSelectedGroupIndex] = useState<number>(0);
 	const rankingService = new RankingService();
 	const [selectedGroup, setSelectedGroup] = useState(groups[selectedGroupIndex]);
+	const [matchesDisplayed, setMatchDisplayed] = useState(selectedGroup.matches);
 
 	useEffect(() => {
 		groups = tournament.phases[tournament.currentPhase].groups!;
@@ -62,23 +64,20 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 	};
 
 	const updateMatch = (newMatch: Match, matchIndex: number) => {
-		const updateTournament = { ...tournament };
+		let updateTournament = { ...tournament };
 		const group = updateTournament.phases[tournament.currentPhase].groups![selectedGroupIndex];
 		group.matches[matchIndex] = newMatch;
 		setSelectedGroup(group);
 
 		if (newMatch.score1 != null && newMatch.score2 != null) {
-			console.log("tascapte")
 			let teamsRank = updateTournament.phases[tournament.currentPhase].groups![selectedGroupIndex].ranking!;
-			console.log(teamsRank)
 			newMatch = rankingService.DetermineWinner(newMatch);
-			console.log(newMatch)
-			rankingService.ComputeRanking(teamsRank, newMatch, updateTournament, selectedGroupIndex);
-			console.log(updateTournament)
+			updateTournament.phases[updateTournament.currentPhase].groups![selectedGroupIndex].ranking = rankingService.ComputeRanking(teamsRank, newMatch, updateTournament, selectedGroupIndex);
 		}
 
-		setTournament(updateTournament);
+		console.log(updateTournament)
 
+		setTournament(updateTournament);
 	};
 
 	const handleSaveGame = async () => {
@@ -97,6 +96,25 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 		await setDoc(doc(db, "tournaments", tournament.id!), updateTournament);
 		setTournament(updateTournament);
 	};
+	const handlePrecPhase = async () => {
+		const updateTournament = {...tournament}
+		updateTournament.currentPhase = updateTournament.currentPhase - 1
+		await setDoc(doc(db, "tournaments", tournament.id!), updateTournament);
+		setTournament(updateTournament);
+	};
+
+	const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+		let teams = {...selectedGroup}.matches.flatMap(m => m.teams).filter(m => m.toUpperCase().includes(e.target.value.toUpperCase()))
+		teams = teams.filter(function(item, pos) {
+			return teams.indexOf(item) === pos;
+		})
+
+		const filteredMatches = selectedGroup.matches.filter((match) =>
+			match.teams.some((team) => teams.includes(team))
+		);
+		setMatchDisplayed(filteredMatches);
+	}
+
 	return (
 		<>
 			<div className="space-y-4 px-4 sm:mx-16 mt-20">
@@ -119,9 +137,13 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 					</select>
 				</div>
 
+				<div className="w-2/3">
+					<input type="text" placeholder="Chercher par équipe" className="rounded-full w-full italic p-4 border-2 border-primary" onChange={handleSearch}/>
+				</div>
+
 				<div className="flex flex-col sm:flex-row w-full justify-between items-start">
-					<ul className="divide-y divide-gray-200 p-4 px-8 rounded-xl mt-10 w-full sm:w-auto">
-						{selectedGroup.matches.map((match, matchIndex) => (
+					<ul className="divide-y divide-gray-200 p-4 px-8 rounded-xl mt-6 w-full sm:w-auto">
+						{matchesDisplayed.map((match, matchIndex) => (
 							<li key={matchIndex} className="py-4 pl-0 flex justify-center">
 								<div className="rounded-xl border-2 p-4 hover:scale-110 transition-all">
 									<MatchComponent handleSaveGame={handleSaveGame} match={match} matchIndex={matchIndex} handleScoreChange={handleScoreChange} handleFieldChange={handleFieldChange} handleHourChange={handleHourChange}/>
@@ -132,52 +154,19 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 					</ul>
 					<div className="flex justify-center items-center w-full sm:w-1/2 p-4 ml-8 mt-10">
 						<div className="flex flex-col w-full ">
-							<div className="border-2 rounded-xl">
-								<table className="table-fixed w-full divide-y divide-gray-200">
-									<thead className="rounded-lg">
-									<tr className="font-bold rounded-lg">
-										<th className="w-1/12 px-4 py-2 text-left">N°</th>
-										<th className="w-1/4 px-4 py-2">Equipe</th>
-										<th className="w-1/12 px-4 py-2">BM</th>
-										<th className="w-1/12 px-4 py-2">BE</th>
-										<th className="w-1/12 px-4 py-2">Diff</th>
-										<th className="w-1/12 px-4 py-2">Pts</th>
-									</tr>
-									</thead>
-									<tbody>
-									{selectedGroup.ranking &&
-										selectedGroup.ranking.map((team, index) => (
-											<tr
-												key={index}
-												className={index < tournament.phases[tournament.currentPhase].numberQualifiedByGroup! ? "bg-green-100 text-black" : ""}
-											>
-												{index < tournament.phases[tournament.currentPhase].numberQualifiedByGroup! ?
-													<td className="px-5 border-l-8 border-l-green-500">{team.position}</td> : <td className="px-6 py-4">{team.position}</td>
-												}
-
-												<td className="px-6 py-4 text-center uppercase font-bold">{team.team}</td>
-												<td className="px-6 py-4 text-center">{team.goalScored}</td>
-												<td className="px-6 py-4 text-center">{team.goalTaken}</td>
-												<td className="px-6 py-4 text-center">
-													{team.goalScored - team.goalTaken}
-												</td>
-												<td className="px-4 py-2 text-center">{team.points}</td>
-											</tr>
-										))}
-									</tbody>
-								</table>
-							</div>
+							<RankingComponent selectedGroup={selectedGroup} detailsLevel={1} tournament={tournament} />
 							<div className="flex flex-col sm:flex-row justify-end gap-8 mt-10">
 								<Button
 									text="Retour"
 									color="danger"
 									action={() => navigate("/")}
 								/>
-								<Button
-									text="Reinitialiser la phase"
+								{tournament.currentPhase > 0 && <Button
+									text="Phase précédente"
 									color="warning"
-									action={() => navigate("/")}
-								/>
+									action={handlePrecPhase}
+								/>}
+
 								<Button
 									text="Finaliser cette phase !"
 									color="primary"

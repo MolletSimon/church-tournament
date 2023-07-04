@@ -31,21 +31,6 @@ const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
     return getRound(phase.knockout?.roundOf! * 2).toString();
   }
 
-  const getRound = (roundOf: number): Round => {
-    switch (roundOf) {
-      case 8:
-        return Round.HUITIEME;
-      case 4:
-        return Round.QUART;
-      case 2:
-        return Round.DEMI;
-      case 1:
-        return Round.FINALE;
-      default:
-        return Round.NONE
-    }
-  }
-
   const handleScoreChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
     const newScore = e.target.value ? parseInt(e.target.value) : null;
     const teamIndex = e.target.id === "score1" ? 0 : 1;
@@ -119,5 +104,20 @@ const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
   </div>
   )
 };
+
+export const getRound = (roundOf: number): Round => {
+  switch (roundOf) {
+    case 8:
+      return Round.HUITIEME;
+    case 4:
+      return Round.QUART;
+    case 2:
+      return Round.DEMI;
+    case 1:
+      return Round.FINALE;
+    default:
+      return Round.NONE
+  }
+}
 
 export default KnockoutPhase;

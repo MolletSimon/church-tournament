@@ -2,8 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-
+@font-face {
+  font-family: "LEXEND";
+  src: url("../public/fonts/Lexend.ttf");
 }
 
 body {
