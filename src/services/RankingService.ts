@@ -4,9 +4,9 @@ import {Match} from "../models/Match";
 
 export class RankingService {
     public ComputeRanking(ranks: Ranking[], match: Match, tournament: Tournament, index: number): Ranking[] {
+        console.log(ranks)
         ranks.forEach(team => {
             team = this.InitTeam(team);
-            console.log(team)
             const teamMatches = tournament.phases[tournament.currentPhase].groups![index].matches.filter((match) => match.teams.includes(team.team));
             teamMatches.forEach((teamMatch) => {
                 switch (teamMatch.winner) {

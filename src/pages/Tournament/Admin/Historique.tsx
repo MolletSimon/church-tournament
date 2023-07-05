@@ -108,7 +108,7 @@ const TeamHistorique: React.FC<TeamHistoriqueProps> = ({tournament, team, setTea
 						</div>
 						<div className="w-2/3 m-6">
 							<p className="italic font-bold">Classement sur la fin de la phase :</p>
-							<RankingComponent detailsLevel={2} selectedGroup={phase.groups?.find(g => g.teams.includes(team)) || {} as Group} tournament={tournament} />
+							<RankingComponent phase={index} detailsLevel={2} selectedGroup={phase.groups?.find(g => g.teams.includes(team)) || {} as Group} tournament={tournament} />
 						</div>
 					</>  : <div className="grid grid-cols-3 gap-4 m-4">
 						{phase.knockout?.matches?.filter(m => m.teams.includes(team)).map((m, i) => (

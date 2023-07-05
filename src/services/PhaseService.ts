@@ -38,7 +38,7 @@ export class PhaseService {
     }[] | undefined)[], 1>[] | undefined): Phase[] {
         const koPhase = {...tournament.phases[tournament.currentPhase + 1]};
         koPhase.knockout = {
-            currentRound: 0,
+            currentRound: Math.ceil(teams.length / 2),
             teams: teams,
             roundOf: Math.ceil(teams.length / 2),
             matches: this.generateNextPhaseMatches(qualified!, qualified?.length).slice(0, Math.ceil(teams.length / 2))

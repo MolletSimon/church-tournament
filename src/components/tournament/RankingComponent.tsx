@@ -6,10 +6,11 @@ import {Tournament} from "../../models/Tournament";
 interface Props {
 	selectedGroup: Group,
 	tournament: Tournament,
-	detailsLevel: number
+	detailsLevel: number,
+	phase: number
 }
 
-export const RankingComponent: React.FC<Props> = ({selectedGroup, tournament, detailsLevel}) => {
+export const RankingComponent: React.FC<Props> = ({selectedGroup, tournament, detailsLevel, phase}) => {
 	return (
 		<>
 			<div className="border-2 rounded-xl">
@@ -36,9 +37,9 @@ export const RankingComponent: React.FC<Props> = ({selectedGroup, tournament, de
 						selectedGroup.ranking.map((team, index) => (
 							<tr
 								key={index}
-								className={index < tournament.phases[tournament.currentPhase].numberQualifiedByGroup! ? "bg-green-100 text-black" : ""}
+								className={index < tournament.phases[phase].numberQualifiedByGroup! ? "bg-green-100 text-black" : ""}
 							>
-								{index < tournament.phases[tournament.currentPhase].numberQualifiedByGroup! ?
+								{index < tournament.phases[phase].numberQualifiedByGroup! ?
 									<td className="px-5 border-l-8 border-l-green-500">{team.position}</td> : <td className="px-6 py-4">{team.position}</td>
 								}
 

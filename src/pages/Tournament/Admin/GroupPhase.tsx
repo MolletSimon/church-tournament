@@ -19,13 +19,14 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 	let groups = tournament.phases[tournament.currentPhase].groups!;
 	const navigate = useNavigate();
 	const [selectedGroupIndex, setSelectedGroupIndex] = useState<number>(0);
-	const rankingService = new RankingService();
+	let rankingService = new RankingService();
 	const [selectedGroup, setSelectedGroup] = useState(groups[selectedGroupIndex]);
 	const [matchesDisplayed, setMatchDisplayed] = useState(selectedGroup.matches);
 
 	useEffect(() => {
 		groups = tournament.phases[tournament.currentPhase].groups!;
 		setSelectedGroup(groups[0])
+		setMatchDisplayed(groups[0].matches)
 	}, [tournament.currentPhase, tournament.phases])
 
 	const handleGroupChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -42,6 +43,7 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 			};
 		});
 		setSelectedGroup({...groups[newIndex], matches: updatedMatches});
+		setMatchDisplayed(updatedMatches)
 	};
 
 	const handleScoreChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
@@ -72,12 +74,13 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 		if (newMatch.score1 != null && newMatch.score2 != null) {
 			let teamsRank = updateTournament.phases[tournament.currentPhase].groups![selectedGroupIndex].ranking!;
 			newMatch = rankingService.DetermineWinner(newMatch);
+			console.log(teamsRank)
 			updateTournament.phases[updateTournament.currentPhase].groups![selectedGroupIndex].ranking = rankingService.ComputeRanking(teamsRank, newMatch, updateTournament, selectedGroupIndex);
 		}
 
-		console.log(updateTournament)
-
+		setMatchDisplayed(group.matches)
 		setTournament(updateTournament);
+		console.log(updateTournament)
 	};
 
 	const handleSaveGame = async () => {
@@ -87,7 +90,7 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 
 		group.matches.forEach(match => {
 			if (match.score1 != null && match.score2 != null) {
-				let teamsRank = updateTournament.phases[0].groups![selectedGroupIndex].ranking!;
+				let teamsRank = updateTournament.phases[tournament.currentPhase].groups![selectedGroupIndex].ranking!;
 				match = rankingService.DetermineWinner(match);
 				rankingService.ComputeRanking(teamsRank, match, updateTournament, selectedGroupIndex);
 			}
@@ -138,7 +141,7 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 				</div>
 
 				<div className="w-2/3">
-					<input type="text" placeholder="Chercher par équipe" className="rounded-full w-full italic p-4 border-2 border-primary" onChange={handleSearch}/>
+					<input type="text" placeholder="Chercher par équipe" className="rounded-full border-opacity-20 focus:border-opacity-100 focus:border-primary w-full italic p-4 border-2 border-primary" onChange={handleSearch}/>
 				</div>
 
 				<div className="flex flex-col sm:flex-row w-full justify-between items-start">
@@ -154,7 +157,7 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 					</ul>
 					<div className="flex justify-center items-center w-full sm:w-1/2 p-4 ml-8 mt-10">
 						<div className="flex flex-col w-full ">
-							<RankingComponent selectedGroup={selectedGroup} detailsLevel={1} tournament={tournament} />
+							<RankingComponent selectedGroup={selectedGroup} detailsLevel={1} tournament={tournament} phase={tournament.currentPhase} />
 							<div className="flex flex-col sm:flex-row justify-end gap-8 mt-10">
 								<Button
 									text="Retour"

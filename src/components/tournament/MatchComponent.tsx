@@ -25,6 +25,7 @@ export const MatchComponent: React.FC<Props> = ({match, matchIndex, handleScoreC
 				<div className="flex items-center space-x-2">
 					<input
 						type="number"
+						onWheel={(e) => e.currentTarget.blur()}
 						id="score1"
 						onBlur={handleSaveGame}
 						onChange={(e) =>
@@ -36,6 +37,7 @@ export const MatchComponent: React.FC<Props> = ({match, matchIndex, handleScoreC
 					<span className="text-sm text-gray-500">-</span>
 					<input
 						type="number"
+						onWheel={(e) => e.currentTarget.blur()}
 						id="score2"
 						onBlur={handleSaveGame}
 						onChange={(e) =>

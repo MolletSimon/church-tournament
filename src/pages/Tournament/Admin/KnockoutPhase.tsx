@@ -24,11 +24,11 @@ const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
   }, [])
 
   const getNextRound = () => {
-    return getRound(phase.knockout?.roundOf! / 2).toString();
+    return getRound(phase.knockout?.currentRound! / 2).toString();
   }
 
   const getLastRound = () => {
-    return getRound(phase.knockout?.roundOf! * 2).toString();
+    return getRound(phase.knockout?.currentRound! * 2).toString();
   }
 
   const handleScoreChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
@@ -38,7 +38,6 @@ const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
     newPhase.knockout!.matches![matchIndex] = {
       ...match,
       [`score${teamIndex + 1}`]: newScore,
-      round: phase.knockout?.roundOf!
     } as MatchKnockout;
     tournament.phases[phase.id!] = {...newPhase};
     setPhase(newPhase);
@@ -67,18 +66,28 @@ const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
   };
 
   const nextPhase = () => {
-    const round = getRound(phase.knockout?.roundOf! / 2)
-    const newPhase = {...phase};
-    setCurrentRound(round)
-    const qualified = phase.knockout?.matches?.filter(m => m.round === phase.knockout?.roundOf!).map(m => {
-      return m.winner
-    })
-    const newRoundOf = phase.knockout?.roundOf! / 2
-    newPhase.knockout!.roundOf = newRoundOf
-    newPhase.knockout?.matches?.push({
-      round: newRoundOf,
-      teams: qualified
-    } as MatchKnockout)
+    if (phase.knockout!.matches?.find(m => m.round === phase.knockout!.currentRound! / 2)) {
+      setCurrentRound(getRound(phase.knockout!.currentRound! / 2))
+      setPhase({...phase, knockout: {...phase.knockout, currentRound: phase.knockout!.currentRound! / 2}})
+    } else {
+      const round = getRound(phase.knockout?.currentRound! / 2)
+      const newPhase = {...phase};
+      setCurrentRound(round)
+      const qualified = phase.knockout?.matches?.filter(m => m.round === phase.knockout?.currentRound!).map(m => {
+        return m.winner
+      })
+      const newRoundOf = phase.knockout?.roundOf! / 2
+      newPhase.knockout!.currentRound = newRoundOf
+      newPhase.knockout?.matches?.push({
+        round: newRoundOf,
+        teams: qualified
+      } as MatchKnockout)
+    }
+  };
+
+  const lastPhase = () => {
+    setCurrentRound(getRound(phase.knockout!.currentRound! * 2))
+    setPhase({...phase, knockout: {...phase.knockout, currentRound: phase.knockout!.currentRound! * 2}})
   };
 
   return(
@@ -86,7 +95,7 @@ const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
 
     {phase.knockout?.matches?.map((match, matchIndex) => (
         <>
-        {match.round === phase.knockout!.roundOf &&
+        {match.round === phase.knockout!.currentRound &&
 
                 <li key={matchIndex} className="py-4 pl-0 flex justify-center m-8 flex-col">
                   <div className="rounded-xl border-2 p-4 hover:scale-110 transition-all">
@@ -99,8 +108,13 @@ const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
         </>
     ))}
         <div className="flex items-center w-full justify-center gap-4">
-          <Button text={`Précédent (${getLastRound()}..)` } color="danger" type="button" action={nextPhase} />
-          <Button text={`Suivant (${getNextRound()}..)`} color="primary" type="button" action={nextPhase} /></div>
+          {phase.knockout!.currentRound! < phase.knockout!.roundOf! &&
+              <Button text={`Précédent (${getLastRound()}..)` } color="danger" type="button" action={lastPhase} />
+          }
+          {phase.knockout!.matches?.filter(m => m.round === phase.knockout!.currentRound).filter(m => m.round ===  m.score1 === null || m.score1 === undefined || m.score2 === null || m.score2 === undefined)?.length! > 0 ?
+              <Button text="Suivant (Validez tous les scores)" color="primary" disabled={true}  /> : <Button text={`Suivant (${getNextRound()}..)`}  color="primary" type="button" action={nextPhase} />
+          }
+          </div>
   </div>
   )
 };
