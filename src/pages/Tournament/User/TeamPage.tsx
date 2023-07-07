@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {Link, useParams} from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
+import {doc, getDoc, onSnapshot} from "firebase/firestore";
 import {Match} from "../../../models/Match";
 import {Tournament} from "../../../models/Tournament";
 import {db} from "../../../index";
@@ -35,7 +35,6 @@ const TeamPage = () => {
 					const tournament = docSnap.data() as Tournament;
 					setTournament(tournament);
 					setCurrentPhase(tournament.phases[tournament.currentPhase]);
-					console.log(tournament.phases[tournament.currentPhase].groups!.find(g => g.teams!.includes(teamName!)))
 					if (tournament.phases[tournament.currentPhase]?.type === "Poules") setCurrentGroup(tournament.phases[tournament.currentPhase].groups!.find(g => g.teams!.includes(teamName!)) ?? null)
 				} else {
 					console.log("No such document!");
@@ -43,7 +42,17 @@ const TeamPage = () => {
 			}
 		};
 
+		const subscriber = onSnapshot(doc(db, "tournaments", tournamentId!), (doc) => {
+			const tournament = doc.data() as Tournament;
+			setTournament(tournament);
+			setCurrentPhase(tournament.phases[tournament.currentPhase]);
+			if (tournament.phases[tournament.currentPhase]?.type === "Poules") setCurrentGroup(tournament.phases[tournament.currentPhase].groups!.find(g => g.teams!.includes(teamName!)) ?? null)
+		})
+
 		fetchTournament();
+
+		return () => subscriber()
+
 	}, [tournamentId]);
 
 	useEffect(() => {

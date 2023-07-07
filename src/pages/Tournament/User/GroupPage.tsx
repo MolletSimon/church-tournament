@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {Link, useParams} from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
+import {doc, getDoc, onSnapshot} from "firebase/firestore";
 import { FaFutbol, FaTrophy } from "react-icons/fa";
 import { IoMdFootball } from "react-icons/io";
 import {Group} from "../../../models/Group";
@@ -32,7 +32,15 @@ const GroupPage = () => {
 			}
 		};
 
+		const subscriber = onSnapshot(doc(db, "tournaments", tournamentId!), (doc) => {
+			const tournament = doc.data() as Tournament;
+			setTournament(tournament)
+			setCurrentPhaseIndex(tournament.currentPhase);
+		})
+
 		fetchTournament();
+
+		return () => subscriber()
 	}, [tournamentId]);
 
 	useEffect(() => {
@@ -57,10 +65,6 @@ const GroupPage = () => {
 			setTeamMatches(teamMatches);
 		}
 	}, [group, allMatches]);
-
-	const isTeamQualified = (index: number) => {
-		return index < tournament?.phases![tournament?.currentPhase]!.numberQualifiedByGroup! ? 'text-green-600' : ''
-	}
 
 	return (
 		<div className="min-h-screen bg-gray-100">

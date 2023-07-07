@@ -36,12 +36,18 @@ export class RankingService {
     }
 
     public DetermineWinner(match: Match): Match {
-        if (match.score1 === match.score2) {
-            match.winner = "Aucun";
+        // tab a eu lieu
+        if (match.tab1 && match.tab2) {
+            match.winner = match.tab1 < match.tab2 ? match.teams[1] : match.teams[0]
         } else {
-            if (match.score1! > match.score2!) match.winner = match.teams[0];
-            else match.winner = match.teams[1];
+            if (match.score1 === match.score2) {
+                match.winner = "Aucun";
+            } else {
+                if (match.score1! > match.score2!) match.winner = match.teams[0];
+                else match.winner = match.teams[1];
+            }
         }
+
         return match;
     }
 

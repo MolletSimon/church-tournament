@@ -8,6 +8,7 @@ import {db} from "../../../index";
 import {Tournament} from "../../../models/Tournament";
 import {MatchComponent} from "../../../components/tournament/MatchComponent";
 import {RankingComponent} from "../../../components/tournament/RankingComponent";
+import 'firebase/firestore';
 
 interface Props {
 	tournament: Tournament,
@@ -53,10 +54,10 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 		updateMatch(newMatch, matchIndex);
 	};
 
-	const handleFieldChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
+	const handleFieldChange = async (e: React.ChangeEvent<HTMLSelectElement>, match: Match, matchIndex: number) => {
 		const newField = e.target.value;
 		const newMatch = { ...match, field: newField };
-		await updateMatch(newMatch, matchIndex);
+		updateMatch(newMatch, matchIndex);
 	};
 
 	const handleHourChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {

@@ -17,6 +17,7 @@ type Props = {
 const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
   const [currentRound, setCurrentRound] = useState<Round>(Round.NONE);
   const [phase, setPhase] = useState(tournament.phases[tournament.currentPhase]);
+
   const rankingService = new RankingService();
 
   useEffect(() => {
@@ -31,14 +32,16 @@ const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
     return getRound(phase.knockout?.currentRound! * 2).toString();
   }
 
-  const handleScoreChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
+  const handleScoreChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number, tab?: boolean) => {
     const newScore = e.target.value ? parseInt(e.target.value) : null;
-    const teamIndex = e.target.id === "score1" ? 0 : 1;
+    const teamIndex = e.target.id.includes("1") ? 0 : 1;
     let newPhase = {...phase};
+    let scoreProperty = tab ? `tab${teamIndex + 1}` : `score${teamIndex + 1}`;
     newPhase.knockout!.matches![matchIndex] = {
       ...match,
-      [`score${teamIndex + 1}`]: newScore,
+      [scoreProperty]: newScore,
     } as MatchKnockout;
+
     tournament.phases[phase.id!] = {...newPhase};
     setPhase(newPhase);
     setTournament(tournament);
@@ -55,7 +58,7 @@ const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
     setTournament(updateTournament);
   }
 
-  const handleFieldChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
+  const handleFieldChange = async (e: React.ChangeEvent<HTMLSelectElement>, match: Match, matchIndex: number) => {
     const newField = e.target.value;
     const newMatch = { ...match, field: newField };
   };
@@ -66,6 +69,8 @@ const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
   };
 
   const nextPhase = () => {
+    console.log(phase)
+
     if (phase.knockout!.matches?.find(m => m.round === phase.knockout!.currentRound! / 2)) {
       setCurrentRound(getRound(phase.knockout!.currentRound! / 2))
       setPhase({...phase, knockout: {...phase.knockout, currentRound: phase.knockout!.currentRound! / 2}})
@@ -76,12 +81,15 @@ const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
       const qualified = phase.knockout?.matches?.filter(m => m.round === phase.knockout?.currentRound!).map(m => {
         return m.winner
       })
-      const newRoundOf = phase.knockout?.roundOf! / 2
+      const newRoundOf = phase.knockout?.currentRound! / 2
       newPhase.knockout!.currentRound = newRoundOf
-      newPhase.knockout?.matches?.push({
-        round: newRoundOf,
-        teams: qualified
-      } as MatchKnockout)
+      for (let i = 0; i < qualified!.length; i += 2) {
+        newPhase.knockout?.matches?.push({
+          round: newRoundOf,
+          teams: [qualified![i], qualified![i+1]]
+        } as MatchKnockout)
+      }
+
     }
   };
 
@@ -100,7 +108,7 @@ const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
                 <li key={matchIndex} className="py-4 pl-0 flex justify-center m-8 flex-col">
                   <div className="rounded-xl border-2 p-4 hover:scale-110 transition-all">
                     <h2 className="font-bold text-xl m-2 italic">{currentRound}</h2>
-                    <MatchComponent handleSaveGame={handleSaveGame} match={match} matchIndex={matchIndex} handleScoreChange={handleScoreChange} handleFieldChange={handleFieldChange} handleHourChange={handleHourChange} />
+                    <MatchComponent tab={match.score1 !== undefined && match.score2 !== undefined && match.score1 === match.score2} handleSaveGame={handleSaveGame} match={match} matchIndex={matchIndex} handleScoreChange={handleScoreChange} handleFieldChange={handleFieldChange} handleHourChange={handleHourChange} />
                   </div>
                 </li>
 

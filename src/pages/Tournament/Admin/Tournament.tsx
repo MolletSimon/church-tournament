@@ -31,7 +31,9 @@ export const TournamentDetails: React.FC = () => {
 	}
 
 	const handleStartTournament = async () => {
-		await setDoc(doc(db, "tournaments", tournament?.id!),{...tournament, status: "started"});
+		const newTournament: Tournament = {...tournament!, status: "started"}
+		setTournament(newTournament);
+		await setDoc(doc(db, "tournaments", tournament?.id!), newTournament);
 		setLaunched(true);
 	};
 
