@@ -18,18 +18,26 @@ import {Historique} from "./pages/Tournament/Admin/Historique";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Import the functions you need from the SDKs you need
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyAuoJd0tqoF23elawzcpaDU02-Mu9azKlw",
-    authDomain: "church-tournament.firebaseapp.com",
-    projectId: "church-tournament",
-    storageBucket: "church-tournament.appspot.com",
-    messagingSenderId: "154721190099",
-    appId: "1:154721190099:web:f00f921dc824cbd4bf1426",
-    measurementId: "G-087KHJ547J"
+    apiKey: "AIzaSyAr0_gTc3SwHQcmnLJl_Pl2DQrShAsywf0",
+    authDomain: "tournoi-intereglises.firebaseapp.com",
+    projectId: "tournoi-intereglises",
+    storageBucket: "tournoi-intereglises.appspot.com",
+    messagingSenderId: "6441628913",
+    appId: "1:6441628913:web:0c868441dde5a48bb5e550",
+    measurementId: "G-GRC9KXY36C"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 export const db = getFirestore(app);
 
 const root = ReactDOM.createRoot(

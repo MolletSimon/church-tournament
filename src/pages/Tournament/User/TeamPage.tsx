@@ -86,7 +86,9 @@ const TeamPage = () => {
 							<h3 className="text-2xl underline">Phases finales</h3>
 							{getRound(currentPhase.knockout!.roundOf!)}
 							{teamMatches.map(m => (
-								<MatchMobileComponent teamWon={() => ""} m={m} />
+								<div className="m-4 p-4 border-2 rounded-xl border-primary">
+									<MatchMobileComponent teamWon={() => ""} m={m} />
+								</div>
 							))}
 						</>
 					}

@@ -53,7 +53,7 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 		setIsOpen(false);
 	}
 
-	const handleNextPhase = async () => {
+	const handleNextPhase = async (idLooserTournament?: string) => {
 		const phaseService = new PhaseService();
 		const previousPhase = tournament.phases[tournament.currentPhase];
 		let qualified = previousPhase.groups?.map((g, indexG) => g.ranking?.slice(0, previousPhase.numberQualifiedByGroup)
@@ -72,6 +72,7 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 		const tournamentToSave = {...tournament, phases: newPhases, currentPhase: tournament.currentPhase + 1}
 		setTournament(tournamentToSave);
 		try {
+			if(idLooserTournament) tournamentToSave.looserTournament = idLooserTournament
 			await setDoc(doc(db, "tournaments", tournament.id!), {...tournamentToSave});
 		} catch (e) {
 			console.error("Error adding document: ", e);
@@ -105,14 +106,34 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 			currentPhase: 0,
 			name: tournament.name + " - Consolante",
 			dateTournament: tournament.dateTournament,
-			status: "init",
+			status: "started",
 			numberTeams: getEliminated(tournament.phases[tournament.currentPhase]).length,
 			teams: getEliminated(tournament.phases[tournament.currentPhase]),
-			phases: [] as Phase[]
+			phases: [
+				{
+					type: "Poules",
+					name: "Poules",
+					numberGroups: 2,
+					isHomeAndAway: false,
+					numberTeamsByGroup: 4,
+					numberQualifiedByGroup: 2
+				},
+				{
+					type: "Elimination directe",
+					name: "Phases finales"
+				}
+			] as Phase[]
 		} as Tournament;
 
+		const tournamentService = new TournamentService();
+		lTournament.phases = tournamentService.GeneratePhase(lTournament, [
+			getEliminated(tournament.phases[tournament.currentPhase]).slice(0,4), getEliminated(tournament.phases[tournament.currentPhase]).slice(4,8)
+		])
+		console.log(lTournament)
+
 		setLooserTournament(lTournament);
-		setLooserTournamentIsOpen(true);
+		await handleSaveLooserTournament(lTournament)
+		/*setLooserTournamentIsOpen(true);*/
 	};
 
 	const CustomToastWithLink = () => (
@@ -121,24 +142,28 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 		</div>
 	);
 
-	const handleSaveLooserTournament = async () => {
+	const handleSaveLooserTournament = async (lTournament: Tournament) => {
 		try {
-			const docRef = await addDoc(collection(db, "tournaments"), looserTournament);
-			await setDoc(doc(db, "tournaments", docRef.id), {...looserTournament, id: docRef.id});
-			await setDoc(doc(db, "tournaments", tournament.id!), {...tournament, looserTournament : docRef.id})
-			setLooserTournamentIsOpen(false);
-			toast.success(CustomToastWithLink, {
-				position: "top-right",
-				autoClose: 5000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-				theme: "light",
-			});
-			window.open(`/tournament/${docRef.id}`,'_blank', 'noreferrer')
-			handleNextPhase();
+			if (tournament.currentPhase === 0) {
+				const docRef = await addDoc(collection(db, "tournaments"), lTournament);
+				await setDoc(doc(db, "tournaments", docRef.id), {...lTournament, id: docRef.id})
+				setLooserTournamentIsOpen(false);
+				toast.success(CustomToastWithLink, {
+					position: "top-right",
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+					theme: "light",
+				});
+				window.open(`/tournament/${docRef.id}`,'_blank', 'noreferrer')
+				await handleNextPhase(docRef.id);
+			} else {
+				await handleNextPhase();
+			}
+
 		} catch (e) {
 			console.error("Error adding document: ", e);
 		}
@@ -162,11 +187,10 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 					</p>
 					<p>Les éliminés sont : {getEliminated(tournament.phases[tournament.currentPhase])!.map(t =>
 						<p className="text-danger"> {t}</p>)}</p>
-					<p className="mt-3">Voulez-vous créer un tournoi avec les équipes qui ont étés éliminés ?</p>
+					<p className="mt-3">Voulez-vous passer à la phase suivante ?</p>
 				</div>
 				<div className="flex justify-center gap-2">
-					<Button text="Oui, créer un tournoi" color="success" action={handleCreateLooserTournament} />
-					<Button text="Non, passer à la phase suivante" color="warning" action={handleNextPhase} />
+					<Button text="Oui" color="success" action={handleCreateLooserTournament} />
 					<Button text="Non, annuler" color="danger" action={closeModal} />
 				</div>
 
@@ -180,7 +204,7 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 					{looserTournament.phases.map((p,index) => p.type === "Poules" && <GroupPhaseDefinition phase={p} updatePhase={updatePhase} index={index} setIsValid={() => true} />)}
 
 					<div className="flex justify-center gap-2">
-						{looserTournament.phases.length > 0 && <Button text="Oui, créer un tournoi" color="success" action={handleSaveLooserTournament} />}
+						{/*{looserTournament.phases.length > 0 && <Button text="Oui, créer un tournoi" color="success" action={handleSaveLooserTournament} />}*/}
 						<Button text="Annuler" color="danger" action={() => setLooserTournamentIsOpen(false)} />
 					</div>
 				</>}

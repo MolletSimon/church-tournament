@@ -60,17 +60,29 @@ const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
 
   const handleFieldChange = async (e: React.ChangeEvent<HTMLSelectElement>, match: Match, matchIndex: number) => {
     const newField = e.target.value;
-    const newMatch = { ...match, field: newField };
+    let newPhase = {...phase};
+    newPhase.knockout!.matches![matchIndex] = {
+      ...match,
+      field: newField,
+    } as MatchKnockout;
+    tournament.phases[phase.id!] = {...newPhase};
+    setPhase(newPhase);
+    setTournament(tournament);
   };
 
   const handleHourChange = async (e: React.ChangeEvent<HTMLInputElement>, match: Match, matchIndex: number) => {
     const newHour = e.target.value;
-    const newMatch = { ...match, hour: newHour };
+    let newPhase = {...phase};
+    newPhase.knockout!.matches![matchIndex] = {
+      ...match,
+      hour: newHour,
+    } as MatchKnockout;
+    tournament.phases[phase.id!] = {...newPhase};
+    setPhase(newPhase);
+    setTournament(tournament);
   };
 
-  const nextPhase = () => {
-    console.log(phase)
-
+  const nextPhase = async () => {
     if (phase.knockout!.matches?.find(m => m.round === phase.knockout!.currentRound! / 2)) {
       setCurrentRound(getRound(phase.knockout!.currentRound! / 2))
       setPhase({...phase, knockout: {...phase.knockout, currentRound: phase.knockout!.currentRound! / 2}})
@@ -90,6 +102,10 @@ const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
         } as MatchKnockout)
       }
 
+      const newTournament = {...tournament}
+      newTournament.phases[tournament.currentPhase] = newPhase
+      await setDoc(doc(db, "tournaments", tournament.id!), newTournament)
+      setTournament(newTournament)
     }
   };
 
@@ -119,7 +135,7 @@ const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
           {phase.knockout!.currentRound! < phase.knockout!.roundOf! &&
               <Button text={`Précédent (${getLastRound()}..)` } color="danger" type="button" action={lastPhase} />
           }
-          {phase.knockout!.matches?.filter(m => m.round === phase.knockout!.currentRound).filter(m => m.round ===  m.score1 === null || m.score1 === undefined || m.score2 === null || m.score2 === undefined)?.length! > 0 ?
+          {phase.knockout!.matches?.filter(m => m.round === phase.knockout!.currentRound).filter(m => m.round ===  m.score1 === null || m.score1 === undefined || m.score2 === null || m.score2 === undefined || m.winner === "Aucun")?.length! > 0 ?
               <Button text="Suivant (Validez tous les scores)" color="primary" disabled={true}  /> : <Button text={`Suivant (${getNextRound()}..)`}  color="primary" type="button" action={nextPhase} />
           }
           </div>

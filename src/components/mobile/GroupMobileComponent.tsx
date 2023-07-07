@@ -78,7 +78,10 @@ export const GroupMobileComponent: React.FC<Props> = ({teamMatches, currentGroup
 				</div>
 			) : (
 				<div className="text-center text-gray-500 py-4">
-					Aucun match trouvé pour l'équipe sélectionnée.
+					Aucun match trouvé pour l'équipe sélectionnée. L'équipe se situe peut être dans le tournoi consolante
+					<Link to={`/${tournament.looserTournament}`}>
+						<Button text="Tournoi consolante" color="primary" />
+					</Link>
 				</div>
 			)}
 		</>
