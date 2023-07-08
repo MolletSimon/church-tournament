@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import React, { useEffect, useState } from 'react';
-import {collection, getDocs, Timestamp} from "firebase/firestore";
+import {addDoc, collection, doc, getDocs, setDoc, Timestamp} from "firebase/firestore";
 import {db} from "../../index";
 import Loader from "../Common/Loader";
 import {Tournament} from "../../models/Tournament";
@@ -23,6 +23,7 @@ export const Admin: React.FC = () => {
 				}))
 
 				setTournaments(dataTournaments);
+				addDoc(collection(db, "tournaments"), dataTournaments.find(t => t.id === 'CtxAVrYPbNaVuwEKZTQr'))
 			})
 	}
 
