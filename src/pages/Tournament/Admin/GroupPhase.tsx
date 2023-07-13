@@ -168,7 +168,6 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 								{tournament.currentPhase > 0 && <Button
 									text="Phase précédente"
 									color="warning"
-									action={handlePrecPhase}
 								/>}
 
 								<Button

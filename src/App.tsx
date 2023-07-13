@@ -5,8 +5,7 @@ import {Navigate} from "react-router-dom";
 function App() {
   return (
     <div className="Content">
-      <Navigate to={"/CtxAVrYPbNaVuwEKZTQr"}  />
-        {/*<Navigate to={"/admin"}  />*/}
+        <Navigate to={"/admin"}  />
     </div>
   );
 }

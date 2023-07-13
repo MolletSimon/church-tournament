@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="75e9fa08-76f5-4581-afa3-658573bdc955" name="Changes" comment="dernieres modifs">
+      <change afterPath="$PROJECT_DIR$/public/images/logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/logo192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/logo512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Admin/Admin.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Admin/Admin.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Tournament/Admin/GroupPhase.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Tournament/Admin/GroupPhase.tsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+        <option value="tsconfig.json" />
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIEW_PUSH_PROTECTED_ONLY" value="true" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/package.json" />
+  </component>
+  <component name="ProjectId" id="2PZTJkRi8qc8tkmqxr8zVMtQKTN" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/simon/Documents/Dev/church-tournament&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs.jest.jest_package&quot;: &quot;/Users/simon/Documents/Dev/church-tournament/node_modules/react-scripts&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/simon/Documents/Dev/church-tournament/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="ReactDesignerToolWindowState">
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.haulmont.rcb.reactComponents" value="false" />
+        <entry key="com.haulmont.rcb.reactInspector" value="false" />
+      </map>
+    </option>
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/images" />
+      <recent name="$PROJECT_DIR$/public" />
+      <recent name="$PROJECT_DIR$/public/fonts" />
+      <recent name="$PROJECT_DIR$/src/pages/Tournament/Admin" />
+      <recent name="$PROJECT_DIR$/src/models" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Jest.create tournament with 24 teams and 3 phases.passes">
+    <configuration name="rest-api | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/rest-api.http" requestIdentifier="#1" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="create tournament with 24 teams and 3 phases.passes" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/node_modules/react-scripts" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/cypress/e2e/createTournament.cy.ts" />
+      <test-names>
+        <test-name value="create tournament with 24 teams and 3 phases" />
+        <test-name value="passes" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="pass group phase" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/node_modules/react-scripts" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/cypress/e2e/passGroupPhase.cy.ts" />
+      <test-names>
+        <test-name value="pass group phase" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="dev" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="start" />
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="HTTP Request.rest-api | #1" />
+      <item itemvalue="Jest.create tournament with 24 teams and 3 phases.passes" />
+      <item itemvalue="Jest.pass group phase" />
+      <item itemvalue="npm.dev" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Jest.create tournament with 24 teams and 3 phases.passes" />
+        <item itemvalue="Jest.pass group phase" />
+        <item itemvalue="HTTP Request.rest-api | #1" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="75e9fa08-76f5-4581-afa3-658573bdc955" name="Changes" comment="" />
+      <created>1683663534907</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1683663534907</updated>
+      <workItem from="1683663537357" duration="56000" />
+      <workItem from="1683663610472" duration="16190000" />
+      <workItem from="1683846532502" duration="13797000" />
+      <workItem from="1684860791678" duration="3447000" />
+      <workItem from="1684877591208" duration="15463000" />
+      <workItem from="1685044642843" duration="838000" />
+      <workItem from="1685135990773" duration="42170000" />
+      <workItem from="1686069244482" duration="15593000" />
+      <workItem from="1686163718986" duration="14946000" />
+      <workItem from="1686646174550" duration="20000" />
+      <workItem from="1687004882222" duration="10933000" />
+      <workItem from="1687523632630" duration="272000" />
+      <workItem from="1687523907415" duration="12481000" />
+      <workItem from="1688340263201" duration="13918000" />
+      <workItem from="1688479418408" duration="25631000" />
+      <workItem from="1688545039221" duration="7792000" />
+      <workItem from="1688641890544" duration="1785000" />
+      <workItem from="1688643701964" duration="17945000" />
+      <workItem from="1688801534450" duration="4366000" />
+    </task>
+    <task id="LOCAL-00001" summary="initial commit">
+      <created>1683740350947</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1683740350947</updated>
+    </task>
+    <task id="LOCAL-00002" summary="refacto, ui ajout de tailwind, suppression bulma, ajout des phases">
+      <created>1683843154081</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1683843154081</updated>
+    </task>
+    <task id="LOCAL-00003" summary="definition des phases de poules, clean, deploiement">
+      <created>1683847169406</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1683847169406</updated>
+    </task>
+    <task id="LOCAL-00004" summary="ajout des controles et tutticuanti">
+      <created>1684191976133</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1684191976133</updated>
+    </task>
+    <task id="LOCAL-00005" summary="ajout du tirage au sort">
+      <created>1684279425554</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1684279425554</updated>
+    </task>
+    <task id="LOCAL-00006" summary="refonte graphique total, fix divers bug, stabilisation de l'application">
+      <created>1684969249659</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1684969249660</updated>
+    </task>
+    <task id="LOCAL-00007" summary="ajout majeure : lancement du tournoi ,refacto, modif mineure">
+      <created>1685144347557</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1685144347557</updated>
+    </task>
+    <task id="LOCAL-00008" summary="classement live, difference de buts etc, correctif">
+      <created>1685231042401</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1685231042402</updated>
+    </task>
+    <task id="LOCAL-00009" summary="minor fixes mais pas parfait encore">
+      <created>1685232243139</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1685232243139</updated>
+    </task>
+    <task id="LOCAL-00010" summary="corrigé mais pas totalement je crois">
+      <created>1685288142023</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1685288142023</updated>
+    </task>
+    <task id="LOCAL-00011" summary="corrigé mais je crois que cette fois c'est bon !!">
+      <created>1685817700670</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1685817700671</updated>
+    </task>
+    <task id="LOCAL-00012" summary="correction diverses, ajout (enfin) de nouvelles phases etc">
+      <created>1685918706972</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1685918706972</updated>
+    </task>
+    <task id="LOCAL-00013" summary="ajout des pages pour les utilisateurs">
+      <created>1686084753440</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1686084753440</updated>
+    </task>
+    <task id="LOCAL-00014" summary="ajout création tournoi loosers">
+      <created>1686174025993</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1686174025993</updated>
+    </task>
+    <task id="LOCAL-00015" summary="init phase eliminatoire">
+      <created>1686178695865</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1686178695865</updated>
+    </task>
+    <task id="LOCAL-00016" summary="phase elim">
+      <created>1687008919934</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1687008919935</updated>
+    </task>
+    <task id="LOCAL-00017" summary="minor design changes, cypress init">
+      <created>1687388888227</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1687388888227</updated>
+    </task>
+    <task id="LOCAL-00018" summary="improvement">
+      <created>1687390423269</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1687390423269</updated>
+    </task>
+    <task id="LOCAL-00019" summary="many fixes, knockout phase are working">
+      <created>1687567356038</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1687567356039</updated>
+    </task>
+    <task id="LOCAL-00020" summary="refonte graphique mobile">
+      <created>1688346330238</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1688346330238</updated>
+    </task>
+    <task id="LOCAL-00021" summary="pleins de modifs, d'amélioration de nouvelles features et tout">
+      <created>1688510507368</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1688510507368</updated>
+    </task>
+    <task id="LOCAL-00022" summary="correction divers bugs, amelioration stabilite">
+      <created>1688571015895</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1688571015895</updated>
+    </task>
+    <task id="LOCAL-00023" summary="correction divers bugs, ajout demi finale, stabilisation des phases finales, ajout des TAB">
+      <created>1688691297604</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1688691297604</updated>
+    </task>
+    <task id="LOCAL-00024" summary="dernieres modifs avant jour j">
+      <created>1688773539438</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1688773539438</updated>
+    </task>
+    <task id="LOCAL-00025" summary="dernieres modifs">
+      <created>1688774425970</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1688774425970</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="refacto, ui ajout de tailwind, suppression bulma, ajout des phases" />
+    <MESSAGE value="definition des phases de poules, clean, deploiement" />
+    <MESSAGE value="ajout des controles et tutticuanti" />
+    <MESSAGE value="finition creation tournoi, page admin, modification visuelles, ajout de la db firestore" />
+    <MESSAGE value="ajout du tirage au sort" />
+    <MESSAGE value="refonte graphique total, fix divers bug, stabilisation de l'application" />
+    <MESSAGE value="ajout majeure : lancement du tournoi ,refacto, modif mineure" />
+    <MESSAGE value="classement live, difference de buts etc, correctif" />
+    <MESSAGE value="minor fixes mais pas parfait encore" />
+    <MESSAGE value="corrigé mais pas totalement je crois" />
+    <MESSAGE value="corrigé mais je crois que cette fois c'est bon !!" />
+    <MESSAGE value="correction diverses, ajout (enfin) de nouvelles phases etc" />
+    <MESSAGE value="ajout des pages pour les utilisateurs" />
+    <MESSAGE value="ajout création tournoi loosers" />
+    <MESSAGE value="init phase eliminatoire" />
+    <MESSAGE value="phase elim" />
+    <MESSAGE value="minor design changes, cypress init" />
+    <MESSAGE value="improvement" />
+    <MESSAGE value="many fixes, knockout phase are working" />
+    <MESSAGE value="refonte graphique mobile" />
+    <MESSAGE value="pleins de modifs, d'amélioration de nouvelles features et tout" />
+    <MESSAGE value="correction divers bugs, amelioration stabilite" />
+    <MESSAGE value="correction divers bugs, ajout demi finale, stabilisation des phases finales, ajout des TAB" />
+    <MESSAGE value="dernieres modifs avant jour j" />
+    <MESSAGE value="dernieres modifs" />
+    <option name="LAST_COMMIT_MESSAGE" value="dernieres modifs" />
+  </component>
+</project>

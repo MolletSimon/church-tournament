@@ -1,0 +1,10 @@
+GET http://localhost:63989/api/item?id=99
+Accept: application/json
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-05-09T230010.200.html
+
+###
+

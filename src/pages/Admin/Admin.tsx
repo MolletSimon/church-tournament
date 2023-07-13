@@ -23,7 +23,6 @@ export const Admin: React.FC = () => {
 				}))
 
 				setTournaments(dataTournaments);
-				addDoc(collection(db, "tournaments"), dataTournaments.find(t => t.id === 'CtxAVrYPbNaVuwEKZTQr'))
 			})
 	}
 
@@ -42,29 +41,34 @@ export const Admin: React.FC = () => {
 
 	return (
 		<>
-			<div className="flex gap-6 items-center m-8">
-				<img src="/images/logo.png" alt="logo" width={100}/>
-				<h1 className="uppercase text-6xl ml-8 tracking-widest font-bold text-primary font-lexend">Pied ballon</h1>
+			<div className="flex gap-6 justify-between m-12">
+				<div className="flex items-center">
+					<img src="/images/logo.png" className="rounded-full bg-primary p-4" alt="logo" width={120}/>
+					<h1 className="uppercase text-6xl ml-8 tracking-widest font-bold text-primary font-lexend">Pied ballon</h1>
+				</div>
+				<div className="flex items-center gap-4 rounded-full border-2 px-8 border-primary">
+					<span className="bg-primary rounded-full p-4 text-white text-lg font-bold">SM</span>
+					<p className="italic text-lg">Simon M.</p>
+				</div>
 			</div>
-			<h1 className="text-3xl mt-8 ml-20 font-bold">Page administrateur</h1>
 			<div className="flex flex-row my-8 mx-20">
 				<button
 					id="createTournament"
-					className="bg-primary hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full hover:transition-all focus:outline-none focus:shadow-outline"
+					className="bg-primary hover:bg-green-600 mt-4 text-white font-bold py-2 px-4 rounded-full delay-100 hover:scale-105 transition-all focus:outline-none focus:shadow-outline"
 					onClick={() => navigate("/create-tournament")}
 				>
 					Créer un tournoi
 				</button>
 			</div>
-			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mx-16 gap-6">
 				{tournaments ? tournaments.map((t) => (
 					<div
 						key={t.id}
 						id={t.name}
 						onClick={() => handleClick(t)}
-						className="bg-gray-100 p-4 rounded-md flex flex-col justify-center items-center shadow-lg mx-8 cursor-pointer hover:scale-110 transform transition-all"
+						className="bg-gray-100 p-6 rounded-xl flex flex-col justify-center items-center shadow-lg cursor-pointer hover:scale-110 transform transition-all"
 					>
-						<h3 className="text-lg font-bold mb-2 text-primary">{t.name}</h3>
+						<h3 className="text-xl font-bold mb-2 text-primary">{t.name}</h3>
 						<p>{t.dateTournament?.toLocaleDateString()}</p>
 
 						<p className="text-lg mb-2">Nombre d'équipes : {t.numberTeams}</p>
