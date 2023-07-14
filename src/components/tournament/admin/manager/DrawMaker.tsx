@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {doc, setDoc} from "firebase/firestore";
-import { db } from '../../..';
-import { Button } from '../../generic/Button';
-import { Tournament } from '../../../models/Tournament';
-import { TournamentService } from '../../../services/TournamentService';
+import { db } from '../../../..';
+import { Button } from '../../../generic/Button';
+import { Tournament } from '../../../../models/Tournament';
+import { TournamentService } from '../../../../services/TournamentService';
 
 interface MakeDrawProps {
 	tournament: Tournament;

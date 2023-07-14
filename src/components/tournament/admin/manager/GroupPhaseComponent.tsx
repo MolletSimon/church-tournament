@@ -1,13 +1,13 @@
-import {Button} from "../../generic/Button";
+import {Button} from "../../../generic/Button";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {RankingService} from "../../../services/RankingService";
-import {Match} from "../../../models/Match";
+import {RankingService} from "../../../../services/RankingService";
+import {Match} from "../../../../models/Match";
 import {doc, setDoc} from "firebase/firestore";
-import {db} from "../../../index";
-import {Tournament} from "../../../models/Tournament";
-import {MatchComponent} from "../common/MatchComponent";
-import {RankingComponent} from "../common/RankingComponent";
+import {db} from "../../../../index";
+import {Tournament} from "../../../../models/Tournament";
+import {MatchComponent} from "../../common/MatchComponent";
+import {RankingComponent} from "../../common/RankingComponent";
 import 'firebase/firestore';
 
 interface Props {

@@ -4,7 +4,6 @@ import {doc, getDoc, onSnapshot} from "firebase/firestore";
 import { FaFutbol, FaTrophy } from "react-icons/fa";
 import { IoMdFootball } from "react-icons/io";
 import {Group} from "../../models/Group";
-import {Match} from "../../models/Match";
 import {db} from "../../index";
 import {Tournament} from "../../models/Tournament";
 import {Button} from "../../components/generic/Button";
@@ -12,9 +11,7 @@ import {Button} from "../../components/generic/Button";
 const GroupPage = () => {
 	const { tournamentId, groupId } = useParams<{ tournamentId: string; groupId: string }>();
 	const [group, setGroup] = useState<Group>();
-	const [teamMatches, setTeamMatches] = useState<Match[]>([]);
 	const [tournament, setTournament] = useState<Tournament>();
-	const [allMatches, setAllMatches] = useState<Match[]>([]);
 	const [currentPhaseIndex, setCurrentPhaseIndex] = useState<number>();
 
 	useEffect(() => {
@@ -49,7 +46,6 @@ const GroupPage = () => {
 				if (tournament) {
 					const group = tournament.phases[currentPhaseIndex].groups?.find((group, index) => index.toString() === groupId);
 					setGroup(group);
-					setAllMatches(group?.matches || []);
 				} else {
 					console.log("No such document!");
 				}
@@ -58,13 +54,6 @@ const GroupPage = () => {
 
 		fetchGroup();
 	}, [tournamentId, groupId, currentPhaseIndex]);
-
-	useEffect(() => {
-		if (group) {
-			const teamMatches = allMatches.filter(match => group.teams.includes(match.teams[0]) || group.teams.includes(match.teams[1]));
-			setTeamMatches(teamMatches);
-		}
-	}, [group, allMatches]);
 
 	return (
 		<div className="min-h-screen bg-gray-100">

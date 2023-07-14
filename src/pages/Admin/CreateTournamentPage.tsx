@@ -29,7 +29,8 @@ export const CreateTournamentPage = () => {
 	};
 
 	const handlePrecStep = () => {
-		setStep(step-1);
+		if (step > 1) setStep(prevStep => prevStep - 1);
+		if (step === 1) navigate("/admin");
 	}
 
 	useEffect(() => {

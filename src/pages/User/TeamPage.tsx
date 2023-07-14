@@ -12,7 +12,7 @@ import {Group} from "../../models/Group";
 import {GroupMobileComponent} from "../../components/mobile/GroupMobileComponent";
 import {PhaseType} from "../../models/Enums/PhaseType";
 import {MatchMobileComponent} from "../../components/mobile/MatchMobileComponent";
-import {getRound} from "../../components/tournament/admin/KnockoutPhaseComponent";
+import {getRound} from "../../components/tournament/admin/manager/KnockoutPhaseComponent";
 
 export type TeamMatch = {
 	match: Match;

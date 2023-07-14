@@ -2,8 +2,7 @@ import {Tournament} from "../models/Tournament";
 import {Phase} from "../models/Phase";
 import {Ranking} from "../models/Ranking";
 import {Group} from "../models/Group";
-import {Match} from "../models/Match";
-import { getDocs, collection, Timestamp } from "firebase/firestore";
+import { getDocs, collection, Timestamp, doc, getDoc } from "firebase/firestore";
 import { db } from "..";
 
 export class TournamentService {
@@ -43,6 +42,24 @@ export class TournamentService {
             return phase;
         })
     }
+
+    public async FetchTournament(id: string): Promise<Tournament> {
+        let tournament = {} as Tournament;
+
+        const docRef = doc(db, "tournaments", id!);
+		const docSnap = await getDoc(docRef);
+
+		if (docSnap.exists()) {
+			tournament = docSnap.data() as Tournament;
+			const date = tournament.dateTournament as unknown as Timestamp;
+            tournament.dateTournament = date.toDate();
+		} else {
+			console.error("No such document!");
+		}
+
+        return tournament;
+    }
+
 
     public async FetchTournaments(): Promise<Tournament[]> {
         let tournaments = [] as Tournament[];

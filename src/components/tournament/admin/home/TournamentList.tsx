@@ -1,6 +1,6 @@
 import React from "react";
-import Loader from "../../generic/Loader";
-import { Tournament } from "../../../models/Tournament";
+import { Tournament } from "../../../../models/Tournament";
+import Loader from "../../../generic/Loader";
 
 interface Props {
 	tournaments: Tournament[];

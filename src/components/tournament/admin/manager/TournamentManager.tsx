@@ -5,16 +5,16 @@ import Modal from 'react-modal';
 import {addDoc, collection, doc, setDoc} from "firebase/firestore";
 import {toast, ToastContainer} from "react-toastify";
 import {Link} from "react-router-dom";
-import { db } from "../../..";
-import GroupPhaseDefinition from "../../create-tournament/GroupPhaseDefinition";
-import PhasesTournamentDefinition from "../../create-tournament/PhasesTournamentDefinition";
-import { Button } from "../../generic/Button";
+import { db } from "../../../..";
+import GroupPhaseDefinition from "../../../create-tournament/GroupPhaseDefinition";
+import PhasesTournamentDefinition from "../../../create-tournament/PhasesTournamentDefinition";
+import { Button } from "../../../generic/Button";
 import { GroupPhaseComponent } from "./GroupPhaseComponent";
 import KnockoutPhaseComponent from "./KnockoutPhaseComponent";
-import { Phase } from "../../../models/Phase";
-import { Tournament } from "../../../models/Tournament";
-import { PhaseService } from "../../../services/PhaseService";
-import { TournamentService } from "../../../services/TournamentService";
+import { Phase } from "../../../../models/Phase";
+import { Tournament } from "../../../../models/Tournament";
+import { PhaseService } from "../../../../services/PhaseService";
+import { TournamentService } from "../../../../services/TournamentService";
 
 interface Props {
 	tournament: Tournament,

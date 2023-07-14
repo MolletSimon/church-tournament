@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Phase} from "../../../models/Phase";
-import {Match, MatchKnockout} from "../../../models/Match";
-import {MatchComponent} from "../common/MatchComponent";
-import {Button} from "../../generic/Button";
-import {Round} from '../../../models/Enums/Round';
-import {Tournament} from "../../../models/Tournament";
-import {RankingService} from "../../../services/RankingService";
+import {Phase} from "../../../../models/Phase";
+import {Match, MatchKnockout} from "../../../../models/Match";
+import {MatchComponent} from "../../common/MatchComponent";
+import {Button} from "../../../generic/Button";
+import {Round} from '../../../../models/Enums/Round';
+import {Tournament} from "../../../../models/Tournament";
+import {RankingService} from "../../../../services/RankingService";
 import {doc, setDoc} from "firebase/firestore";
-import {db} from "../../../index";
+import {db} from "../../../../index";
 
 type Props = {
   tournament: Tournament;
