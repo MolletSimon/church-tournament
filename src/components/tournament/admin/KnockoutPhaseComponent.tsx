@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Phase} from "../../../models/Phase";
 import {Match, MatchKnockout} from "../../../models/Match";
-import {MatchComponent} from "../../../components/tournament/MatchComponent";
-import {Button} from "../../../components/generic/Button";
+import {MatchComponent} from "../common/MatchComponent";
+import {Button} from "../../generic/Button";
 import {Round} from '../../../models/Enums/Round';
 import {Tournament} from "../../../models/Tournament";
 import {RankingService} from "../../../services/RankingService";
@@ -14,7 +14,7 @@ type Props = {
   setTournament: (phase: Tournament) => void,
 };
 
-const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
+const KnockoutPhaseComponent: React.FC<Props> = ({ tournament, setTournament }) => {
   const [currentRound, setCurrentRound] = useState<Round>(Round.NONE);
   const [phase, setPhase] = useState(tournament.phases[tournament.currentPhase]);
 
@@ -133,10 +133,10 @@ const KnockoutPhase: React.FC<Props> = ({ tournament, setTournament }) => {
     ))}
         <div className="flex items-center w-full justify-center gap-4">
           {phase.knockout!.currentRound! < phase.knockout!.roundOf! &&
-              <Button text={`Précédent (${getLastRound()}..)` } color="danger" type="button" action={lastPhase} />
+              <Button color="danger" type="button" action={lastPhase}>Précédent ({getLastRound()}..)</Button>
           }
           {phase.knockout!.matches?.filter(m => m.round === phase.knockout!.currentRound).filter(m => m.round ===  m.score1 === null || m.score1 === undefined || m.score2 === null || m.score2 === undefined || m.winner === "Aucun")?.length! > 0 ?
-              <Button text="Suivant (Validez tous les scores)" color="primary" disabled={true}  /> : <Button text={`Suivant (${getNextRound()}..)`}  color="primary" type="button" action={nextPhase} />
+              <Button color="primary" disabled={true}>Suivant (Validez tous les scores)</Button> : <Button color="primary" type="button" action={nextPhase}>Suivant ({getNextRound()}..)</Button>
           }
           </div>
   </div>
@@ -158,4 +158,4 @@ export const getRound = (roundOf: number): Round => {
   }
 }
 
-export default KnockoutPhase;
+export default KnockoutPhaseComponent;

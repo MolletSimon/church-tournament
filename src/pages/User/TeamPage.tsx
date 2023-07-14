@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import {Link, useParams} from "react-router-dom";
 import {doc, getDoc, onSnapshot} from "firebase/firestore";
-import {Match} from "../../../models/Match";
-import {Tournament} from "../../../models/Tournament";
-import {db} from "../../../index";
+import {Match} from "../../models/Match";
+import {Tournament} from "../../models/Tournament";
+import {db} from "../../index";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { FaFutbol, FaMapMarkerAlt } from "react-icons/fa";
-import {Button} from "../../../components/generic/Button";
-import {Phase} from "../../../models/Phase";
-import {Group} from "../../../models/Group";
-import {GroupMobileComponent} from "../../../components/mobile/GroupMobileComponent";
-import {PhaseType} from "../../../models/Enums/PhaseType";
-import {MatchMobileComponent} from "../../../components/mobile/MatchMobileComponent";
-import {getRound} from "../Admin/KnockoutPhase";
+import {Button} from "../../components/generic/Button";
+import {Phase} from "../../models/Phase";
+import {Group} from "../../models/Group";
+import {GroupMobileComponent} from "../../components/mobile/GroupMobileComponent";
+import {PhaseType} from "../../models/Enums/PhaseType";
+import {MatchMobileComponent} from "../../components/mobile/MatchMobileComponent";
+import {getRound} from "../../components/tournament/admin/KnockoutPhaseComponent";
 
 export type TeamMatch = {
 	match: Match;

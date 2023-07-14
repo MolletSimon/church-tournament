@@ -1,4 +1,4 @@
-import {Button} from "../../../components/generic/Button";
+import {Button} from "../../generic/Button";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {RankingService} from "../../../services/RankingService";
@@ -6,8 +6,8 @@ import {Match} from "../../../models/Match";
 import {doc, setDoc} from "firebase/firestore";
 import {db} from "../../../index";
 import {Tournament} from "../../../models/Tournament";
-import {MatchComponent} from "../../../components/tournament/MatchComponent";
-import {RankingComponent} from "../../../components/tournament/RankingComponent";
+import {MatchComponent} from "../common/MatchComponent";
+import {RankingComponent} from "../common/RankingComponent";
 import 'firebase/firestore';
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
 	handleNextPhase: () => void,
 }
 
-export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNextPhase}) => {
+export const GroupPhaseComponent:React.FC<Props> = ({tournament, setTournament, handleNextPhase}) => {
 	let groups = tournament.phases[tournament.currentPhase].groups!;
 	const navigate = useNavigate();
 	const [selectedGroupIndex, setSelectedGroupIndex] = useState<number>(0);
@@ -161,20 +161,18 @@ export const GroupPhase:React.FC<Props> = ({tournament, setTournament, handleNex
 							<RankingComponent selectedGroup={selectedGroup} detailsLevel={1} tournament={tournament} phase={tournament.currentPhase} />
 							<div className="flex flex-col sm:flex-row justify-end gap-8 mt-10">
 								<Button
-									text="Retour"
 									color="danger"
 									action={() => navigate("/")}
-								/>
-								{tournament.currentPhase > 0 && <Button
-									text="Phase précédente"
+								>Retour</Button>
+								{tournament.currentPhase > 0 && 
+								<Button
 									color="warning"
-								/>}
+								>Phase précédente</Button>}
 
 								<Button
-									text="Finaliser cette phase !"
 									color="primary"
 									action={handleNextPhase}
-								/>
+								>Finaliser cette phase !</Button>
 							</div>
 						</div>
 					</div>

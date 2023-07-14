@@ -1,26 +1,20 @@
 import React, {useState} from "react";
-import {Tournament} from "../../../models/Tournament";
-import {GroupPhase} from "./GroupPhase";
-import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-import {Group} from "../../../models/Group";
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from 'react-modal';
-import {TournamentService} from "../../../services/TournamentService";
-import {Button} from "../../../components/generic/Button";
 import {addDoc, collection, doc, setDoc} from "firebase/firestore";
-import {db} from "../../../index";
-import {Knockout, Phase} from "../../../models/Phase";
-import PhasesTournamentDefinition from "../../Admin/CreationTournament/PhasesTournamentDefinition";
-import GroupPhaseDefinition from "../../Admin/CreationTournament/GroupPhaseDefinition";
 import {toast, ToastContainer} from "react-toastify";
 import {Link} from "react-router-dom";
-import * as tls from "tls";
-import knockoutPhase from "./KnockoutPhase";
-import {Match, MatchKnockout} from "../../../models/Match";
-import KnockoutPhase from "./KnockoutPhase";
-import KnockoutTree from "./KnockoutPhase";
-import {PhaseService} from "../../../services/PhaseService";
+import { db } from "../../..";
+import GroupPhaseDefinition from "../../create-tournament/GroupPhaseDefinition";
+import PhasesTournamentDefinition from "../../create-tournament/PhasesTournamentDefinition";
+import { Button } from "../../generic/Button";
+import { GroupPhaseComponent } from "./GroupPhaseComponent";
+import KnockoutPhaseComponent from "./KnockoutPhaseComponent";
+import { Phase } from "../../../models/Phase";
+import { Tournament } from "../../../models/Tournament";
+import { PhaseService } from "../../../services/PhaseService";
+import { TournamentService } from "../../../services/TournamentService";
 
 interface Props {
 	tournament: Tournament,
@@ -38,7 +32,7 @@ const customStyles = {
 	},
 };
 
-export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) => {
+export const TournamentManager:React.FC<Props>  = ({tournament, setTournament}) => {
 	const [modalIsOpen, setIsOpen] = React.useState(false);
 	const [modalLooserTournamentIsOpen, setLooserTournamentIsOpen] = React.useState(false);
 	const [looserTournament, setLooserTournament] = useState<Tournament>();
@@ -190,8 +184,8 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 					<p className="mt-3">Voulez-vous passer à la phase suivante ?</p>
 				</div>
 				<div className="flex justify-center gap-2">
-					<Button text="Oui" color="success" action={handleCreateLooserTournament} />
-					<Button text="Non, annuler" color="danger" action={closeModal} />
+					<Button color="success" action={handleCreateLooserTournament}>Oui</Button>
+					<Button color="danger" action={closeModal}>Non, annuler</Button>
 				</div>
 
 			</Modal>}
@@ -205,7 +199,7 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 
 					<div className="flex justify-center gap-2">
 						{/*{looserTournament.phases.length > 0 && <Button text="Oui, créer un tournoi" color="success" action={handleSaveLooserTournament} />}*/}
-						<Button text="Annuler" color="danger" action={() => setLooserTournamentIsOpen(false)} />
+						<Button  color="danger" action={() => setLooserTournamentIsOpen(false)}>Annuler</Button>
 					</div>
 				</>}
 			</Modal>
@@ -216,12 +210,12 @@ export const TournamentStarted:React.FC<Props>  = ({tournament, setTournament}) 
 					{tournament.name} - Phase : {tournament.phases[tournament.currentPhase]?.name}
 				</h1>
 				<Link to={`historique`}>
-					<Button text="Historique" color="primary" />
+					<Button  color="primary">Historique</Button>
 				</Link>
 			</div>
 			{tournament.phases[tournament.currentPhase]?.type === "Poules" ?
-				<GroupPhase handleNextPhase={openModal} tournament={tournament} setTournament={setTournament} /> :
-				<KnockoutPhase setTournament={setTournament} tournament={tournament} />}
+				<GroupPhaseComponent handleNextPhase={openModal} tournament={tournament} setTournament={setTournament} /> :
+				<KnockoutPhaseComponent setTournament={setTournament} tournament={tournament} />}
 			<ToastContainer
 				position="top-right"
 				autoClose={5000}

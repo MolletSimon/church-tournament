@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 
-import {Phase} from "../../../models/Phase";
+import {Phase} from "../../models/Phase";
 
 interface PoulesPhaseProps {
 	phase: Phase,

@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
-import {Tournament} from "../../../models/Tournament";
-import {Button} from "../../../components/generic/Button";
 import {doc, setDoc} from "firebase/firestore";
-import {db} from "../../../index";
-import {TournamentService} from "../../../services/TournamentService";
+import { db } from '../../..';
+import { Button } from '../../generic/Button';
+import { Tournament } from '../../../models/Tournament';
+import { TournamentService } from '../../../services/TournamentService';
 
 interface MakeDrawProps {
 	tournament: Tournament;
@@ -12,7 +12,7 @@ interface MakeDrawProps {
 	setDrawMode: (value: boolean) => void;
 }
 
-const MakeDraw: React.FC<MakeDrawProps> = ({ tournament, setTournament, setDrawMode }) => {
+const DrawMaker: React.FC<MakeDrawProps> = ({ tournament, setTournament, setDrawMode }) => {
 	const [groups, setGroups] = useState<string[][]>(
 		new Array(tournament.phases[0].numberGroups).fill([]),
 	);
@@ -137,10 +137,10 @@ const MakeDraw: React.FC<MakeDrawProps> = ({ tournament, setTournament, setDrawM
 					</div>
 				</div>
 				<div className="flex gap-4 my-6">
-					<Button text="Retour" color="primary" action={() => setDrawMode(false)} />
-					<Button text="Réinitialiser" color="danger" action={handleReset} hoverColor='red-600' />
-					<Button text="Tirage aléatoire" color="warning" action={handleRandom} />
-					<Button text="Valider" disabled={remainingTeams.length > 0} color="success" action={handleValidate} hoverColor='green-600' />
+					<Button color="primary" action={() => setDrawMode(false)}>Retour</Button>
+					<Button color="danger" action={handleReset} hoverColor='red-600'>Réinitialiser</Button>
+					<Button color="warning" action={handleRandom}>Tirage aléatoire</Button>
+					<Button disabled={remainingTeams.length > 0} color="success" action={handleValidate} hoverColor='green-600'>Valider</Button>
 				</div>
 			</div>
 
@@ -148,4 +148,4 @@ const MakeDraw: React.FC<MakeDrawProps> = ({ tournament, setTournament, setDrawM
 	);
 };
 
-export default MakeDraw;
+export default DrawMaker;

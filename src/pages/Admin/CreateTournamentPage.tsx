@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from "react";
-import {Tournament} from "../../../models/Tournament";
-import {TournamentDefinition} from "./TournamentDefinition";
-import {TeamsDefinition} from "./TeamsDefinition";
-import RecapTournament from "./RecapTournament";
-import GroupPhaseDefinition from "./GroupPhaseDefinition";
-import PhasesTournamentDefinition from "./PhasesTournamentDefinition";
-import FinalRecap from "./FinalRecap";
-import {Phase} from "../../../models/Phase";
-import {Button} from "../../../components/generic/Button";
+import {Tournament} from "../../models/Tournament";
+import {TournamentDefinition} from "../../components/create-tournament/TournamentDefinition";
+import {TeamsDefinition} from "../../components/create-tournament/TeamsDefinition";
+import RecapTournament from "../../components/create-tournament/RecapTournament";
+import GroupPhaseDefinition from "../../components/create-tournament/GroupPhaseDefinition";
+import PhasesTournamentDefinition from "../../components/create-tournament/PhasesTournamentDefinition";
+import FinalRecap from "../../components/create-tournament/FinalRecap";
+import {Phase} from "../../models/Phase";
+import {Button} from "../../components/generic/Button";
 import {useNavigate} from "react-router-dom";
 
-export const CreateTournament = () => {
+export const CreateTournamentPage = () => {
 	const [tournament, setTournament] = useState({teams: [], phases: [], status: "init", currentPhase:0} as Tournament);
 	const [step, setStep] = useState(1);
 	const [isValid, setIsValid] = useState(false);
@@ -66,8 +66,8 @@ export const CreateTournament = () => {
 					)}
 
 					{step < 5 && <div className="mt-8">
-						<Button action={handlePrecStep} color="danger" text="Précédent" hoverColor="red-600" additionalClass="ml-4 mr-4" />
-						<Button action={handleNextStep} color="success" text="Suivant" hoverColor="primary" />
+						<Button action={handlePrecStep} color="danger"  hoverColor="red-600" additionalClass="ml-4 mr-4">Précédent</Button>
+						<Button action={handleNextStep} color="success"  hoverColor="primary">Suivant</Button>
 					</div>}
 				</div>
 				{step < 5 && <>

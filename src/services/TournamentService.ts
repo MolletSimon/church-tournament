@@ -3,6 +3,8 @@ import {Phase} from "../models/Phase";
 import {Ranking} from "../models/Ranking";
 import {Group} from "../models/Group";
 import {Match} from "../models/Match";
+import { getDocs, collection, Timestamp } from "firebase/firestore";
+import { db } from "..";
 
 export class TournamentService {
     public GeneratePhase(tournament: Tournament, groups?: string[][]): Phase[] {
@@ -40,6 +42,19 @@ export class TournamentService {
             }
             return phase;
         })
+    }
+
+    public async FetchTournaments(): Promise<Tournament[]> {
+        let tournaments = [] as Tournament[];
+        await getDocs(collection(db, "tournaments"))
+            .then((querySnapshot) => {
+                let dataTournaments = querySnapshot.docs.map((doc) => ({...doc.data(),})) as Tournament[];
+                tournaments = dataTournaments.map((tournament) => ({
+                    ...tournament,
+                    dateTournament: (tournament.dateTournament as unknown as Timestamp)?.toDate()}));
+                });
+
+        return tournaments;
     }
 
     private createMatchs(teams: string[], isHomeAndAway: boolean) {

@@ -1,4 +1,4 @@
-import {Tournament} from "../../../models/Tournament";
+import {Tournament} from "../../models/Tournament";
 import React, {useEffect} from "react";
 
 interface Props {

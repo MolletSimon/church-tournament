@@ -1,5 +1,5 @@
 import React from "react";
-import {Match} from "../../models/Match";
+import {Match} from "../../../models/Match";
 
 interface Props {
 	match: Match,

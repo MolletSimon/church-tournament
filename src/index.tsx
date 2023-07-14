@@ -7,19 +7,19 @@ import {Route, BrowserRouter as Router, Routes} from "react-router-dom";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import {CreateTournament} from "./pages/Admin/CreationTournament/CreateTournament";
-import {Admin} from "./pages/Admin/Admin";
-import {TournamentDetails} from "./pages/Tournament/Admin/Tournament";
-import HomePage from "./pages/Tournament/User/HomePage";
-import TeamPage from "./pages/Tournament/User/TeamPage";
-import GroupPage from "./pages/Tournament/User/GroupPage";
+import {CreateTournamentPage} from "./pages/Admin/CreateTournamentPage";
+import {HomeAdminPage} from "./pages/Admin/HomeAdminPage";
+import HomeUserPage from "./pages/User/HomeUserPage";
+import TeamPage from "./pages/User/TeamPage";
+import GroupPage from "./pages/User/GroupPage";
 import LoginPage from "./pages/Admin/LoginPage";
-import {Historique} from "./pages/Tournament/Admin/Historique";
+import {HistoricPage} from "./pages/Admin/HistoricPage";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 // Import the functions you need from the SDKs you need
 import { getAnalytics } from "firebase/analytics";
+import { TournamentPage } from './pages/Admin/Tournament';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -49,14 +49,14 @@ root.render(
       <Router>
           <Routes>
               <Route path="/" element={<App/>}></Route>
-              <Route path="/:tournamentId" element={<HomePage/>}/>
+              <Route path="/:tournamentId" element={<HomeUserPage/>}/>
               <Route path="/login" element={<LoginPage/>} />
               <Route path="/:tournamentId/:teamName" element={<TeamPage/>}/>
               <Route path="/:tournamentId/group/:groupId" element={<GroupPage/>}/>
-              <Route path="/admin" element={<Admin/>}/>
-              <Route path="/create-tournament" element={<CreateTournament/>} />
-              <Route path="/tournament/:id" element={<TournamentDetails/>} />
-              <Route path="/tournament/:id/historique" element={<Historique/>} />
+              <Route path="/admin" element={<HomeAdminPage/>}/>
+              <Route path="/create-tournament" element={<CreateTournamentPage/>} />
+              <Route path="/tournament/:id" element={<TournamentPage/>} />
+              <Route path="/tournament/:id/historique" element={<HistoricPage/>} />
           </Routes>
       </Router>
   </React.Fragment>

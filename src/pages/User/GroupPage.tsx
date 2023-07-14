@@ -3,11 +3,11 @@ import {Link, useParams} from "react-router-dom";
 import {doc, getDoc, onSnapshot} from "firebase/firestore";
 import { FaFutbol, FaTrophy } from "react-icons/fa";
 import { IoMdFootball } from "react-icons/io";
-import {Group} from "../../../models/Group";
-import {Match} from "../../../models/Match";
-import {db} from "../../../index";
-import {Tournament} from "../../../models/Tournament";
-import {Button} from "../../../components/generic/Button";
+import {Group} from "../../models/Group";
+import {Match} from "../../models/Match";
+import {db} from "../../index";
+import {Tournament} from "../../models/Tournament";
+import {Button} from "../../components/generic/Button";
 
 const GroupPage = () => {
 	const { tournamentId, groupId } = useParams<{ tournamentId: string; groupId: string }>();
@@ -152,10 +152,10 @@ const GroupPage = () => {
 			<div className="flex justify-center mt-8">
 				<Link to={`/${tournamentId}`}>
 					<Button
-						text="Retour"
+						
 						color="danger"
 						hoverColor="red-600"
-					/>
+					>Retour</Button>
 				</Link>
 			</div>
 		</div>

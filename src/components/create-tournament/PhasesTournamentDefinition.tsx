@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
-import { Tournament } from "../../../models/Tournament";
-import {Phase} from "../../../models/Phase";
-import {Button} from "../../../components/generic/Button";
+import { Tournament } from "../../models/Tournament";
+import {Phase} from "../../models/Phase";
+import {Button} from "../generic/Button";
 
 type Props = {
 	tournament: Tournament;
@@ -106,7 +106,7 @@ const PhasesTournamentDefinition: React.FC<Props> = ({ tournament, setTournament
 					</div>
 				</div>
 			))}
-			<Button text='Enregistrer' color='primary' type='submit' />
+			<Button color='primary' type='submit'>Enregistrer</Button>
 		</form>
 	);
 };

@@ -1,16 +1,16 @@
 import {Link, useParams} from "react-router-dom";
 import {doc, getDoc, Timestamp} from "firebase/firestore";
-import {db} from "../../../index";
-import {Tournament} from "../../../models/Tournament";
+import {db} from "../../index";
+import {Tournament} from "../../models/Tournament";
 import {ChangeEvent, useEffect, useState} from "react";
-import {MatchMobileComponent} from "../../../components/mobile/MatchMobileComponent";
-import {Match} from "../../../models/Match";
-import {Button} from "../../../components/generic/Button";
-import {getRound} from "./KnockoutPhase";
-import {RankingComponent} from "../../../components/tournament/RankingComponent";
-import {Group} from "../../../models/Group";
+import {MatchMobileComponent} from "../../components/mobile/MatchMobileComponent";
+import {Match} from "../../models/Match";
+import {Button} from "../../components/generic/Button";
+import {getRound} from "../../components/tournament/admin/KnockoutPhaseComponent";
+import {RankingComponent} from "../../components/tournament/common/RankingComponent";
+import {Group} from "../../models/Group";
 
-export const Historique = () => {
+export const HistoricPage = () => {
 	const {id} = useParams();
 	const [launched, setLaunched] = useState(false);
 	const [tournament, setTournament] = useState({} as Tournament);
@@ -45,7 +45,7 @@ export const Historique = () => {
 			<div className="flex items-center gap-8">
 				<h1 className="text-3xl text-primary font-bold">Historique des équipes</h1>
 				<Link to={`/tournament/${id}`}>
-					<Button text="Retour au menu tournoi" color="danger" />
+					<Button  color="danger">Retour au menu tournoi</Button>
 				</Link>
 			</div>
 			{tournament && tournament.teams && (
@@ -90,7 +90,7 @@ const TeamHistorique: React.FC<TeamHistoriqueProps> = ({tournament, team, setTea
 		<>
 			<div className="flex gap-8  my-6 items-center">
 				<p className="italic text-primary text-xl">Équipe : {team}</p>
-				<Button text="Changer d'équipe" color="primary" action={() => setTeamSelected(null)} />
+				<Button  color="primary" action={() => setTeamSelected(null)}>Changer d'équipe</Button>
 			</div>
 			{tournament.phases && tournament.phases.map((phase, index) => (
 				<div key={index}>

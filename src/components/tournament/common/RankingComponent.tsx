@@ -1,7 +1,7 @@
-import {Button} from "../generic/Button";
+import {Button} from "../../generic/Button";
 import React from "react";
-import {Group} from "../../models/Group";
-import {Tournament} from "../../models/Tournament";
+import {Group} from "../../../models/Group";
+import {Tournament} from "../../../models/Tournament";
 
 interface Props {
 	selectedGroup: Group,

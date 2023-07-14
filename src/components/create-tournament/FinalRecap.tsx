@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import 'firebase/firestore';
 import RecapTournament from './RecapTournament';
-import {Tournament} from "../../../models/Tournament";
-import Loader from "../../Common/Loader";
-import {db} from "../../../index";
+import {Tournament} from "../../models/Tournament";
+import Loader from "../generic/Loader";
+import {db} from "../../index";
 import {addDoc, collection, doc, setDoc} from 'firebase/firestore';
 import {useNavigate} from "react-router-dom";
-import {Button} from "../../../components/generic/Button";
+import {Button} from "../generic/Button";
 
 interface Props {
 	tournament: Tournament;
@@ -38,7 +38,7 @@ const FinalRecap: React.FC<Props> = ({ tournament }) => {
 			<RecapTournament tournament={tournament} />
 			<div className="flex justify-center mt-4">
 
-				{isLoading ? <Loader /> : <Button text='Enregistrer' color='primary' action={handleSaveTournament} disabled={isLoading} />}
+				{isLoading ? <Loader /> : <Button color='primary' action={handleSaveTournament} disabled={isLoading}>Enregistrer</Button>}
 			</div>
 		</>
 	);

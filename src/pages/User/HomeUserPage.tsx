@@ -1,17 +1,17 @@
 import {useState, useEffect, ChangeEvent} from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {doc, getDoc, onSnapshot} from "firebase/firestore";
-import {Tournament} from "../../../models/Tournament";
-import {db} from "../../../index";
+import {Tournament} from "../../models/Tournament";
+import {db} from "../../index";
 import { FaUserFriends, FaRegFutbol, FaUsers } from "react-icons/fa";
 import { MdGroup } from "react-icons/md";
-import {PhaseType} from "../../../models/Enums/PhaseType";
-import {Button} from "../../../components/generic/Button";
-import {getRound} from "../Admin/KnockoutPhase";
-import {MatchMobileComponent} from "../../../components/mobile/MatchMobileComponent";
+import {PhaseType} from "../../models/Enums/PhaseType";
+import {Button} from "../../components/generic/Button";
+import {getRound} from "../../components/tournament/admin/KnockoutPhaseComponent";
+import {MatchMobileComponent} from "../../components/mobile/MatchMobileComponent";
 
 
-const HomePage = () => {
+const HomeUserPage = () => {
 	const { tournamentId } = useParams<{ tournamentId: string }>();
 	const [teamsDisplayed, setTeamsDisplayed] = useState<string[]>([]);
 	const navigate = useNavigate();
@@ -131,7 +131,7 @@ const HomePage = () => {
 							<p className="italic mx-2 my-4 font-bold">⚠️ Si votre équipe ne figure pas dans la liste, elle est peut être dans le tournoi consolante. Vous pouvez y accéder à l'aide du bouton ci-dessous...</p>
 							<Link to={`/${tournament.looserTournament}`} >
 								<div className="flex justify-center w-full mb-6">
-									<Button text="Accéder au tournoi consolante" color="primary" />
+									<Button  color="primary">Accéder au tournoi consolante</Button>
 								</div>
 							</Link>
 						</>}
@@ -185,4 +185,4 @@ const HomePage = () => {
 	);
 };
 
-export default HomePage;
+export default HomeUserPage;

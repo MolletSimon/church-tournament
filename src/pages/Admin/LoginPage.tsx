@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {useNavigate} from "react-router-dom";
+import { Button } from "../../components/generic/Button";
 
 const LoginPage = () => {
-	const [password, setPassword] = useState("");
+	const password = useRef<HTMLInputElement>(null);
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
 
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		if (password === "motdepassetournoi") {
+		if (password.current && password.current.value === "motdepassetournoi") {
 			localStorage.setItem("connected", "true");
 			navigate("/admin")
 		} else {
@@ -30,23 +31,17 @@ const LoginPage = () => {
 							Mot de passe
 						</label>
 						<input
-							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+							className="shadow appearance-none border rounded w-full py-2 px-3 text-primary leading-tight focus:outline-none focus:shadow-outline"
 							id="password"
 							name="password"
 							type="password"
-							value={password}
-							onChange={(event) => setPassword(event.target.value)}
+							ref={password}
 							placeholder="********"
 						/>
 					</div>
 
 					<div className="flex items-center justify-between">
-						<button
-							className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-							type="submit"
-						>
-							Se connecter
-						</button>
+						<Button color="primary" type="submit">Se connecter</Button>
 					</div>
 				</form>
 			</div>

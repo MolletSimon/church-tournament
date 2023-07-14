@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from "react";
-import {Tournament} from "../../../models/Tournament";
-import {Button} from "../../../components/generic/Button";
+import {Tournament} from "../../models/Tournament";
+import {Button} from "../generic/Button";
 
 interface Props {
 	setTournament: (value: Tournament) => void;
@@ -52,7 +52,7 @@ export const TeamsDefinition: React.FC<Props> = ({setTournament, tournament, set
 					onChange={handleChange}
 					onKeyUp={(e) => handleKeyPress(e)}
 				/>
-				<Button text="Valider" color="primary" action={handleSubmit} />
+				<Button color="primary" action={handleSubmit}>Valider</Button>
 			</div>
 
 			<div className="w-1/2 my-8 mx-4 rounded-lg shadow-md">
@@ -60,7 +60,7 @@ export const TeamsDefinition: React.FC<Props> = ({setTournament, tournament, set
 					{tournament.teams.map((e, index) => (
 						<li key={index} className="flex items-center justify-between py-2">
 							<span className="text-gray-700">{e}</span>
-							<Button action={() => handleDelete(index)} color="danger" text="X" additionalClass='' />
+							<Button action={() => handleDelete(index)} color="danger" additionalClass=''>X</Button>
 						</li>
 					))}
 				</ul>

@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import 'firebase/firestore';
-import {db} from "../../../index";
 import {doc, getDoc, setDoc, Timestamp} from 'firebase/firestore'
-import {Tournament} from "../../../models/Tournament";
-import RecapTournament from '../../Admin/CreationTournament/RecapTournament';
-import MakeDraw from "./MakeDraw";
-import {Button} from "../../../components/generic/Button";
-import {TournamentStarted} from "./TournamentStarted";
+import MakeDraw from "../../components/tournament/admin/DrawMaker";
+import {TournamentManager} from "../../components/tournament/admin/TournamentManager";
+import { db } from '../..';
+import RecapTournament from '../../components/create-tournament/RecapTournament';
+import { Button } from '../../components/generic/Button';
+import { Tournament } from '../../models/Tournament';
 
-export const TournamentDetails: React.FC = () => {
+export const TournamentPage: React.FC = () => {
 	const { id } = useParams();
 	const [tournament, setTournament] = useState<Tournament | null>(null);
 	const [drawMode, setDrawMode] = useState(false);
@@ -60,11 +60,10 @@ export const TournamentDetails: React.FC = () => {
 					<RecapTournament tournament={tournament} />
 					<div className="flex justify-end space-x-4 py-4">
 
-						<Button text="Retour" color="primary" action={handleBack}/>
-
-						<Button text="Lancer le tournoi" color="warning" hoverColor="green-600" action={handleStartTournament} disabled={tournament.status !== 'drawMade'} />
-						<Button text="Effectuer le tirage au sort" color="success" action={handleDraw} hoverColor='green-600' disabled={tournament.status !== 'init'} />
-						<Button text="Supprimer le tournoi" color="danger" action={handleDeleteTournament} hoverColor='red-600' />
+						<Button  color="primary" action={handleBack}>Retour</Button>
+						<Button  color="warning" hoverColor="green-600" action={handleStartTournament} disabled={tournament.status !== 'drawMade'} >Lancer le tournoi</Button>
+						<Button  color="success" action={handleDraw} hoverColor='green-600' disabled={tournament.status !== 'init'} >Effectuer le tirage au sort</Button>
+						<Button  color="danger" action={handleDeleteTournament} hoverColor='red-600' >Supprimer le tournoi</Button>
 					</div>
 				</div>
 			) }
@@ -72,7 +71,7 @@ export const TournamentDetails: React.FC = () => {
 			{drawMode && <MakeDraw tournament={tournament!} setTournament={setTournament} setDrawMode={setDrawMode} />}
 
 			{tournament && launched && (
-				<TournamentStarted tournament={tournament} setTournament={setTournament} />
+				<TournamentManager tournament={tournament} setTournament={setTournament} />
 			)}
 		</>
 	);

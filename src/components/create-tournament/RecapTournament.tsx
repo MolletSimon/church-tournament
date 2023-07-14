@@ -1,4 +1,4 @@
-import {Tournament} from "../../../models/Tournament";
+import {Tournament} from "../../models/Tournament";
 
 type Props = {
 	tournament: Tournament;
