@@ -3,62 +3,74 @@ import {Ranking} from "../models/Ranking";
 import {Match} from "../models/Match";
 
 export class RankingService {
-    public ComputeRanking(ranks: Ranking[], match: Match, tournament: Tournament, index: number): Ranking[] {
-        console.log(ranks)
-        ranks.forEach(team => {
-            team = this.InitTeam(team);
-            const teamMatches = tournament.phases[tournament.currentPhase].groups![index].matches.filter((match) => match.teams.includes(team.team));
+    public ComputeRanking(teams: string[], tournament: Tournament, index: number): Ranking[] {
+        const ranks: Ranking[] = [];
+        teams.forEach(team => {
+            const teamInRank = this.InitTeam(team);
+            const teamMatches = tournament.phases[tournament.currentPhase].groups![index].matches.filter((match) => match.teams.includes(teamInRank.team));
             teamMatches.forEach((teamMatch) => {
                 switch (teamMatch.winner) {
-                    case team.team:
-                        this.handleTeamWin(team, teamMatch);
+                    case teamInRank.team:
+                        this.handleTeamWin(teamInRank, teamMatch);
                         break;
                     case "Aucun":
-                        this.handleTeamDraw(team, teamMatch);
+                        this.handleTeamDraw(teamInRank, teamMatch);
                         break;
                     default:
-                        this.handleTeamLoss(team, teamMatch);
+                        this.handleTeamLoss(teamInRank, teamMatch);
                         break;
                 }
             });
+            ranks.push(teamInRank);
         });
+
         ranks.sort((a, b) => {
             if (b.points !== a.points) {
                 return b.points - a.points;
             }
+
             if ((b.goalScored - b.goalTaken) !== (a.goalScored - a.goalTaken)) {
-                return b.goalScored - a.goalScored;
+                return (b.goalScored - b.goalTaken) - (a.goalScored - a.goalTaken);
             }
             return b.goalScored - a.goalScored;
         });
+        
         ranks.forEach((r, i) => r.position = i + 1)
         return ranks;
     }
 
-    public DetermineWinner(match: Match): Match {
+    public DetermineWinner(match: Match): Match  {
         // tab a eu lieu
         if (match.tab1 && match.tab2) {
             match.winner = match.tab1 < match.tab2 ? match.teams[1] : match.teams[0]
-        } else {
-            if (match.score1 === match.score2) {
-                match.winner = "Aucun";
-            } else {
-                if (match.score1! > match.score2!) match.winner = match.teams[0];
-                else match.winner = match.teams[1];
-            }
+            return match;
+        } 
+
+        if (match.score1 == null || match.score2 == null) {
+            delete match.winner;
+            return match
         }
+
+        if (match.score1 === match.score2) {
+                match.winner = "Aucun";
+                return match;
+        }
+        if (match.score1! > match.score2!) match.winner = match.teams[0];
+        else match.winner = match.teams[1];
 
         return match;
     }
 
-    private InitTeam(team: Ranking) {
-        team.goalScored = 0;
-        team.numberLose = 0;
-        team.points = 0;
-        team.goalTaken = 0;
-        team.numberWin = 0;
-        team.numberDraw = 0;
-        return team;
+    private InitTeam(team: string) {
+        const teamRanking = {} as Ranking;
+        teamRanking.goalScored = 0;
+        teamRanking.numberLose = 0;
+        teamRanking.points = 0;
+        teamRanking.goalTaken = 0;
+        teamRanking.numberWin = 0;
+        teamRanking.numberDraw = 0;
+        teamRanking.team = team
+        return teamRanking;
     }
 
     private handleTeamWin(team: Ranking, teamMatch: Match) {

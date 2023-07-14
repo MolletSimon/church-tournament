@@ -4,6 +4,7 @@ import {Ranking} from "../models/Ranking";
 import {Group} from "../models/Group";
 import { getDocs, collection, Timestamp, doc, getDoc } from "firebase/firestore";
 import { db } from "..";
+import { Match } from "../models/Match";
 
 export class TournamentService {
     public GeneratePhase(tournament: Tournament, groups?: string[][]): Phase[] {
@@ -75,40 +76,18 @@ export class TournamentService {
     }
 
     private createMatchs(teams: string[], isHomeAndAway: boolean) {
-        const numTeams = teams.length;
-        const halfNumTeams = Math.ceil(numTeams / 2);
-        const rounds = numTeams - 1;
-        const matches = [];
+        const matches: Match[] = [];
 
-        // Générer les matchs pour la première journée
-        for (let i = 0; i < halfNumTeams; i++) {
-            const homeTeam = teams[i];
-            const awayTeam = teams[numTeams - i - 1];
-            if (homeTeam && awayTeam) {
-                matches.push({ teams: [homeTeam, awayTeam] });
+        teams.forEach((team, index) => {
+            for (let i = index + 1; i < teams.length; i++) {
+                matches.push({ teams: [team, teams[i]] });
                 if (isHomeAndAway) {
-                    matches.push({ teams: [awayTeam, homeTeam] });
+                    matches.push({ teams: [teams[i], team] });
                 }
             }
-        }
+        })
 
-        // Générer les matchs pour les journées suivantes
-        for (let round = 1; round < rounds; round++) {
-            const roundMatches = [];
-            const pivot = teams.shift()!;
-            teams.splice(halfNumTeams, 0, pivot);
-            for (let i = 0; i < halfNumTeams; i++) {
-                const homeTeam = teams[i];
-                const awayTeam = teams[numTeams - i - 1];
-                if (homeTeam && awayTeam) {
-                    roundMatches.push({ teams: [homeTeam, awayTeam] });
-                    if (isHomeAndAway) {
-                        roundMatches.push({ teams: [awayTeam, homeTeam] });
-                    }
-                }
-            }
-            matches.push(...roundMatches);
-        }
+        matches.sort(() => Math.random() - 0.5)
 
         return matches;
     }

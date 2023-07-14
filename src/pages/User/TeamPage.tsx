@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from "react";
-import {Link, useParams} from "react-router-dom";
+import { useState, useEffect } from "react";
+import {useParams} from "react-router-dom";
 import {doc, getDoc, onSnapshot} from "firebase/firestore";
 import {Match} from "../../models/Match";
 import {Tournament} from "../../models/Tournament";
 import {db} from "../../index";
-import { AiOutlineClockCircle } from "react-icons/ai";
-import { FaFutbol, FaMapMarkerAlt } from "react-icons/fa";
-import {Button} from "../../components/generic/Button";
 import {Phase} from "../../models/Phase";
 import {Group} from "../../models/Group";
 import {GroupMobileComponent} from "../../components/mobile/GroupMobileComponent";

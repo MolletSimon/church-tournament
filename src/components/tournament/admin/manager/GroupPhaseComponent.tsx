@@ -72,13 +72,9 @@ export const GroupPhaseComponent:React.FC<Props> = ({tournament, setTournament, 
 		group.matches[matchIndex] = newMatch;
 		setSelectedGroup(group);
 
-		if (newMatch.score1 != null && newMatch.score2 != null) {
-			let teamsRank = updateTournament.phases[tournament.currentPhase].groups![selectedGroupIndex].ranking!;
-			newMatch = rankingService.DetermineWinner(newMatch);
-			console.log(teamsRank)
-			updateTournament.phases[updateTournament.currentPhase].groups![selectedGroupIndex].ranking = rankingService.ComputeRanking(teamsRank, newMatch, updateTournament, selectedGroupIndex);
-		}
-
+		newMatch = rankingService.DetermineWinner(newMatch);
+		
+		updateTournament.phases[updateTournament.currentPhase].groups![selectedGroupIndex].ranking = rankingService.ComputeRanking(selectedGroup.teams, updateTournament, selectedGroupIndex);
 		setMatchDisplayed(group.matches)
 		setTournament(updateTournament);
 		console.log(updateTournament)
@@ -91,15 +87,17 @@ export const GroupPhaseComponent:React.FC<Props> = ({tournament, setTournament, 
 
 		group.matches.forEach(match => {
 			if (match.score1 != null && match.score2 != null) {
-				let teamsRank = updateTournament.phases[tournament.currentPhase].groups![selectedGroupIndex].ranking!;
 				match = rankingService.DetermineWinner(match);
-				rankingService.ComputeRanking(teamsRank, match, updateTournament, selectedGroupIndex);
+				rankingService.ComputeRanking(selectedGroup.teams, updateTournament, selectedGroupIndex);
 			}
 		})
+
+		console.log(updateTournament)
 
 		await setDoc(doc(db, "tournaments", tournament.id!), updateTournament);
 		setTournament(updateTournament);
 	};
+
 	const handlePrecPhase = async () => {
 		const updateTournament = {...tournament}
 		updateTournament.currentPhase = updateTournament.currentPhase - 1
