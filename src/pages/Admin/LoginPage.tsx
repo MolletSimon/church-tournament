@@ -10,7 +10,7 @@ const LoginPage = () => {
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		if (password.current && password.current.value === "motdepassetournoi") {
+		if (password.current && password.current.value === "beta") {
 			localStorage.setItem("connected", "true");
 			navigate("/admin")
 		} else {

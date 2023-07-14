@@ -1,7 +1,7 @@
 {
   "projects": {
     "default": "tournoi-intereglises",
-    "prod": "tournoi-intereglises"
+    "prod": "pied-ballon"
   },
   "targets": {}
 }

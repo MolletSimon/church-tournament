@@ -43,7 +43,7 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <React.Fragment>
+  <div className='min-h-screen'>
       <Router>
           <Routes>
               <Route path="/" element={<App/>}></Route>
@@ -57,7 +57,7 @@ root.render(
               <Route path="/tournament/:id/historique" element={<HistoricPage/>} />
           </Routes>
       </Router>
-  </React.Fragment>
+  </div>
 );
 
 // If you want to start measuring performance in your app, pass a function
