@@ -1,11 +1,24 @@
 import React, { useRef, useState } from "react";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { Button } from "../../components/generic/Button";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../..";
+import Loader from "../../components/generic/Loader";
+import { Header } from "../../components/generic/Header";
 
 const LoginPage = () => {
 	const password = useRef<HTMLInputElement>(null);
+	const email = useRef<HTMLInputElement>(null);
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
+	const [authChecked, setAuthChecked] = useState(false);
+
+
+	// check when auth status changes
+	auth.onAuthStateChanged((user) => {
+		if (user) navigate("/admin/home");
+		setAuthChecked(true);
+	})
 
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -18,20 +31,45 @@ const LoginPage = () => {
 		}
 	};
 
+	const handleLoginWithGoogle = () => {
+		// login with google with firebase auth
+		const provider = new GoogleAuthProvider();
+		signInWithPopup(auth, provider).then(() => {
+		}).catch((error) => {
+			console.log(error);
+		});
+	};
+
 	return (
-		<div className="flex justify-center items-center h-screen bg-gray-100">
-			<div className="w-full max-w-md">
-				<form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
-					<h1 className="text-2xl font-bold mb-6 text-center">Connectez-vous</h1>
+		<>
+		<Header user={null}/>
+		<div className="flex justify-center items-center mt-6">
+			{authChecked ? <div className="w-full max-w-4xl">
+				<form className="bg-white shadow-md rounded-xl px-36 py-12 mb-4" onSubmit={handleSubmit}>
+					<h1 className="text-3xl font-bold mb-6 text-center text-primary">Connectez-vous</h1>
 
 					{error && <p className="text-red-500 mb-4">{error}</p>}
 
-					<div className="mb-4">
+					<div className="mb-6">
+						<label className="block text-gray-700 font-bold mb-2" htmlFor="password" id="password">
+							Adresse email
+						</label>
+						<input
+							className="placeholder:italic appearance-none border rounded-xl w-full py-3 px-4 text-primary transition-all duration-300 leading-tight focus:outline-none focus:shadow-outline focus:scale-110"
+							id="email"
+							name="email"
+							type="email"
+							ref={email}
+							placeholder="Votre adresse mail ici"
+						/>
+					</div>
+
+					<div className="mb-6">
 						<label className="block text-gray-700 font-bold mb-2" htmlFor="password" id="password">
 							Mot de passe
 						</label>
 						<input
-							className="shadow appearance-none border rounded w-full py-2 px-3 text-primary leading-tight focus:outline-none focus:shadow-outline"
+							className=" appearance-none border rounded-xl w-full py-3 px-4 text-primary leading-tight transition-all duration-300 focus:outline-none focus:shadow-outline focus:scale-110"
 							id="password"
 							name="password"
 							type="password"
@@ -40,12 +78,29 @@ const LoginPage = () => {
 						/>
 					</div>
 
-					<div className="flex items-center justify-between">
-						<Button color="primary" type="submit">Se connecter</Button>
+					<div className="flex flex-col items-center justify-center gap-3">
+						<Button 
+							color="primary" 
+							type="submit" 
+							additionalClass="w-full">Se connecter</Button>
+						<Button 
+							color="white" 
+							text="black" 
+							type="button" 
+							action={handleLoginWithGoogle}
+							additionalClass="border-2 w-full flex items-center justify-center gap-4">
+							<img src="images/google.png" alt="google" width={18} />
+							<span>Se connecter avec Google</span>
+						</Button>
+						<Link to={'/signup'}>
+							<p className="text-primary underline hover:scale-105 transition-all">S'inscrire</p>
+						</Link>
 					</div>
 				</form>
-			</div>
+			</div> : <Loader/>}
+			
 		</div>
+		</>
 	);
 };
 

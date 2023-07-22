@@ -4,16 +4,11 @@ interface Props {
 	size?: number;
 }
 
-const Loader: React.FC<Props> = ({ size = 6 }) => {
-	const sizeClasses = `h-${size} w-${size}`;
-
+const Loader: React.FC<Props> = ({ size = 10 }) => {
+	// animated loader tsx
 	return (
-		<div className={`flex justify-center items-center ${sizeClasses}`}>
-			<div className="relative flex">
-				<div className="w-1.5 h-1.5 bg-gray-500 rounded-full mr-1 animate-bounce" />
-				<div className="w-1.5 h-1.5 bg-gray-500 rounded-full mr-1 animate-bounce" />
-				<div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" />
-			</div>
+		<div className="flex justify-center items-center">
+			<div className={`animate-spin rounded-full h-${size} w-${size} border-b-2 border-primary`}></div>
 		</div>
 	);
 };

@@ -73,7 +73,7 @@ const TeamPage = () => {
 		<div className="min-h-screen bg-[#F9F9FB]">
 			{currentPhase  && <>
 				<div className=" py-6 mb-4 flex px-10 justify-center gap-4 items-center">
-					<img src="/images/football-team.png" width={30}/>
+					<img src="/images/football-team.png" width={30} alt="football-team"/>
 					<h1 className="text-primary text-center font-bold text-3xl">{teamName}</h1>
 				</div>
 				<div className="px-4">

@@ -30,12 +30,8 @@ export const CreateTournamentPage = () => {
 
 	const handlePrecStep = () => {
 		if (step > 1) setStep(prevStep => prevStep - 1);
-		if (step === 1) navigate("/admin");
+		if (step === 1) navigate("../home");
 	}
-
-	useEffect(() => {
-		if (!localStorage.getItem("connected")) navigate("/login")
-	}, [])
 
 	return (
 		<div className="m-5 p-5">

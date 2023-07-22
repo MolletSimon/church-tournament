@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { Tournament } from "../../models/Tournament";
-import { Header } from "../../components/generic/Header";
 import { Button } from "../../components/generic/Button";
 import { TournamentService } from "../../services/TournamentService";
 import { TournamentList } from "../../components/tournament/admin/home/TournamentList";
@@ -12,27 +11,23 @@ export const HomeAdminPage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("connected")) {
       tournamentService.FetchTournaments().then((data) => {
-		setTournaments(data);
-	});
-    } else {
-      navigate("/login");
-    }
+        setTournaments(data);
+      });
+    
   }, []);
 
   const handleClick = (tournament: Tournament) => {
-    navigate(`/tournament/${tournament.id}`);
+    navigate(`../tournament/${tournament.id}`);
   };
 
   return (
     <>
-      <Header></Header>
       <Button
         id="createTournament"
         additionalClass="my-8 mx-20"
         color="primary"
-        action={() => navigate("/create-tournament")}
+        action={() => navigate("/admin/create-tournament")}
       >
         Créer un tournoi
       </Button>

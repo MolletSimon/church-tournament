@@ -8,10 +8,11 @@ interface Props {
 	additionalClass?: string,
 	disabled?: boolean,
 	id?: string,
-	children: ReactNode
+	children: ReactNode,
+	text?: string
 }
 
-export const Button : React.FC<Props> = ({children, color, type, action, hoverColor, additionalClass, disabled, id}) => {
+export const Button : React.FC<Props> = ({children, color, type, action, hoverColor, additionalClass, disabled, id, text = 'white'}) => {
 	return (
 		<>
 			{disabled ? (
@@ -21,7 +22,7 @@ export const Button : React.FC<Props> = ({children, color, type, action, hoverCo
 				</button>
 			) : (
 			<button disabled={disabled} onClick={action} type={type} id={id}
-					className={`bg-${color} text-white py-2 px-4 rounded-full transition-all duration-500 hover:scale-105 hover:bg-${hoverColor} ${additionalClass}`}>
+					className={`bg-${color} text-${text} py-2 px-4 rounded-full transition-all duration-500 hover:scale-105 hover:bg-${hoverColor} ${additionalClass}`}>
 				{children}
 			</button>)
 			}
