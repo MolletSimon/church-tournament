@@ -13,7 +13,7 @@ export function Header({user}: {user: User | null}) {
 				</svg>
 			</div>
 				<Link to="/admin">
-				<div className="flex items-center cursor-pointer mt-10">
+				<div className="flex items-center cursor-pointer mt-16">
 					<img
 						src="/images/logo.png"
 						className="rounded-full bg-primary p-4"
@@ -26,15 +26,16 @@ export function Header({user}: {user: User | null}) {
 				</div>
 				</Link>
 				{user && 
-					<div className="flex items-center gap-4 rounded-full border-2 px-8 border-primary">
+					<div className="flex items-center gap-4 rounded-full px-8 border-primary">
 						{user.photoURL ? <img src={user.photoURL!} alt="user" width={60} className="rounded-full" /> : 
 						<span className="bg-primary rounded-full p-4 text-white text-lg font-bold">
 							SM
 						</span>}
 					
-						<p className="italic text-xl font-bold text-primary">{user.displayName}</p>
-						<Button color="white" action={() => {signOut(auth)}}>
-							<img src="/images/logout.png" alt="logout" width={25} className="mr-2" />
+					<p className="text-xl font-bold text-primary">{user.displayName} - <span className="italic font-normal">Admin</span></p>
+						<Button color="white" text="danger" action={() => {signOut(auth)}}>
+							{/* <img src="/images/logout.png" alt="logout" width={25} className="mr-2" /> */}
+							Se déconnecter
 						</Button>
 					</div>
 				}

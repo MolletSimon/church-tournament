@@ -3,7 +3,7 @@ import 'firebase/firestore';
 import RecapTournament from './RecapTournament';
 import {Tournament} from "../../models/Tournament";
 import Loader from "../generic/Loader";
-import {db} from "../../index";
+import {auth, db} from "../../index";
 import {addDoc, collection, doc, setDoc} from 'firebase/firestore';
 import {useNavigate} from "react-router-dom";
 import {Button} from "../generic/Button";
@@ -20,8 +20,8 @@ const FinalRecap: React.FC<Props> = ({ tournament }) => {
 		setIsLoading(true);
 
 		try {
-			const docRef = await addDoc(collection(db, "tournaments"), tournament);
-			await setDoc(doc(db, "tournaments", docRef.id), {...tournament, id: docRef.id});
+			const docRef = await addDoc(collection(db, "tournaments"), {tournament});
+			await setDoc(doc(db, "tournaments", docRef.id), {...tournament, id: docRef.id, admin: auth.currentUser?.uid});
 			navigate("/admin");
 		} catch (e) {
 			console.error("Error adding document: ", e);
@@ -37,7 +37,6 @@ const FinalRecap: React.FC<Props> = ({ tournament }) => {
 			</h3>
 			<RecapTournament tournament={tournament} />
 			<div className="flex justify-center mt-4">
-
 				{isLoading ? <Loader /> : <Button color='primary' action={handleSaveTournament} disabled={isLoading}>Enregistrer</Button>}
 			</div>
 		</>
