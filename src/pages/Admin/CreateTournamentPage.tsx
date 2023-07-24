@@ -9,6 +9,7 @@ import FinalRecap from "../../components/create-tournament/FinalRecap";
 import {Phase} from "../../models/Phase";
 import {Button} from "../../components/generic/Button";
 import {useNavigate} from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 export const CreateTournamentPage = () => {
 	const [tournament, setTournament] = useState({teams: [], phases: [], status: "init", currentPhase:0} as Tournament);
@@ -26,6 +27,7 @@ export const CreateTournamentPage = () => {
 			setStep(step+1);
 			setIsValid(false);
 		}
+		console.log(isValid);
 	};
 
 	const handlePrecStep = () => {
@@ -64,7 +66,7 @@ export const CreateTournamentPage = () => {
 
 					{step < 5 && <div className="mt-8">
 						<Button action={handlePrecStep} color="danger"  hoverColor="red-600" additionalClass="ml-4 mr-4">Précédent</Button>
-						<Button action={handleNextStep} color="success"  hoverColor="primary">Suivant</Button>
+						<Button action={handleNextStep} disabled={!isValid} color="success" hoverColor="primary">Suivant</Button>
 					</div>}
 				</div>
 				{step < 5 && <>
@@ -74,6 +76,16 @@ export const CreateTournamentPage = () => {
 				</>}
 
 			</div>
+			<ToastContainer
+				position="top-right"
+				autoClose={5000}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				/>
+				<ToastContainer />
 		</div>
 	);
 };

@@ -17,6 +17,8 @@ import {HistoricPage} from "./pages/Admin/HistoricPage";
 import {
   getAuth,
 } from "firebase/auth";
+import AOS from 'aos';
+import 'aos/dist/aos.css'; // You can also use <link> for styles
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -43,6 +45,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+
+AOS.init({
+  duration: 1000,
+  once: true,
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

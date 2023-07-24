@@ -45,7 +45,7 @@ const LoginPage = () => {
 		<Header user={null}/>
 		<div className="flex justify-center items-center mt-6">
 			{authChecked ? <div className="w-full max-w-4xl">
-				<form className="bg-white shadow-md rounded-xl px-36 py-12 mb-4" onSubmit={handleSubmit}>
+				<form data-aos="flip-up" className="bg-white shadow-md rounded-xl px-36 py-12 mb-4" onSubmit={handleSubmit}>
 					<h1 className="text-3xl font-bold mb-6 text-center text-primary">Connectez-vous</h1>
 
 					{error && <p className="text-red-500 mb-4">{error}</p>}

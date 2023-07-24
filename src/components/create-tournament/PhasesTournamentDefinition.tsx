@@ -2,6 +2,8 @@ import React, {useEffect, useState} from "react";
 import { Tournament } from "../../models/Tournament";
 import {Phase} from "../../models/Phase";
 import {Button} from "../generic/Button";
+import { FormInput } from "../generic/FormInput";
+import { FormSelect } from "../generic/FormSelect";
 
 type Props = {
 	tournament: Tournament;
@@ -60,8 +62,19 @@ const PhasesTournamentDefinition: React.FC<Props> = ({ tournament, setTournament
 
 	return (
 		<form onSubmit={handleSubmit}>
-			<div className="mb-4">
-				<label className="block text-gray-700 font-bold mb-2" htmlFor="numberPhase">
+			<FormInput 
+				id="numberPhase" 
+				label="Nombre de phases"
+				placeholder="Entrez le nombre de phases de la compétition"
+				type="number"
+				value={numberPhase}
+				additionalClass="mb-6"
+				onChange={handleNumberPhaseChange}
+				min="1"
+				max="10"
+				required={true}
+				></FormInput> 
+				{/* <label className="block text-gray-700 font-bold mb-2" htmlFor="numberPhase">
 					Nombre de phases
 				</label>
 				<input
@@ -73,37 +86,29 @@ const PhasesTournamentDefinition: React.FC<Props> = ({ tournament, setTournament
 					min="1"
 					max="10"
 					required
-				/>
-			</div>
+				/> */}
 			{phases.map((phase, index) => (
-				<div key={index} className="border border-gray-400 rounded-md p-4 mb-4">
-					<div className="mb-4">
-						<label className="block text-gray-700 font-bold mb-2" htmlFor={`phaseName${index}`}>
-							Nom de la phase #{index + 1}
-						</label>
-						<input
-							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-							id={`phaseName${index}`}
-							type="text"
-							value={phase.name || ''}
-							onChange={(event) => handlePhaseNameChange(event, index)}
-							maxLength={30}
-						/>
-					</div>
-					<div>
-						<label className="block text-gray-700 font-bold mb-2" htmlFor={`phaseType${index}`}>
-							Type de la phase #{index + 1}
-						</label>
-						<select
-							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-							id={`phaseType${index}`}
-							value={phase.type}
-							onChange={(event) => handlePhaseTypeChange(event, index)}
-						>
-							<option value="Poules">Poules</option>
-							<option value="Elimination directe">Elimination directe</option>
-						</select>
-					</div>
+				<div key={index} className="border border-gray-200 rounded-xl p-8 mb-4">
+					<FormInput 
+						label={`Nom de la phase #${index + 1}`}
+						placeholder="Entrez le nom de la phase"
+						type="text"
+						value={phase.name || ''}
+						additionalClass="mb-6 w-full"
+						id={`phaseName${index}`}
+						onChange={(event) => handlePhaseNameChange(event, index)}
+						></FormInput>
+					<FormSelect 
+						label={`Type de la phase #${index + 1}`}
+						value={phase.type}
+						additionalClass="mb-2 w-full"
+						name={`phaseType${index}`}
+						options={[
+							{value: 'Poules', label: 'Poules'},
+							{value: 'Elimination directe', label: 'Elimination directe'}
+						]}
+						onChange={(event) => handlePhaseTypeChange(event, index)}
+					></FormSelect>
 				</div>
 			))}
 			<Button color='primary' type='submit'>Enregistrer</Button>

@@ -22,7 +22,7 @@ export const HomeAdminPage: React.FC = () => {
   };
 
   return (
-    <>
+    <div data-aos="fade-down">
       <Button
         id="createTournament"
         additionalClass="my-8 mx-20"
@@ -36,6 +36,6 @@ export const HomeAdminPage: React.FC = () => {
         tournaments={tournaments}
         handleClick={handleClick}
       ></TournamentList>
-    </>
+    </div>
   );
 };

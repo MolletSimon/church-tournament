@@ -3,11 +3,11 @@ module.exports = {
   content: ["./src/**/*.{html,js,ts,tsx,jsx}", "./src/**/**/.{html,js,ts,tsx,jsx}"],
   safelist: [
     'bg-danger',
-      'bg-success',
-      'bg-primary',
-      'bg-green-600',
-      'bg-pink',
-      'bg-warning'
+    'bg-success',
+    'bg-primary',
+    'bg-green-600',
+    'bg-pink',
+    'bg-warning'
   ],
   theme: {
     extend: {

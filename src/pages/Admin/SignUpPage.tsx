@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../..";
 import { Button } from "../../components/generic/Button";
 import { Header } from "../../components/generic/Header";
+import { FormInput } from "../../components/generic/FormInput";
 
 export const SignUpPage = () => {
     const emailRef = useRef<HTMLInputElement>(null);
@@ -109,16 +110,6 @@ export const SignUpPage = () => {
                 <FormInput onBlur={checkConfirmPassword} error={error.confirmPassword} label="Confirmez votre mot de passe" placeholder="Confirmez votre mot de passe" id="confirmPassword" innerRef={confirmPasswordRef} type="password"></FormInput>
                 <Button disabled={checkIfError || checkIfNull} color="primary" type="submit">S'inscrire</Button>
             </form>
-        </div>
-    )
-}
-
-export const FormInput = ({innerRef, id, label, type, placeholder, onBlur = () => {}, error }: {innerRef: React.RefObject<HTMLInputElement>, id:string, label: string, type:string, placeholder:string, onBlur?:React.FocusEventHandler<HTMLInputElement>, error?: string} ) => {
-    return (
-        <div className="flex flex-col w-2/3 mx-auto">
-            <label htmlFor="email" className="block text-gray-700 font-bold mb-2">{label}</label>
-            <input onBlur={onBlur} type={type} placeholder={placeholder} className="placeholder:italic appearance-none border rounded-xl w-full py-3 px-4 text-primary transition-all duration-300 leading-tight focus:outline-none focus:shadow-outline focus:scale-110" id={id} ref={innerRef} />
-            {error && <p className="text-red-500 mb-4">{error}</p>}
         </div>
     )
 }
