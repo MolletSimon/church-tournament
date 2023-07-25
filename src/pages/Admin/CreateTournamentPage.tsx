@@ -27,7 +27,6 @@ export const CreateTournamentPage = () => {
 			setStep(step+1);
 			setIsValid(false);
 		}
-		console.log(isValid);
 	};
 
 	const handlePrecStep = () => {

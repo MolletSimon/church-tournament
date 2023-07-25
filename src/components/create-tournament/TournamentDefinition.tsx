@@ -26,7 +26,7 @@ export const TournamentDefinition: React.FC<Props> = ({tournament, setTournament
 
 	const handleBlur = () => {
 		checkErrors();
-		setTournament({...tournament, name: name.current?.value, dateTournament: date.current ? new Date(date.current.value) : undefined});
+		setTournament({...tournament, name: name.current?.value, dateTournament: date.current?.value ? new Date(date.current.value) : undefined});
 	}
 
 	const checkErrors = () => {
@@ -71,7 +71,7 @@ export const TournamentDefinition: React.FC<Props> = ({tournament, setTournament
 						id="tournament-date" 
 						label="Date du tournoi" 
 						additionalClass="mt-6 mb-8"
-						defaultValue={tournament.dateTournament?.toISOString().substring(0,10)}
+						defaultValue={tournament.dateTournament ? tournament.dateTournament.toISOString().substring(0,10) : undefined}
 						error={errors.date}
 						onBlur={handleBlur}
 						type="date" 

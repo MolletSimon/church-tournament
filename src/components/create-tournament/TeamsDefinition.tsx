@@ -27,6 +27,7 @@ export const TeamsDefinition: React.FC<Props> = ({setTournament, tournament, set
 			});
 			return
 		};
+
 		const updatedTeams = [...tournament.teams, inputValue];
 		const updatedTournament = {...tournament, teams: updatedTeams, numberTeams: updatedTeams.length};
 		setTournament(updatedTournament);
@@ -37,8 +38,14 @@ export const TeamsDefinition: React.FC<Props> = ({setTournament, tournament, set
 	};
 
 	const checkValidity = (teams: string[]) => {
-		if (teams.length > 1) setIsValid(true);
-		else setIsValid(false);
+		if (teams.length > 1) {setIsValid(true); return};
+
+		if (tournament.teams.length % 2 !== 0) {
+			setIsValid(false);
+			return
+		};
+		
+		setIsValid(false);
 	};
 
 	const handleDelete = (indexToDelete: number) => {
@@ -67,18 +74,18 @@ export const TeamsDefinition: React.FC<Props> = ({setTournament, tournament, set
 				<Button color="primary" action={handleSubmit}>Valider</Button>
 			</div>
 
-			<div className="w-1/2 my-8 mx-4 rounded-lg">
+			<div className="w-full my-8 mx-4 rounded-lg">
 				{tournament.teams && tournament.teams.length > 0 ? 
 				<ul className="divide-y divide-gray-300 p-4 shadow-md rounded-xl">
 					{tournament.teams.map((e, index) => (
-						<li key={index} className="flex items-center justify-between py-2">
-							<span className="text-gray-700">{e}</span>
+						<li key={index} className="flex items-center justify-between py-2 hover:scale-105 transition-all">
+							<span className="text-gray-700 font-bold italic text-lg pl-4">{e}</span>
 							<Button action={() => handleDelete(index)} color="white" additionalClass=''>
 								<Icon icon="trash" size={32} ></Icon>
 							</Button>
 						</li>
 					))}
-				</ul> : <p className="italic">Liste des équipes, entrez le nom d'une équipe puis appuyer sur la touche "Entrée" ou le bouton Valider</p>
+				</ul> : <p className="italic">Entrez le nom d'une équipe puis appuyer sur la touche "Entrée" ou le bouton Valider</p>
 				}
 				
 			</div>

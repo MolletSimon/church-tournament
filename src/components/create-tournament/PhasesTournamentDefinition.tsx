@@ -33,8 +33,26 @@ const PhasesTournamentDefinition: React.FC<Props> = ({ tournament, setTournament
 
 	const handlePhaseTypeChange = (event: React.ChangeEvent<HTMLSelectElement>, index: number) => {
 		const value = event.target.value as 'Poules' | 'Elimination directe';
-		setPhases(phases.map((phase, i) => i === index ? { ...phase, type: value } : phase));
+		setPhases(prevPhases => {
+			const newPhases = phases.map((phase, i) => i === index ? { ...phase, type: value } : phase);
+			setTournament({ ...tournament, phases: newPhases })
+			return newPhases;
+		} );
 	};
+
+	const handleOnBlur = () => {
+		phases.forEach((phase, index) => {
+			phase.id = index
+			if (phase.type === 'Poules') {
+				phase.numberGroups = 4;
+				phase.isHomeAndAway = false;
+				phase.numberTeamsByGroup = 4;
+				phase.numberQualifiedByGroup = 1;
+				phase.active = false;
+			}
+		})
+		setTournament({ ...tournament, phases, numberPhase });
+	}
 
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -44,7 +62,7 @@ const PhasesTournamentDefinition: React.FC<Props> = ({ tournament, setTournament
 				phase.numberGroups = 4;
 				phase.isHomeAndAway = false;
 				phase.numberTeamsByGroup = 4;
-				phase.numberQualifiedByGroup = 2;
+				phase.numberQualifiedByGroup = 1;
 				phase.active = false;
 			}
 		})
@@ -74,24 +92,13 @@ const PhasesTournamentDefinition: React.FC<Props> = ({ tournament, setTournament
 				max="10"
 				required={true}
 				></FormInput> 
-				{/* <label className="block text-gray-700 font-bold mb-2" htmlFor="numberPhase">
-					Nombre de phases
-				</label>
-				<input
-					className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-					id="numberPhase"
-					type="number"
-					value={numberPhase}
-					onChange={handleNumberPhaseChange}
-					min="1"
-					max="10"
-					required
-				/> */}
+				
 			{phases.map((phase, index) => (
 				<div key={index} className="border border-gray-200 rounded-xl p-8 mb-4">
 					<FormInput 
 						label={`Nom de la phase #${index + 1}`}
 						placeholder="Entrez le nom de la phase"
+						onBlur={handleOnBlur}
 						type="text"
 						value={phase.name || ''}
 						additionalClass="mb-6 w-full"
@@ -111,7 +118,7 @@ const PhasesTournamentDefinition: React.FC<Props> = ({ tournament, setTournament
 					></FormSelect>
 				</div>
 			))}
-			<Button color='primary' type='submit'>Enregistrer</Button>
+			{/* <Button color='primary' type='submit'>Enregistrer</Button> */}
 		</form>
 	);
 };
