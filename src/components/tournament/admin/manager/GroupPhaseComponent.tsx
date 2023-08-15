@@ -9,6 +9,7 @@ import {Tournament} from "../../../../models/Tournament";
 import {MatchComponent} from "../../common/MatchComponent";
 import {RankingComponent} from "../../common/RankingComponent";
 import 'firebase/firestore';
+import { NotifyUser } from "../../../../services/NotificationService";
 
 interface Props {
 	tournament: Tournament,
@@ -92,8 +93,7 @@ export const GroupPhaseComponent:React.FC<Props> = ({tournament, setTournament, 
 			}
 		})
 
-		console.log(updateTournament)
-
+		NotifyUser("Les scores ont été mis à jour !", "success", "test");
 		await setDoc(doc(db, "tournaments", tournament.id!), updateTournament);
 		setTournament(updateTournament);
 	};
