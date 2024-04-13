@@ -93,7 +93,6 @@ export const GroupPhaseComponent:React.FC<Props> = ({tournament, setTournament, 
 			}
 		})
 
-		NotifyUser("Les scores ont été mis à jour !", "success", "test");
 		await setDoc(doc(db, "tournaments", tournament.id!), updateTournament);
 		setTournament(updateTournament);
 	};
