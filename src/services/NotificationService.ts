@@ -1,4 +1,4 @@
-const url = "https://api-ongoal.onrender.com"
+const url = "http://localhost:3001"
 
 export const  NotifyUser = (message: string, title: string, team: string) => {
     fetch(`${url}/notification`, {

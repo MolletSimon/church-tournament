@@ -56,7 +56,7 @@ export const RankingComponent: React.FC<Props> = ({selectedGroup, tournament, de
 								</>}
 
 								<td className="px-6 py-4 text-center">
-									{team.goalScored - team.goalTaken}
+									{team.goalScored - team.goalTaken > 0 ? '+' : ''} {team.goalScored - team.goalTaken}
 								</td>
 								<td className="px-4 py-2 text-center">{team.points}</td>
 							</tr>

@@ -29,11 +29,11 @@ export const MatchComponent: React.FC<Props> = ({match, matchIndex, handleScoreC
 	
 	return (
 		<div className="w-full">
-			<div className="flex items-center justify-center space-x-4">
+			<div className="flex items-center justify-evenly space-x-4">
 				<div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary text-white">
 					{match.teams[0].charAt(0)}
 				</div>
-				<div className="w-24 min-w-0">
+				<div className="w-44 min-w-0">
 					<p className="text-sm font-medium text-gray-900">
 						{match.teams[0]}
 					</p>
@@ -63,7 +63,7 @@ export const MatchComponent: React.FC<Props> = ({match, matchIndex, handleScoreC
 						value={match.score2 != null ? match.score2 : ""}
 					/>
 				</div>
-				<div className="w-24 min-w-0">
+				<div className="w-44 min-w-0">
 					<p className="text-sm font-medium text-gray-900 text-end">
 						{match.teams[1]}
 					</p>
