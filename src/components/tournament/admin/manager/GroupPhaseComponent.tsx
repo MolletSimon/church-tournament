@@ -78,7 +78,6 @@ export const GroupPhaseComponent:React.FC<Props> = ({tournament, setTournament, 
 		updateTournament.phases[updateTournament.currentPhase].groups![selectedGroupIndex].ranking = rankingService.ComputeRanking(selectedGroup.teams, updateTournament, selectedGroupIndex);
 		setMatchDisplayed(group.matches)
 		setTournament(updateTournament);
-		console.log(updateTournament)
 	};
 
 	const handleSaveGame = async () => {

@@ -1,5 +1,7 @@
 import React from "react";
 import {Match} from "../../../models/Match";
+import {NotifyUser} from "../../../services/NotificationService";
+import {formatTeamName} from "../../../utils/utils";
 
 interface Props {
 	match: Match,
@@ -12,6 +14,19 @@ interface Props {
 }
 
 export const MatchComponent: React.FC<Props> = ({match, matchIndex, handleScoreChange, handleFieldChange, handleHourChange, handleSaveGame, tab}) => {
+	const handleBlur = () => {
+		if (handleSaveGame) {
+			handleSaveGame();
+		}
+		
+		if (match.score1 != null && match.score2 != null) {
+			const title = match.winner == "Aucun" ? 'Match nul ! 🫱🏼‍🫲🏽‍' : `Victoire de ${match.winner} ! 💪🏼`;
+			match.teams.forEach((team, index) => {
+				NotifyUser(`Le match entre ${match.teams[0]} et ${match.teams[1]} s'est terminé sur le score de ${match.score1} - ${match.score2}.`, title,formatTeamName(team));
+			});
+		}
+	}
+	
 	return (
 		<div className="w-full">
 			<div className="flex items-center justify-center space-x-4">
@@ -28,7 +43,7 @@ export const MatchComponent: React.FC<Props> = ({match, matchIndex, handleScoreC
 						type="number"
 						onWheel={(e) => e.currentTarget.blur()}
 						id="score1"
-						onBlur={handleSaveGame}
+						onBlur={handleBlur}
 						onChange={(e) =>
 							handleScoreChange(e, match, matchIndex)
 						}
@@ -40,7 +55,7 @@ export const MatchComponent: React.FC<Props> = ({match, matchIndex, handleScoreC
 						type="number"
 						onWheel={(e) => e.currentTarget.blur()}
 						id="score2"
-						onBlur={handleSaveGame}
+						onBlur={handleBlur}
 						onChange={(e) =>
 							handleScoreChange(e, match, matchIndex)
 						}

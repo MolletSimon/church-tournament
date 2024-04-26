@@ -54,10 +54,6 @@ const KnockoutPhaseComponent: React.FC<Props> = ({ tournament, setTournament }) 
     updateTournament!.phases![tournament.currentPhase]!.knockout!.matches!.forEach(match => {
       if (match.score1 != null && match.score2 != null) {
         match = rankingService.DetermineWinner(match) as MatchKnockout;
-        NotifyUser(`Le match ${match.teams[0]} - ${match.teams[1]} s'est terminé sur le score de ${match.score1} - ${match.score2}`,"Match terminé",
-          formatTeamName(match.teams[0]));
-        NotifyUser(`Le match ${match.teams[0]} - ${match.teams[1]} s'est terminé sur le score de ${match.score1} - ${match.score2}`,"Match terminé",
-          formatTeamName(match.teams[1]));
       }
     })
     await setDoc(doc(db, "tournaments", tournament.id!), updateTournament);
