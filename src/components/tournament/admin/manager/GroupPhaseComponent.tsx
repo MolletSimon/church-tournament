@@ -10,6 +10,7 @@ import { MatchComponent } from "../../common/MatchComponent";
 import { RankingComponent } from "../../common/RankingComponent";
 import "firebase/firestore";
 import { NotifyUser } from "../../../../services/NotificationService";
+import {formatTeamName, formatTeamNameFullInfos} from "../../../../utils/utils";
 
 interface Props {
   tournament: Tournament;
@@ -73,7 +74,9 @@ export const GroupPhaseComponent: React.FC<Props> = ({
   ) => {
     const newField = e.target.value;
     const newMatch = { ...match, field: newField };
-    NotifyUser("Les scores ont été mis à jour !", "success", "test");
+    match.teams.forEach((team, index) => {
+      NotifyUser(`Ton prochain match aura lieu sur le terrain : ${newField}, Bon match ! ⚽️`, "On a ton terrain ! 🏟️", formatTeamNameFullInfos(team));
+    });
     updateMatch(newMatch, matchIndex);
   };
 
@@ -85,9 +88,9 @@ export const GroupPhaseComponent: React.FC<Props> = ({
     const newHour = e.target.value;
     const newMatch = { ...match, hour: newHour };
     updateMatch(newMatch, matchIndex);
-    // fire a fcm notif on 'test' topic
-
-    console.log("");
+    match.teams.forEach((team, index) => {
+      NotifyUser(`Ton prochain match aura lieu à ${newHour} heures !`, "Tic tac, tu joues bientôt ! ⏰", formatTeamNameFullInfos(team));
+    });
   };
 
   const updateMatch = (newMatch: Match, matchIndex: number) => {
@@ -130,8 +133,7 @@ export const GroupPhaseComponent: React.FC<Props> = ({
         );
       }
     });
-
-    NotifyUser("Les scores ont été mis à jour !", "success", "test");
+    
     await setDoc(doc(db, "tournaments", tournament.id!), updateTournament);
     setTournament(updateTournament);
   };
@@ -202,12 +204,12 @@ export const GroupPhaseComponent: React.FC<Props> = ({
         </div>
 
         <div className="w-2/3">
-          <input
-            type="text"
-            placeholder="Chercher par équipe"
-            className="mb-8 rounded-full border-opacity-20 focus:border-opacity-100 focus:border-primary w-full italic p-4 border-2 border-primary"
-            onChange={handleSearch}
-          />
+          {/*<input*/}
+          {/*  type="text"*/}
+          {/*  placeholder="Chercher par équipe"*/}
+          {/*  className="mb-8 rounded-full border-opacity-20 focus:border-opacity-100 focus:border-primary w-full italic p-4 border-2 border-primary"*/}
+          {/*  onChange={handleSearch}*/}
+          {/*/>*/}
         </div>
 
         {tabSelector()}

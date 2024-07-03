@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "./Button";
 import { auth } from "../..";
 
-export function Header({ user }: { user: User | null }) {
+export function Header({ user }: { user?: User | null }) {
   return (
     <>
       <div className="flex gap-6 justify-between m-12">
@@ -30,54 +30,13 @@ export function Header({ user }: { user: User | null }) {
             />
             <h1 className="uppercase text-6xl ml-8 tracking-widest font-bold text-primary font-lexend">
               OnGoal
-              <span className="text-lg items-center italic"> - beta</span>
+              <span className="text-lg items-center italic"></span>
             </h1>
           </div>
         </Link>
-        {user && (
-          <div className="flex items-center gap-4 rounded-full px-8 border-primary">
-            {user.photoURL ? (
-              <img
-                src={user.photoURL!}
-                alt="user"
-                width={60}
-                className="rounded-full"
-              />
-            ) : (
-              <span className="bg-primary rounded-full p-4 text-white text-lg font-bold">
-                SM
-              </span>
-            )}
-
-            <p className="text-xl font-bold text-primary">
-              {user.displayName} -{" "}
-              <span className="italic font-normal">Admin</span>
-            </p>
-            <Button
-              color="white"
-              text="danger"
-              action={() => {
-                signOut(auth);
-              }}
-            >
-              {/* <img src="/images/logout.png" alt="logout" width={25} className="mr-2" /> */}
-              Se déconnecter
-            </Button>
-          </div>
-        )}
+        
       </div>
-      <p className="italic mx-4">
-        Ce produit est encore en cours de développement et vous avez accès à une
-        version anticipée. Si un bug parvenait lors de votre parcours, n'hésitez
-        pas à en informer
-        <a
-          href="mailto:simonmollet.developpement@gmail.com"
-          className="underline text-primary"
-        >
-          {" "}
-          Simon Mollet Développement
-        </a>
-      </p>
+
     </>
   );
 }

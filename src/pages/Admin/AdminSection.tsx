@@ -9,22 +9,22 @@ export const AdminSection = () => {
   const navigate = useNavigate();
   let location = useLocation();
 
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (!user) {
-        navigate("/login");
-      } else {
-        if (location.pathname === "/admin") navigate("home");
-        setUser(user);
-      }
-    });
-
-    if (user && location.pathname === "/admin") navigate("home");
-  }, []);
+  // useEffect(() => {
+  //   auth.onAuthStateChanged((user) => {
+  //     if (!user) {
+  //       navigate("/login");
+  //     } else {
+  //       if (location.pathname === "/admin") navigate("home");
+  //       setUser(user);
+  //     }
+  //   });
+  //
+  //   if (user && location.pathname === "/admin") navigate("home");
+  // }, []);
 
   return (
     <>
-      {user && <Header user={user}></Header>}
+      <Header user={user}></Header>
       <Outlet />
     </>
   );
